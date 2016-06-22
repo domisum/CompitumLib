@@ -5,9 +5,9 @@ import java.util.Iterator;
 
 import org.bukkit.Location;
 
+import de.domisum.auxiliumapi.util.bukkit.LocationUtil;
 import de.domisum.compitumapi.path.RawPath;
 import de.domisum.compitumapi.path.node.Node;
-import de.domisum.compitumapi.util.MathUtil;
 
 public class WalkablePath
 {
@@ -57,10 +57,10 @@ public class WalkablePath
 
 			// look towards next point
 			if(after != null)
-				location = MathUtil.lookAt(location, after);
+				location = LocationUtil.lookAt(location, after);
 			else if(before != null)
 			{
-				Location direction = MathUtil.lookAt(before, location);
+				Location direction = LocationUtil.lookAt(before, location);
 				location.setYaw(direction.getYaw());
 				location.setPitch(direction.getPitch());
 			}
