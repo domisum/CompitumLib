@@ -110,5 +110,13 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	
+	<distributionManagement>
+    	<repository>
+        	<id>central</id>
+        	<name>vps.domisum.de-releases</name>
+        	<url>http://vps.domisum.de:8081/artifactory/ext-release-local</url>
+    	</repository>
+	</distributionManagement>
 
 </project>
