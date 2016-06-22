@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.domisum</groupId>
 	<artifactId>CompitumAPI</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -53,24 +53,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>**/plugin.yml</include>
-				</includes>
-			</resource>
-
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-				<excludes>
-					<exclude>**/plugin.yml</exclude>
-				</excludes>
-			</resource>
-		</resources>
 	</build>
 
 	<distributionManagement>
