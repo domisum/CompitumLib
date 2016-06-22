@@ -4,13 +4,21 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.domisum</groupId>
 	<artifactId>CompitumAPI</artifactId>
-	<version>1.0.0</version>
+	<version>${yaml.plugin.version}</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+
+	<pluginRepositories>
+  		<pluginRepository>
+    		<id>comphenix-rep</id>
+    		<name>Comphenix Maven Releases</name>
+    		<url>http://repo.comphenix.net/content/groups/public</url>
+  		</pluginRepository>
+	</pluginRepositories>
 
 	<repositories>
 		<repository>
@@ -42,7 +50,65 @@
                 	<encoding>UTF-8</encoding>
             	</configuration>
         	</plugin>
+        	
+        	<plugin>
+     			<groupId>com.comphenix.maven</groupId>
+      			<artifactId>yaml-properties-plugin</artifactId>
+      			<version>0.1.0</version>
+     			<executions>
+        			<execution>
+          				<goals>
+            				<goal>read-yaml-properties</goal>
+          				</goals>
+          				<configuration>
+            				<files>
+              					<!-- YAML files that will be loaded. The element name is the file ID. -->
+              					<plugin>${basedir}/src/main/resources/plugin.yml</plugin>
+            				</files>
+          				</configuration> 
+        			</execution>
+      			</executions>  
+    		</plugin>
 		</plugins>
+		
+		
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.comphenix.maven
+										</groupId>
+										<artifactId>
+											yaml-properties-plugin
+										</artifactId>
+										<versionRange>
+											[0.1.0,)
+										</versionRange>
+										<goals>
+											<goal>
+												read-yaml-properties
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>

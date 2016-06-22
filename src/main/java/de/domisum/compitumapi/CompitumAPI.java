@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.domisum.compitumapi.path.MaterialEvaluator;
 
-public class CompitumAPI
+public class CompitumAPI extends JavaPlugin
 {
 
 	// REFERENCES
@@ -25,16 +25,18 @@ public class CompitumAPI
 		onEnable();
 	}
 
+	@Override
 	public void onEnable()
 	{
 		MaterialEvaluator.prepareEvaluation();
 
-		getLogger().info("CompitumAPI has been enabled\n");
+		getPluginLogger().info("CompitumAPI has been enabled\n");
 	}
 
+	@Override
 	public void onDisable()
 	{
-		getLogger().info("CompitumAPI has been disabled\n");
+		getPluginLogger().info("CompitumAPI has been disabled\n");
 	}
 
 
@@ -46,7 +48,7 @@ public class CompitumAPI
 		return instance;
 	}
 
-	public Logger getLogger()
+	public Logger getPluginLogger()
 	{
 		return getInstance().plugin.getLogger();
 	}

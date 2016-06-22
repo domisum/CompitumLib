@@ -33,7 +33,7 @@ public class Logger
 
 	private static java.util.logging.Logger getLogger()
 	{
-		return CompitumAPI.getInstance().getLogger();
+		return CompitumAPI.getInstance().getPluginLogger();
 	}
 
 }
