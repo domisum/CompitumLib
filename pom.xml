@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.domisum</groupId>
 	<artifactId>CompitumAPI</artifactId>
-	<version>${yaml.plugin.version}</version>
+	<version>0.0.1</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -13,11 +13,11 @@
 	</properties>
 
 	<pluginRepositories>
-  		<pluginRepository>
-    		<id>comphenix-rep</id>
-    		<name>Comphenix Maven Releases</name>
-    		<url>http://repo.comphenix.net/content/groups/public</url>
-  		</pluginRepository>
+		<pluginRepository>
+			<id>comphenix-rep</id>
+			<name>Comphenix Maven Releases</name>
+			<url>http://repo.comphenix.net/content/groups/public</url>
+		</pluginRepository>
 	</pluginRepositories>
 
 	<repositories>
@@ -43,41 +43,39 @@
 	<build>
 		<plugins>
 			<plugin>
-            	<artifactId>maven-compiler-plugin</artifactId>
-            	<configuration>
-               		<source>1.8</source>
-                	<target>1.8</target>
-                	<encoding>UTF-8</encoding>
-            	</configuration>
-        	</plugin>
-        	
-        	<plugin>
-     			<groupId>com.comphenix.maven</groupId>
-      			<artifactId>yaml-properties-plugin</artifactId>
-      			<version>0.1.0</version>
-     			<executions>
-        			<execution>
-          				<goals>
-            				<goal>read-yaml-properties</goal>
-          				</goals>
-          				<configuration>
-            				<files>
-              					<!-- YAML files that will be loaded. The element name is the file ID. -->
-              					<plugin>${basedir}/src/main/resources/plugin.yml</plugin>
-            				</files>
-          				</configuration> 
-        			</execution>
-      			</executions>  
-    		</plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/plugin.yml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/plugin.yml</exclude>
+				</excludes>
+			</resource>
+		</resources>
 	</build>
-	
+
 	<distributionManagement>
-    	<repository>
-        	<id>central</id>
-        	<name>vps.domisum.de-releases</name>
-        	<url>http://vps.domisum.de:8081/artifactory/ext-release-local</url>
-    	</repository>
+		<repository>
+			<id>central</id>
+			<name>vps.domisum.de-releases</name>
+			<url>http://vps.domisum.de:8081/artifactory/ext-release-local</url>
+		</repository>
 	</distributionManagement>
 
 </project>

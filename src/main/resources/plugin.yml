@@ -1,4 +1,4 @@
 name: CompitumAPI
-version: 0.0.1
+version: ${project.version}
 author: domisum
 main: de.domisum.compitumapi.CompitumAPI
