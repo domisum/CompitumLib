@@ -51,5 +51,4 @@ public class CompitumAPI
 		return getInstance().plugin.getLogger();
 	}
 
-
 }
