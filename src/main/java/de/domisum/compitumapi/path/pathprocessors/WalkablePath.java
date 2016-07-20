@@ -16,7 +16,7 @@ public class WalkablePath
 	private RawPath rawPath;
 
 	// OUTPUT
-	private ArrayList<Location> locations = new ArrayList<Location>();
+	private ArrayList<Location> locations = new ArrayList<>();
 	private Iterator<Location> iterator;
 
 	// STATUS

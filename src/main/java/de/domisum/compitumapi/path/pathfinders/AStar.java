@@ -34,8 +34,8 @@ public class AStar
 	protected Node startNode;
 	protected Node endNode;
 
-	protected List<Node> unvisitedNodes = new ArrayList<Node>(this.maximumNodeVisits * 2);
-	protected Set<Node> visitedNodes = new HashSet<Node>(this.maximumNodeVisits);
+	protected List<Node> unvisitedNodes = new ArrayList<>(this.maximumNodeVisits * 2);
+	protected Set<Node> visitedNodes = new HashSet<>(this.maximumNodeVisits);
 
 	protected RawPath path;
 
@@ -138,12 +138,12 @@ public class AStar
 
 	public Collection<Node> getUnvisitedNodes()
 	{
-		return new ArrayList<Node>(this.unvisitedNodes);
+		return new ArrayList<>(this.unvisitedNodes);
 	}
 
 	public Collection<Node> getVisitedNodes()
 	{
-		return new HashSet<Node>(this.visitedNodes);
+		return new HashSet<>(this.visitedNodes);
 	}
 
 
@@ -367,7 +367,7 @@ public class AStar
 	protected void createPathFromConnectedNodes()
 	{
 		// this list is reversed since we start from the end and work towards the start
-		List<Node> nodeList = new ArrayList<Node>();
+		List<Node> nodeList = new ArrayList<>();
 		nodeList.add(this.endNode);
 
 		do

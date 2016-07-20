@@ -46,7 +46,7 @@ public class RawPath
 
 	public List<Node> getNodes()
 	{
-		return new ArrayList<Node>(this.nodes);
+		return new ArrayList<>(this.nodes);
 	}
 
 
