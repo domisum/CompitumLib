@@ -12,14 +12,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>comphenix-rep</id>
-			<name>Comphenix Maven Releases</name>
-			<url>http://repo.comphenix.net/content/groups/public</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<repositories>
 		<repository>
 			<id>spigot-repo</id>
