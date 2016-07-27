@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.domisum</groupId>
 	<artifactId>CompitumAPI</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>de.domisum</groupId>
 			<artifactId>AuxiliumAPI</artifactId>
-			<version>0.0.2</version>
+			<version>0.0.31</version>
 		</dependency>
 	</dependencies>
 
