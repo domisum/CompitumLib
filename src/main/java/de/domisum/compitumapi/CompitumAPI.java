@@ -25,6 +25,14 @@ public class CompitumAPI
 		onEnable();
 	}
 
+	public static void initialize(JavaPlugin plugin)
+	{
+		if(instance != null)
+			return;
+
+		new CompitumAPI(plugin);
+	}
+
 	public void onEnable()
 	{
 		MaterialEvaluator.prepareEvaluation();
