@@ -24,7 +24,6 @@ public class CompitumAPI
 		onEnable();
 	}
 
-	@Deprecated
 	public static void enable(JavaPlugin plugin)
 	{
 		if(instance != null)
