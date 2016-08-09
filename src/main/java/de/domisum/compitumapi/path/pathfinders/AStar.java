@@ -1,5 +1,11 @@
 package de.domisum.compitumapi.path.pathfinders;
 
+import de.domisum.compitumapi.path.PathfindingStatus;
+import de.domisum.compitumapi.path.RawPath;
+import de.domisum.compitumapi.path.node.Node;
+import org.bukkit.Location;
+import org.bukkit.World;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,13 +13,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-
-import de.domisum.compitumapi.path.PathfindingStatus;
-import de.domisum.compitumapi.path.RawPath;
-import de.domisum.compitumapi.path.node.Node;
 
 public class AStar
 {
@@ -34,7 +33,7 @@ public class AStar
 	protected Node startNode;
 	protected Node endNode;
 
-	protected List<Node> unvisitedNodes = new ArrayList<>(this.maximumNodeVisits * 2);
+	protected List<Node> unvisitedNodes = new ArrayList<>(this.maximumNodeVisits*2);
 	protected Set<Node> visitedNodes = new HashSet<>(this.maximumNodeVisits);
 
 	protected RawPath path;
@@ -109,13 +108,13 @@ public class AStar
 		if((this.pathfindingStatus == PathfindingStatus.NOT_STARTED) || (this.pathfindingStatus == PathfindingStatus.SEARCHING))
 			throw new IllegalStateException("The pathfinding is not done yet");
 
-		return this.endNano - this.startNano;
+		return this.endNano-this.startNano;
 	}
 
 	public double getMilliDuration()
 	{
-		double duration = getNanoDuration() / 1000d / 1000d;
-		double roundedDuration = Math.round(duration * 1000) / 1000d;
+		double duration = getNanoDuration()/1000d/1000d;
+		double roundedDuration = Math.round(duration*1000)/1000d;
 
 		return roundedDuration;
 	}
@@ -125,13 +124,13 @@ public class AStar
 	{
 		String diagnose = "";
 
-		diagnose += "found=" + isPathFound() + ",";
+		diagnose += "found="+isPathFound()+",";
 		if(isPathFound())
-			diagnose += "length=" + getPath().getLength() + ",";
+			diagnose += "length="+getPath().getLength()+",";
 
-		diagnose += "visitedNodes=" + this.visitedNodes.size() + ",";
-		diagnose += "unvisitedNodes=" + this.unvisitedNodes.size() + ",";
-		diagnose += "durationMs=" + getMilliDuration();
+		diagnose += "visitedNodes="+this.visitedNodes.size()+",";
+		diagnose += "unvisitedNodes="+this.unvisitedNodes.size()+",";
+		diagnose += "durationMs="+getMilliDuration();
 
 		return diagnose;
 	}
@@ -186,16 +185,16 @@ public class AStar
 
 			// check if start and end nodes are accessible
 			if(!this.startNode.canStandAt())
-				throw new IllegalArgumentException("The start location is invalid! (" + this.startLocation + ")");
+				throw new IllegalArgumentException("The start location is invalid! ("+this.startLocation+")");
 
 			if(!this.endNode.canStandAt())
-				throw new IllegalArgumentException("The end location is invalid! (" + this.endLocation + ")");
+				throw new IllegalArgumentException("The end location is invalid! ("+this.endLocation+")");
 
 
 			// check if startPosition is end position -> path found
 			if(this.startNode.equals(this.endNode))
 			{
-				this.path = new RawPath(this.world, Arrays.asList(new Node[] { this.startNode }));
+				this.path = new RawPath(this.world, Arrays.asList(new Node[] {this.startNode}));
 				this.pathfindingStatus = PathfindingStatus.FOUND;
 
 				break pathfinding;
@@ -281,7 +280,7 @@ public class AStar
 				return;
 
 			// get node representing current block
-			newNode = newNode(this.world, node.x + dX, node.y + dY, node.z + dZ, this.endNode);
+			newNode = newNode(this.world, node.x+dX, node.y+dY, node.z+dZ, this.endNode);
 
 
 			// node has already been visited -> skip
@@ -321,14 +320,14 @@ public class AStar
 			// check scraped blocks on diagonal movement
 			if((dX != 0) && (dZ != 0))
 			{
-				Node scrapedBlock1 = newNode(this.world, node.x + dX, node.y + dY, node.z, this.endNode); // don't
-																											// modify
+				Node scrapedBlock1 = newNode(this.world, node.x+dX, node.y+dY, node.z, this.endNode); // don't
+				// modify
 				// z
 				if(!scrapedBlock1.canStandAt())
 					return;
 
-				Node scrapedBlock2 = newNode(this.world, node.x, node.y + dY, node.z + dZ, this.endNode); // don't
-																											// modify
+				Node scrapedBlock2 = newNode(this.world, node.x, node.y+dY, node.z+dZ, this.endNode); // don't
+				// modify
 				// x
 				if(!scrapedBlock2.canStandAt())
 					return;
@@ -337,7 +336,7 @@ public class AStar
 			// check if head-block is unobstructed when moving up
 			if(dY == 1)
 			{
-				Node headBlock = newNode(this.world, node.x, node.y + 1, node.z, this.endNode);
+				Node headBlock = newNode(this.world, node.x, node.y+1, node.z, this.endNode);
 				if(!headBlock.isUnblocked())
 					return;
 			}
@@ -345,7 +344,7 @@ public class AStar
 			// check if head-block is unobstructed when moving down
 			if(dY == -1)
 			{
-				Node headBlock = newNode(this.world, node.x + dX, node.y, node.z + dZ, this.endNode);
+				Node headBlock = newNode(this.world, node.x+dX, node.y, node.z+dZ, this.endNode);
 				if(!headBlock.isUnblocked())
 					return;
 			}
@@ -372,9 +371,9 @@ public class AStar
 
 		do
 		{
-			nodeList.add(nodeList.get(nodeList.size() - 1).getParent());
+			nodeList.add(nodeList.get(nodeList.size()-1).getParent());
 		}
-		while(nodeList.get(nodeList.size() - 1).getParent() != null);
+		while(nodeList.get(nodeList.size()-1).getParent() != null);
 
 		// reverse the list
 		Collections.reverse(nodeList);

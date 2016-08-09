@@ -1,11 +1,10 @@
 package de.domisum.compitumapi.path;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import de.domisum.compitumapi.path.node.Node;
 import org.bukkit.World;
 
-import de.domisum.compitumapi.path.node.Node;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RawPath
 {
@@ -30,9 +29,9 @@ public class RawPath
 		String string = "[";
 
 		for(int i = 0; i < this.nodes.size(); i++)
-			string += this.nodes.get(i) + (i != (this.nodes.size() - 1) ? "," : "");
+			string += this.nodes.get(i)+(i != (this.nodes.size()-1) ? "," : "");
 
-		return string + "]";
+		return string+"]";
 	}
 
 

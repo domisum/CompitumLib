@@ -1,9 +1,8 @@
 package de.domisum.compitumapi.path.node;
 
-import org.bukkit.World;
-
 import de.domisum.compitumapi.path.MaterialEvaluator;
 import de.domisum.compitumapi.path.pathfinders.AStar;
+import org.bukkit.World;
 
 public class NodeUnderSurface extends Node
 {
@@ -42,7 +41,7 @@ public class NodeUnderSurface extends Node
 		if(this.canStandAtChecked)
 			return this.canStandAt;
 
-		this.topBlockMaterialID = this.world.getBlockAt(this.x, this.y + 1, this.z).getTypeId();
+		this.topBlockMaterialID = this.world.getBlockAt(this.x, this.y+1, this.z).getTypeId();
 
 		if(!isUnblocked())
 			this.canStandAt = false;

@@ -1,10 +1,9 @@
 package de.domisum.compitumapi;
 
-import java.util.logging.Logger;
-
+import de.domisum.compitumapi.path.MaterialEvaluator;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.domisum.compitumapi.path.MaterialEvaluator;
+import java.util.logging.Logger;
 
 public class CompitumAPI
 {
@@ -25,6 +24,7 @@ public class CompitumAPI
 		onEnable();
 	}
 
+	@Deprecated
 	public static void enable(JavaPlugin plugin)
 	{
 		if(instance != null)
@@ -46,12 +46,12 @@ public class CompitumAPI
 	{
 		MaterialEvaluator.prepareEvaluation();
 
-		getLogger().info(this.getClass().getSimpleName() + " has been enabled");
+		getLogger().info(this.getClass().getSimpleName()+" has been enabled");
 	}
 
 	protected void onDisable()
 	{
-		getLogger().info(this.getClass().getSimpleName() + " has been disabled");
+		getLogger().info(this.getClass().getSimpleName()+" has been disabled");
 	}
 
 

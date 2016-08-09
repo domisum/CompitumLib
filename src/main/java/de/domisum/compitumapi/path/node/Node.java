@@ -1,10 +1,9 @@
 package de.domisum.compitumapi.path.node;
 
-import org.bukkit.Location;
-import org.bukkit.World;
-
 import de.domisum.compitumapi.path.MaterialEvaluator;
 import de.domisum.compitumapi.path.pathfinders.AStar;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 public class Node implements Comparable<Node>
 {
@@ -66,13 +65,13 @@ public class Node implements Comparable<Node>
 	@Override
 	public int hashCode()
 	{
-		return this.x + (513 * this.y) + (517 * this.z);
+		return this.x+(513*this.y)+(517*this.z);
 	}
 
 	@Override
 	public String toString()
 	{
-		return "node[x=" + this.x + ",y=" + this.y + ",z=" + this.z + "]";
+		return "node[x="+this.x+",y="+this.y+",z="+this.z+"]";
 	}
 
 
@@ -132,12 +131,12 @@ public class Node implements Comparable<Node>
 
 	public Location getCentralLocation(World world)
 	{
-		return new Location(world, this.x + .5, this.y + .5, this.z + .5);
+		return new Location(world, this.x+.5, this.y+.5, this.z+.5);
 	}
 
 	public Location getCentralFloorLocation(World world)
 	{
-		return new Location(world, this.x + .5, this.y, this.z + .5);
+		return new Location(world, this.x+.5, this.y, this.z+.5);
 	}
 
 
@@ -161,7 +160,7 @@ public class Node implements Comparable<Node>
 		if(node != null)
 			expenseToVia = node.getExpense();
 
-		return expenseToVia + getExpenseFromNode(node);
+		return expenseToVia+getExpenseFromNode(node);
 	}
 
 	public double getExpenseFromNode(Node node)
@@ -169,11 +168,11 @@ public class Node implements Comparable<Node>
 		if(node == null)
 			return Integer.MAX_VALUE;
 
-		int dX = Math.abs(this.x - node.x);
-		int dY = Math.abs(this.y - node.y);
-		int dZ = Math.abs(this.z - node.z);
+		int dX = Math.abs(this.x-node.x);
+		int dY = Math.abs(this.y-node.y);
+		int dZ = Math.abs(this.z-node.z);
 
-		int dCombined = dX + dY + dZ;
+		int dCombined = dX+dY+dZ;
 
 		if(dCombined == 1)
 			return 1; // sqrt(1)
@@ -199,20 +198,20 @@ public class Node implements Comparable<Node>
 
 	public double getManhattanDistance(Node other)
 	{
-		double dX = Math.abs(this.x - other.x);
-		double dY = Math.abs(this.y - other.y);
-		double dZ = Math.abs(this.z - other.z);
+		double dX = Math.abs(this.x-other.x);
+		double dY = Math.abs(this.y-other.y);
+		double dZ = Math.abs(this.z-other.z);
 
-		return dX + dY + dZ;
+		return dX+dY+dZ;
 	}
 
 	public double getEuclideanDistanceSquared(Node other)
 	{
-		double dX = this.x - other.x;
-		double dY = this.y - other.y;
-		double dZ = this.z - other.z;
+		double dX = this.x-other.x;
+		double dY = this.y-other.y;
+		double dZ = this.z-other.z;
 
-		double distanceSquared = (dX * dX) + (dY * dY) + (dZ * dZ);
+		double distanceSquared = (dX*dX)+(dY*dY)+(dZ*dZ);
 		return distanceSquared;
 	}
 
@@ -224,7 +223,7 @@ public class Node implements Comparable<Node>
 
 	public double getCombinedExpense()
 	{
-		return getExpense() + (this.aStar.getHeuristicWeight() * getRemainingExpense());
+		return getExpense()+(this.aStar.getHeuristicWeight()*getRemainingExpense());
 	}
 
 	@Override
@@ -244,7 +243,7 @@ public class Node implements Comparable<Node>
 			return this.isUnblocked;
 
 		this.bottomBlockMaterialID = this.world.getBlockAt(this.x, this.y, this.z).getTypeId();
-		this.topBlockMaterialID = this.world.getBlockAt(this.x, this.y + 1, this.z).getTypeId();
+		this.topBlockMaterialID = this.world.getBlockAt(this.x, this.y+1, this.z).getTypeId();
 
 		if(!MaterialEvaluator.canStandIn(this.bottomBlockMaterialID))
 			this.isUnblocked = false;
@@ -263,7 +262,7 @@ public class Node implements Comparable<Node>
 		if(this.canStandAtChecked)
 			return this.canStandAt;
 
-		this.beneathBlockMaterialID = this.world.getBlockAt(this.x, this.y - 1, this.z).getTypeId();
+		this.beneathBlockMaterialID = this.world.getBlockAt(this.x, this.y-1, this.z).getTypeId();
 
 		if(!isUnblocked())
 			this.canStandAt = false;

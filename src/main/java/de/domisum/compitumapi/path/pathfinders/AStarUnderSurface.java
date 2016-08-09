@@ -1,10 +1,9 @@
 package de.domisum.compitumapi.path.pathfinders;
 
-import org.bukkit.Location;
-import org.bukkit.World;
-
 import de.domisum.compitumapi.path.node.Node;
 import de.domisum.compitumapi.path.node.NodeUnderSurface;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 public class AStarUnderSurface extends AStar
 {
@@ -40,7 +39,7 @@ public class AStarUnderSurface extends AStar
 			return;
 
 		// get node representing current block
-		newNode = newNode(this.world, node.x + dX, node.y + dY, node.z + dZ, this.endNode);
+		newNode = newNode(this.world, node.x+dX, node.y+dY, node.z+dZ, this.endNode);
 
 
 		// node has already been visited -> skip
@@ -63,14 +62,14 @@ public class AStarUnderSurface extends AStar
 		// check scraped blocks on diagonal movement
 		if((dX != 0) && (dZ != 0))
 		{
-			Node scrapedBlock1 = newNode(this.world, node.x + dX, node.y + dY, node.z, this.endNode); // don't
-																										// modify
+			Node scrapedBlock1 = newNode(this.world, node.x+dX, node.y+dY, node.z, this.endNode); // don't
+			// modify
 			// z
 			if(!scrapedBlock1.canStandAt())
 				return;
 
-			Node scrapedBlock2 = newNode(this.world, node.x, node.y + dY, node.z + dZ, this.endNode); // don't
-																										// modify
+			Node scrapedBlock2 = newNode(this.world, node.x, node.y+dY, node.z+dZ, this.endNode); // don't
+			// modify
 			// x
 			if(!scrapedBlock2.canStandAt())
 				return;

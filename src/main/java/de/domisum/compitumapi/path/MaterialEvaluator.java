@@ -19,8 +19,8 @@ public class MaterialEvaluator
 			if(mat.getId() > maxId)
 				maxId = mat.getId();
 
-		canStandOn = new boolean[maxId + 1]; // value shift
-		canStandIn = new boolean[maxId + 1]; // value shift
+		canStandOn = new boolean[maxId+1]; // value shift
+		canStandIn = new boolean[maxId+1]; // value shift
 
 		for(Material mat : Material.values())
 		{

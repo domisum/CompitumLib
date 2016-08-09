@@ -1,13 +1,12 @@
 package de.domisum.compitumapi.path.pathprocessors;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.bukkit.Location;
-
 import de.domisum.auxiliumapi.util.bukkit.LocationUtil;
 import de.domisum.compitumapi.path.RawPath;
 import de.domisum.compitumapi.path.node.Node;
+import org.bukkit.Location;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class WalkablePath
 {
@@ -44,8 +43,8 @@ public class WalkablePath
 		for(int i = 0; i < this.locations.size(); i++)
 		{
 			Location location = this.locations.get(i);
-			Location before = i >= 1 ? this.locations.get(i - 1) : null;
-			Location after = i <= (this.locations.size() - 2) ? this.locations.get(i + 1) : null;
+			Location before = i >= 1 ? this.locations.get(i-1) : null;
+			Location after = i <= (this.locations.size()-2) ? this.locations.get(i+1) : null;
 
 			// jump before going one block higher
 			// if(after != null)
