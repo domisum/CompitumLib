@@ -17,7 +17,7 @@ public class CompitumAPI
 	// -------
 	// CONSTRUCTOR
 	// -------
-	public CompitumAPI(JavaPlugin plugin)
+	protected CompitumAPI(JavaPlugin plugin)
 	{
 		instance = this;
 		this.plugin = plugin;
@@ -25,7 +25,7 @@ public class CompitumAPI
 		onEnable();
 	}
 
-	public static void initialize(JavaPlugin plugin)
+	public static void enable(JavaPlugin plugin)
 	{
 		if(instance != null)
 			return;
@@ -33,14 +33,23 @@ public class CompitumAPI
 		new CompitumAPI(plugin);
 	}
 
-	public void onEnable()
+	public static void disable()
+	{
+		if(instance == null)
+			return;
+
+		getInstance().onDisable();
+		instance = null;
+	}
+
+	protected void onEnable()
 	{
 		MaterialEvaluator.prepareEvaluation();
 
 		getLogger().info(this.getClass().getSimpleName() + " has been enabled");
 	}
 
-	public void onDisable()
+	protected void onDisable()
 	{
 		getLogger().info(this.getClass().getSimpleName() + " has been disabled");
 	}
