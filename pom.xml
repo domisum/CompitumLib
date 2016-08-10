@@ -57,7 +57,7 @@
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>vps.domisum.de-snapshots</name>
-			<url>vps.domisum.de:8081/artifactory/ext-snapshot-local</url>
+			<url>http://vps.domisum.de:8081/artifactory/ext-snapshot-local</url>
 		</snapshotRepository>
 	</distributionManagement>
 
