@@ -34,9 +34,17 @@ public class SerializationGraph
 
 
 	// -------
-	// GETTERS
+	// CONVERSION
 	// -------
-	public NavGraph getGraph()
+	public SerializationGraph(NavGraph graph)
+	{
+		this.worldName = graph.getWorld().getName();
+
+		for(GraphNode gn : graph.getNodes())
+			this.nodes.add(new SerializationNode(gn));
+	}
+
+	public NavGraph convertToNavGraph()
 	{
 		Map<String, GraphNode> nodesById = new HashMap<>();
 
@@ -51,15 +59,12 @@ public class SerializationGraph
 			for(Duo<String, Double> edge : sn.getEdges())
 			{
 				GraphNode targetNode = nodesById.get(edge.a);
-				node.addEdge(targetNode, edge.b);
+				if(!node.isConnected(targetNode)) // connections are specified both ways
+					node.addEdge(targetNode, edge.b);
 			}
 		}
 
-		// add nodes to graph
-		NavGraph graph = new NavGraph(Bukkit.getWorld(this.worldName));
-		for(GraphNode node : nodesById.values())
-			graph.addNode(node);
-		return graph;
+		return new NavGraph(Bukkit.getWorld(this.worldName), nodesById.values());
 	}
 
 }

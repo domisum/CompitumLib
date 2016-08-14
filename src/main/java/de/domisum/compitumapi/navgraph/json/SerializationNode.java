@@ -1,12 +1,14 @@
 package de.domisum.compitumapi.navgraph.json;
 
 import de.domisum.auxiliumapi.data.container.Duo;
+import de.domisum.auxiliumapi.util.java.annotations.DeserializationNoArgsConstructor;
 import de.domisum.auxiliumapi.util.java.annotations.SetByDeserialization;
+import de.domisum.compitumapi.navgraph.GraphEdge;
 import de.domisum.compitumapi.navgraph.GraphNode;
 
 import java.util.List;
 
-public class SerializationNode
+class SerializationNode
 {
 
 	// PROPERTIES
@@ -28,28 +30,41 @@ public class SerializationNode
 	// -------
 	// CONSTRUCTOR
 	// -------
+	@DeserializationNoArgsConstructor
 	public SerializationNode()
 	{
 
+	}
+
+	SerializationNode(GraphNode graphNode)
+	{
+		this.id = graphNode.getId();
+
+		this.x = graphNode.getX();
+		this.y = graphNode.getY();
+		this.z = graphNode.getZ();
+
+		for(GraphEdge e : graphNode.getEdges())
+			this.edges.add(new Duo<>(e.getOther(graphNode).getId(), e.getWeightModifier()));
 	}
 
 
 	// -------
 	// GETTERS
 	// -------
-	public String getId()
+	String getId()
 	{
 		return this.id;
 	}
 
-	public GraphNode getUnconnectedNode()
+	GraphNode getUnconnectedNode()
 	{
 		return new GraphNode(this.id, this.x, this.y, this.z);
 	}
 
-	public List<Duo<String, Double>> getEdges()
+	List<Duo<String, Double>> getEdges()
 	{
-		return edges;
+		return this.edges;
 	}
 
 }

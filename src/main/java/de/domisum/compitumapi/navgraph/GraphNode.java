@@ -1,5 +1,7 @@
 package de.domisum.compitumapi.navgraph;
 
+import de.domisum.auxiliumapi.data.container.math.Vector3D;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +10,7 @@ public class GraphNode
 {
 
 	// CONSTANTS
-	public static final int KEY_LENGTHS = 4;
+	public static final int KEY_LENGTH = 4;
 
 	// PROPERTIES
 	private final String id;
@@ -73,10 +75,15 @@ public class GraphNode
 		return this.z;
 	}
 
-
-	public int getNumberOfEdges()
+	public Vector3D getPositionVector()
 	{
-		return this.edges.size();
+		return new Vector3D(x, y, z);
+	}
+
+
+	public List<GraphEdge> getEdges()
+	{
+		return edges;
 	}
 
 	public boolean isConnected(GraphNode other)

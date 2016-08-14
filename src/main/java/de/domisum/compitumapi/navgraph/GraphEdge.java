@@ -8,18 +8,21 @@ public class GraphEdge
 	private final GraphNode node2;
 
 	// PROPERTIES
-	private double weight;
+	private double weightModifier;
+
+	// STATUS
+	private double rawWeight = -1;
 
 
 	// -------
 	// CONSTRUCTOR
 	// -------
-	public GraphEdge(GraphNode node1, GraphNode node2, double weight)
+	public GraphEdge(GraphNode node1, GraphNode node2, double weightModifier)
 	{
 		this.node1 = node1;
 		this.node2 = node2;
 
-		this.weight = weight;
+		this.weightModifier = weightModifier;
 	}
 
 
@@ -48,18 +51,35 @@ public class GraphEdge
 	}
 
 
-	public double getWeight()
+	public double getWeightModifier()
 	{
-		return this.weight;
+		return this.weightModifier;
 	}
 
 
 	// -------
 	// SETTERS
 	// -------
-	public void setWeight(double weight)
+	public void setWeightModifier(double weightModifier)
 	{
-		this.weight = weight;
+		this.weightModifier = weightModifier;
+	}
+
+
+	// -------
+	// WEIGHT
+	// -------
+	public double getWeight()
+	{
+		if(this.rawWeight == -1)
+			calculateRawWeight();
+
+		return this.rawWeight*this.weightModifier;
+	}
+
+	private void calculateRawWeight()
+	{
+		this.rawWeight = this.node1.getPositionVector().subtract(this.node2.getPositionVector()).length();
 	}
 
 }
