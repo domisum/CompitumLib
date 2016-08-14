@@ -1,4 +1,4 @@
-package de.domisum.compitumapi.movementgraph;
+package de.domisum.compitumapi.navgraph;
 
 public class GraphEdge
 {

@@ -1,4 +1,4 @@
-package de.domisum.compitumapi.movementgraph;
+package de.domisum.compitumapi.navgraph;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -53,6 +53,11 @@ public class GraphNode
 	// -------
 	// GETTERS
 	// -------
+	public String getId()
+	{
+		return this.id;
+	}
+
 	public double getX()
 	{
 		return this.x;
