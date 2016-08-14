@@ -194,7 +194,7 @@ public class AStar
 			// check if startPosition is end position -> path found
 			if(this.startNode.equals(this.endNode))
 			{
-				this.path = new RawPath(this.world, Arrays.asList(new Node[] {this.startNode}));
+				this.path = new RawPath(this.world, Arrays.asList(this.startNode));
 				this.pathfindingStatus = PathfindingStatus.FOUND;
 
 				break pathfinding;

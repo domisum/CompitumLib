@@ -8,7 +8,7 @@ public enum PathfindingStatus
 	NOT_STARTED,
 	SEARCHING,
 	FOUND,
-	NOT_FOUND;
+	NOT_FOUND
 	// @formatter:on
 
 }

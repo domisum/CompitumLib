@@ -6,8 +6,13 @@ import org.bukkit.Material;
 public class MaterialEvaluator
 {
 
+	// REFERENCES
 	private static boolean[] canStandOn;
 	private static boolean[] canStandIn;
+
+	// STATUS
+	private static boolean ready = false;
+
 
 	// -------
 	// CONSTRUCTOR
@@ -41,6 +46,8 @@ public class MaterialEvaluator
 				canStandOn[id] = false;
 			}
 		}
+
+		ready = true;
 	}
 
 
@@ -49,11 +56,18 @@ public class MaterialEvaluator
 	// -------
 	public static boolean canStandOn(int materialID)
 	{
+		if(!ready)
+			throw new IllegalStateException("CompitumAPI has to be anabled before usage!");
+
 		return canStandOn[materialID];
 	}
 
 	public static boolean canStandIn(int materialID)
 	{
+		// TODO check if this impacts performance much
+		if(!ready)
+			throw new IllegalStateException("CompitumAPI has to be anabled before usage!");
+
 		return canStandIn[materialID];
 	}
 
