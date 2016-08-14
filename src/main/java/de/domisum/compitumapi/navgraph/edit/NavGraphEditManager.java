@@ -1,6 +1,5 @@
 package de.domisum.compitumapi.navgraph.edit;
 
-import de.domisum.auxiliumapi.util.DebugUtil;
 import de.domisum.auxiliumapi.util.bukkit.ItemStackBuilder;
 import de.domisum.auxiliumapi.util.bukkit.PlayerUtil;
 import de.domisum.compitumapi.CompitumAPI;
@@ -53,8 +52,6 @@ public class NavGraphEditManager
 
 	public void terminate()
 	{
-		DebugUtil.say("terminate");
-
 		stopUpdateTask();
 
 		// copying the set to avoid ConcurrentModificaiton
