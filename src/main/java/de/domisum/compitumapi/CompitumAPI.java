@@ -52,7 +52,7 @@ public class CompitumAPI
 
 	private void onEnable()
 	{
-		AuxiliumAPI.enable(plugin);
+		AuxiliumAPI.enable(this.plugin);
 
 		MaterialEvaluator.prepareEvaluation();
 		this.navGraphManager = new NavGraphManager();

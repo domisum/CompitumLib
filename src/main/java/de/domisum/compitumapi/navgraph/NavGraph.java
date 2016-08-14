@@ -1,6 +1,5 @@
 package de.domisum.compitumapi.navgraph;
 
-import de.domisum.auxiliumapi.data.container.Duo;
 import de.domisum.auxiliumapi.data.container.math.Vector3D;
 import de.domisum.auxiliumapi.util.keys.Base64Key;
 import org.bukkit.Location;
@@ -89,17 +88,28 @@ public class NavGraph
 	// -------
 	// CHANGERS
 	// -------
-	public GraphNode addNode(double x, double y, double z, Duo<String, Double>... connectedNodes)
+	public GraphNode addNode(Vector3D location, GraphNode connectedNode, double edgeWeightModifier)
+	{
+		return addNode(location.x, location.y, location.z, connectedNode, edgeWeightModifier);
+	}
+
+	public GraphNode addNode(double x, double y, double z, GraphNode connectedNode, double edgeWeightModifier)
 	{
 		GraphNode node = new GraphNode(getUnusedNodeId(), x, y, z);
-		for(Duo<String, Double> cn : connectedNodes)
-		{
-			GraphNode connectedNode = getNode(cn.a);
-			node.addEdge(connectedNode, cn.b);
-		}
+		if(connectedNode != null)
+			node.addEdge(connectedNode, edgeWeightModifier);
 
 		this.nodes.add(node);
 		return node;
+	}
+
+	public void removeNode(GraphNode node)
+	{
+		// cloning the HashSet to avoid ConcurrentModification since edges are removed from both nodes
+		for(GraphEdge edge : new HashSet<>(node.getEdges()))
+			edge.getOther(node).removeEdge(node);
+
+		nodes.remove(node);
 	}
 
 }

@@ -19,6 +19,9 @@ public class GraphEdge
 	// -------
 	public GraphEdge(GraphNode node1, GraphNode node2, double weightModifier)
 	{
+		if(node1 == node2)
+			throw new IllegalArgumentException("Can't connect a node to itself");
+
 		this.node1 = node1;
 		this.node2 = node2;
 

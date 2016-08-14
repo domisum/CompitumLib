@@ -99,15 +99,15 @@ public class GraphNode
 	// -------
 	// CHANGERS
 	// -------
-	public void addEdge(GraphNode node, double weight)
+	public void addEdge(GraphNode node, double weightModifier)
 	{
 		if(isConnected(node))
 			throw new IllegalStateException(
 					"Creating edge failed. The node '"+this.id+"' is already connected to the node '"+node.id+"'");
 
-		GraphEdge edge = new GraphEdge(this, node, weight);
+		GraphEdge edge = new GraphEdge(this, node, weightModifier);
 		this.edges.add(edge);
-		node.edges.remove(edge);
+		node.edges.add(edge);
 	}
 
 
@@ -115,7 +115,7 @@ public class GraphNode
 	{
 		if(!isConnected(node))
 			throw new IllegalStateException(
-					"Removing edge failed. The node '"+this.id+"' isn't connected to the node '"+this.id+"'");
+					"Removing edge failed. The node '"+this.id+"' isn't connected to the node '"+node.id+"'");
 
 		Iterator<GraphEdge> iterator = this.edges.iterator();
 		while(iterator.hasNext())

@@ -19,7 +19,7 @@ class NavGraphEditor
 	private static final double VISIBILITY_RANGE = 24;
 	private static final double EDGE_PARTICLE_DISTANCE = 0.5;
 
-	private static final double NODE_SELECTION_MAX_DISTANCE = 2;
+	private static final double NODE_SELECTION_MAX_DISTANCE = 1.5;
 
 	// REFERENCES
 	private Player player;
@@ -153,16 +153,29 @@ class NavGraphEditor
 	// -------
 	void connect()
 	{
-		if(this.connectedNode != null)
-		{
-			this.player.sendMessage("Connecting failed. You are already connected to a node.");
-			return;
-		}
-
 		GraphNode nearbyNode = getNearbyNode();
 		if(nearbyNode == null)
 		{
 			this.player.sendMessage("Connecting failed. No node found nearby.");
+			return;
+		}
+
+		if(this.connectedNode != null)
+		{
+			if(nearbyNode == this.connectedNode)
+			{
+				this.player.sendMessage("Connecting failed. You can't connect a node to itself.");
+				return;
+			}
+
+			if(this.connectedNode.isConnected(nearbyNode))
+			{
+				this.player.sendMessage("Connecting failed. The nodes are already connected.");
+				return;
+			}
+
+			this.connectedNode.addEdge(nearbyNode, 1);
+			this.connectedNode = null;
 			return;
 		}
 
@@ -180,9 +193,38 @@ class NavGraphEditor
 		this.connectedNode = null;
 	}
 
-	void newNode()
+	void createNode()
 	{
+		NavGraph graph = getGraph();
+		if(graph == null)
+		{
+			this.player.sendMessage("Creating node failed. No graph is covering this area.");
+			return;
+		}
 
+		if(this.connectedNode == null)
+			this.player.sendMessage("Warning: The created node is not connected to any other node.");
+
+		this.connectedNode = graph.addNode(new Vector3D(this.player.getLocation()), this.connectedNode, 1);
+	}
+
+	void removeNode()
+	{
+		NavGraph graph = getGraph();
+		if(graph == null)
+		{
+			this.player.sendMessage("Creating node failed. No graph is covering this area.");
+			return;
+		}
+
+		GraphNode node = getNearbyNode();
+		if(node == null)
+		{
+			this.player.sendMessage("Removing node failed. No node nearby.");
+			return;
+		}
+
+		graph.removeNode(node);
 	}
 
 }

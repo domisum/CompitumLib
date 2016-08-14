@@ -1,5 +1,6 @@
 package de.domisum.compitumapi.navgraph.edit;
 
+import de.domisum.auxiliumapi.util.DebugUtil;
 import de.domisum.auxiliumapi.util.bukkit.ItemStackBuilder;
 import de.domisum.auxiliumapi.util.bukkit.PlayerUtil;
 import de.domisum.compitumapi.CompitumAPI;
@@ -21,7 +22,7 @@ public class NavGraphEditManager
 {
 
 	// CONSTANTS
-	private static final int TASK_INTERVAL_TICKS = 3;
+	private static final int TASK_INTERVAL_TICKS = 5;
 
 	// REFERENCES
 	private Set<NavGraphEditor> editors = new HashSet<>();
@@ -31,7 +32,8 @@ public class NavGraphEditManager
 	private List<ItemStack> editItemStacks = new ArrayList<>();
 	ItemStack connectItemStack;
 	ItemStack disconnectItemStack;
-	ItemStack newNodeItemStack;
+	ItemStack createNodeItemStack;
+	ItemStack removeNodeItemStack;
 
 
 	// -------
@@ -51,6 +53,8 @@ public class NavGraphEditManager
 
 	public void terminate()
 	{
+		DebugUtil.say("terminate");
+
 		stopUpdateTask();
 
 		// copying the set to avoid ConcurrentModificaiton
@@ -65,12 +69,15 @@ public class NavGraphEditManager
 				.build();
 		this.disconnectItemStack = new ItemStackBuilder(Material.SHEARS).displayName(ChatColor.RED+"Disconnect from node")
 				.build();
-		this.newNodeItemStack = new ItemStackBuilder(Material.RABBIT_FOOT).displayName(ChatColor.GREEN+"New node").build();
+		this.createNodeItemStack = new ItemStackBuilder(Material.RABBIT_FOOT).displayName(ChatColor.GREEN+"Create node").build();
+		this.removeNodeItemStack = new ItemStackBuilder(Material.BLAZE_POWDER).displayName(ChatColor.RED+"Remove node").build();
+
 
 		// this determines the order of the itemstacks in the inventory
 		this.editItemStacks.add(this.connectItemStack);
-		this.editItemStacks.add(this.newNodeItemStack);
+		this.editItemStacks.add(this.createNodeItemStack);
 		this.editItemStacks.add(this.disconnectItemStack);
+		this.editItemStacks.add(this.removeNodeItemStack);
 	}
 
 	private void registerCommand()
@@ -194,10 +201,16 @@ public class NavGraphEditManager
 		getEditor(player).disconnect();
 	}
 
-	void newNode(Player player)
+	void createNode(Player player)
 	{
 		// noinspection ConstantConditions
-		getEditor(player).newNode();
+		getEditor(player).createNode();
+	}
+
+	void removeNode(Player player)
+	{
+		// noinspection ConstantConditions
+		getEditor(player).removeNode();
 	}
 
 }

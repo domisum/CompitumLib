@@ -50,8 +50,10 @@ class NavGraphEditListener implements Listener
 			editManager.connect(player);
 		else if(itemStack.isSimilar(editManager.disconnectItemStack))
 			editManager.disconnect(player);
-		else if(itemStack.isSimilar(editManager.newNodeItemStack))
-			editManager.newNode(player);
+		else if(itemStack.isSimilar(editManager.createNodeItemStack))
+			editManager.createNode(player);
+		else if(itemStack.isSimilar(editManager.removeNodeItemStack))
+			editManager.removeNode(player);
 
 	}
 
