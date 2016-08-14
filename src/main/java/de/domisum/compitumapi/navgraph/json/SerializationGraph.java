@@ -1,6 +1,7 @@
 package de.domisum.compitumapi.navgraph.json;
 
 import de.domisum.auxiliumapi.data.container.Duo;
+import de.domisum.auxiliumapi.data.container.math.Vector3D;
 import de.domisum.auxiliumapi.util.java.annotations.DeserializationNoArgsConstructor;
 import de.domisum.auxiliumapi.util.java.annotations.SetByDeserialization;
 import de.domisum.compitumapi.navgraph.GraphNode;
@@ -17,6 +18,10 @@ public class SerializationGraph
 	// PROPERTIES
 	@SetByDeserialization
 	private String worldName;
+	@SetByDeserialization
+	private Vector3D rangeCenter;
+	@SetByDeserialization
+	private double range;
 
 	// REFERENCES
 	@SetByDeserialization
@@ -44,7 +49,7 @@ public class SerializationGraph
 			this.nodes.add(new SerializationNode(gn));
 	}
 
-	public NavGraph convertToNavGraph()
+	public NavGraph convertToNavGraph(String id)
 	{
 		Map<String, GraphNode> nodesById = new HashMap<>();
 
@@ -64,7 +69,7 @@ public class SerializationGraph
 			}
 		}
 
-		return new NavGraph(Bukkit.getWorld(this.worldName), nodesById.values());
+		return new NavGraph(id, this.rangeCenter, this.range, Bukkit.getWorld(this.worldName), nodesById.values());
 	}
 
 }

@@ -1,7 +1,9 @@
 package de.domisum.compitumapi.navgraph;
 
 import de.domisum.auxiliumapi.data.container.Duo;
+import de.domisum.auxiliumapi.data.container.math.Vector3D;
 import de.domisum.auxiliumapi.util.keys.Base64Key;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.Collection;
@@ -11,6 +13,11 @@ import java.util.Set;
 public class NavGraph
 {
 
+	// PROPERTIES
+	private String id;
+	private Vector3D rangeCenter;
+	private double range;
+
 	// REFERENCES
 	private World world;
 	private Set<GraphNode> nodes = new HashSet<>();
@@ -19,30 +26,43 @@ public class NavGraph
 	// -------
 	// CONSTRUCTOR
 	// -------
-	public NavGraph(World world, Collection<GraphNode> nodes)
+	public NavGraph(String id, Vector3D ranceCenter, double range, World world, Collection<GraphNode> nodes)
 	{
+		this.id = id;
+		this.rangeCenter = ranceCenter;
+		this.range = range;
+
 		this.world = world;
 		for(GraphNode gn : nodes)
 			this.nodes.add(gn);
-	}
-
-	public NavGraph(World world)
-	{
-		this(world, new HashSet<>());
 	}
 
 
 	// -------
 	// GETTERS
 	// -------
+	public String getId()
+	{
+		return this.id;
+	}
+
+	public boolean isInRange(Location location)
+	{
+		if(location.getWorld() != this.world)
+			return false;
+
+		return new Vector3D(location).distanceToSquared(this.rangeCenter) < this.range*this.range;
+	}
+
 	public World getWorld()
 	{
-		return world;
+		return this.world;
 	}
+
 
 	public Set<GraphNode> getNodes()
 	{
-		return nodes;
+		return this.nodes;
 	}
 
 	public GraphNode getNode(String id)
@@ -53,6 +73,7 @@ public class NavGraph
 
 		return null;
 	}
+
 
 	private String getUnusedNodeId()
 	{

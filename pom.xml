@@ -31,6 +31,12 @@
 			<artifactId>AuxiliumAPI</artifactId>
 			<version>LATEST</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.darkblade12.particleeffect</groupId>
+			<artifactId>ParticleAPI</artifactId>
+			<version>LATEST</version>
+		</dependency>
 	</dependencies>
 
 	<build>

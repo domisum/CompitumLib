@@ -10,7 +10,7 @@ public class GraphNode
 {
 
 	// CONSTANTS
-	public static final int KEY_LENGTH = 4;
+	public static final int KEY_LENGTH = 5;
 
 	// PROPERTIES
 	private final String id;
