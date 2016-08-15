@@ -6,6 +6,7 @@ import de.domisum.auxiliumapi.util.java.annotations.SetByDeserialization;
 import de.domisum.compitumapi.navgraph.GraphEdge;
 import de.domisum.compitumapi.navgraph.GraphNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class SerializationNode
@@ -24,7 +25,7 @@ class SerializationNode
 
 	// REFERENCES
 	@SetByDeserialization
-	private List<Duo<String, Double>> edges;
+	private List<Duo<String, Double>> edges = new ArrayList<>();
 
 
 	// -------

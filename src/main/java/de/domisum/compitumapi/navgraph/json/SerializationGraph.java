@@ -8,6 +8,7 @@ import de.domisum.compitumapi.navgraph.GraphNode;
 import de.domisum.compitumapi.navgraph.NavGraph;
 import org.bukkit.Bukkit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class SerializationGraph
 
 	// REFERENCES
 	@SetByDeserialization
-	private List<SerializationNode> nodes;
+	private List<SerializationNode> nodes = new ArrayList<>();
 
 
 	// -------
@@ -44,6 +45,8 @@ public class SerializationGraph
 	public SerializationGraph(NavGraph graph)
 	{
 		this.worldName = graph.getWorld().getName();
+		this.rangeCenter = graph.getRangeCenter();
+		this.range = graph.getRange();
 
 		for(GraphNode gn : graph.getNodes())
 			this.nodes.add(new SerializationNode(gn));

@@ -91,7 +91,7 @@ public class NavGraphManager
 			}
 		}
 
-		CompitumAPI.getLogger().info("Loading NavGraphs successful: loaded "+this.graphs.size()+" NavGraph(s)");
+		CompitumAPI.getLogger().info("Loading NavGraphs complete: loaded "+this.graphs.size()+" NavGraph(s)");
 	}
 
 
@@ -100,7 +100,31 @@ public class NavGraphManager
 	// -------
 	private void saveGraphs()
 	{
+		CompitumAPI.getLogger().info("Saving NavGraphs...");
 
+		File baseDir = new File(NAV_GRAPHS_DIRECTORY);
+		// noinspection ResultOfMethodCallIgnored
+		baseDir.mkdirs();
+		FileUtil.deleteDirectoryContents(baseDir);
+
+		for(NavGraph graph : this.graphs)
+		{
+			File file = new File(baseDir, graph.getId()+NAV_GRAPH_FILE_EXTENSION);
+
+			try
+			{
+				SerializationGraph sGraph = new SerializationGraph(graph);
+				String json = GsonUtil.getPretty().toJson(sGraph);
+
+				FileUtil.writeStringToFile(file, json);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		CompitumAPI.getLogger().info("Saving NavGraphs complete: saved "+this.graphs.size()+" NavGraph(s)");
 	}
 
 

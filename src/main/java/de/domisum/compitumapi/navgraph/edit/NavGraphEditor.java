@@ -175,7 +175,7 @@ class NavGraphEditor
 			}
 
 			this.connectedNode.addEdge(nearbyNode, 1);
-			this.connectedNode = null;
+			this.connectedNode = nearbyNode;
 			return;
 		}
 

@@ -45,6 +45,16 @@ public class NavGraph
 		return this.id;
 	}
 
+	public Vector3D getRangeCenter()
+	{
+		return this.rangeCenter;
+	}
+
+	public double getRange()
+	{
+		return this.range;
+	}
+
 	public boolean isInRange(Location location)
 	{
 		if(location.getWorld() != this.world)
