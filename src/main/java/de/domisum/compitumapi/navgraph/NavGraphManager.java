@@ -1,9 +1,8 @@
-package de.domisum.compitumapi.navgraph.manager;
+package de.domisum.compitumapi.navgraph;
 
 import de.domisum.auxiliumapi.util.FileUtil;
 import de.domisum.auxiliumapi.util.java.GsonUtil;
 import de.domisum.compitumapi.CompitumAPI;
-import de.domisum.compitumapi.navgraph.NavGraph;
 import de.domisum.compitumapi.navgraph.edit.NavGraphEditManager;
 import de.domisum.compitumapi.navgraph.json.SerializationGraph;
 import org.bukkit.Bukkit;
