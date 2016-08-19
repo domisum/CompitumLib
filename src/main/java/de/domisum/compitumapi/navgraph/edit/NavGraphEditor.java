@@ -20,7 +20,7 @@ class NavGraphEditor
 
 	// CONSTANTS
 	private static final double VISIBILITY_RANGE = 24;
-	private static final double EDGE_PARTICLE_DISTANCE = 0.2;
+	private static final double EDGE_PARTICLE_DISTANCE = 0.5;
 
 	private static final double NODE_SELECTION_MAX_DISTANCE = 1.5;
 

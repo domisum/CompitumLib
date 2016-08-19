@@ -3,6 +3,7 @@ package de.domisum.compitumapi;
 import de.domisum.auxiliumapi.AuxiliumAPI;
 import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.compitumapi.navgraph.NavGraphManager;
+import de.domisum.compitumapi.navmesh.NavMeshManager;
 import de.domisum.compitumapi.path.MaterialEvaluator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +19,7 @@ public class CompitumAPI
 	private Plugin plugin;
 
 	private NavGraphManager navGraphManager;
+	private NavMeshManager navMeshManager;
 
 
 	// -------
@@ -57,6 +59,8 @@ public class CompitumAPI
 		MaterialEvaluator.prepareEvaluation();
 		this.navGraphManager = new NavGraphManager();
 		this.navGraphManager.initiialize();
+		this.navMeshManager = new NavMeshManager();
+		this.navMeshManager.initiialize();
 
 		getLogger().info(this.getClass().getSimpleName()+" has been enabled");
 	}
@@ -65,6 +69,8 @@ public class CompitumAPI
 	{
 		if(this.navGraphManager != null)
 			this.navGraphManager.terminate();
+		if(this.navMeshManager != null)
+			this.navMeshManager.terminate();
 
 		getLogger().info(this.getClass().getSimpleName()+" has been disabled");
 	}
@@ -94,6 +100,12 @@ public class CompitumAPI
 	public static NavGraphManager getNavGraphManager()
 	{
 		return getInstance().navGraphManager;
+	}
+
+	@APIUsage
+	public static NavMeshManager getNavMeshManager()
+	{
+		return getInstance().navMeshManager;
 	}
 
 }
