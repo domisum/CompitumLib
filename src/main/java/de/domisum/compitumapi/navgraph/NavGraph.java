@@ -83,6 +83,27 @@ public class NavGraph
 		return null;
 	}
 
+	public GraphNode getNearestNode(Location location)
+	{
+		if(!isInRange(location))
+			return null;
+
+		double closesDistanceSquared = Double.MAX_VALUE;
+		GraphNode closestNode = null;
+
+		for(GraphNode node : nodes)
+		{
+			double distanceSquared = node.getPositionVector().distanceToSquared(new Vector3D(location));
+			if(distanceSquared < closesDistanceSquared)
+			{
+				closestNode = node;
+				closesDistanceSquared = distanceSquared;
+			}
+		}
+
+		return closestNode;
+	}
+
 
 	private String getUnusedNodeId()
 	{

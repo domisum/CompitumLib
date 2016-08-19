@@ -2,10 +2,13 @@ package de.domisum.compitumapi.navgraph.edit;
 
 import com.darkblade12.particleeffect.ParticleEffect;
 import de.domisum.auxiliumapi.data.container.math.Vector3D;
+import de.domisum.auxiliumapi.util.bukkit.MessagingUtil;
+import de.domisum.auxiliumapi.util.math.MathUtil;
 import de.domisum.compitumapi.CompitumAPI;
 import de.domisum.compitumapi.navgraph.GraphEdge;
 import de.domisum.compitumapi.navgraph.GraphNode;
 import de.domisum.compitumapi.navgraph.NavGraph;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -17,7 +20,7 @@ class NavGraphEditor
 
 	// CONSTANTS
 	private static final double VISIBILITY_RANGE = 24;
-	private static final double EDGE_PARTICLE_DISTANCE = 0.5;
+	private static final double EDGE_PARTICLE_DISTANCE = 0.2;
 
 	private static final double NODE_SELECTION_MAX_DISTANCE = 1.5;
 
@@ -49,14 +52,30 @@ class NavGraphEditor
 	// -------
 	// UPDATE
 	// -------
-	void update()
+	void update(int updateCount)
 	{
-		spawnParticles();
+		NavGraph graph = getGraph();
+		if(graph != null)
+			spawnParticles(graph, updateCount);
+
+		sendNearbyGraphName(graph);
 
 		if(this.connectedNode != null)
 			if(this.connectedNode.getPositionVector().subtract(new Vector3D(this.player.getLocation())).lengthSquared()
 					> VISIBILITY_RANGE*VISIBILITY_RANGE)
+			{
+				this.player.sendMessage("You were disconnected from the node.");
 				disconnect();
+			}
+	}
+
+	private void sendNearbyGraphName(NavGraph graph)
+	{
+		String graphName = ChatColor.RED+"No graph in range";
+		if(graph != null)
+			graphName = "Graph: '"+graph.getId()+"'";
+
+		MessagingUtil.sendActionBarMessage(graphName, this.player);
 	}
 
 
@@ -71,6 +90,9 @@ class NavGraphEditor
 	private GraphNode getNearbyNode()
 	{
 		NavGraph graph = getGraph();
+		if(graph == null)
+			return null;
+
 		Vector3D playerLocation = new Vector3D(this.player.getLocation());
 
 		double closesDistanceSquared = Double.MAX_VALUE;
@@ -96,12 +118,8 @@ class NavGraphEditor
 	// -------
 	// VISUALIZATION
 	// -------
-	private void spawnParticles()
+	private void spawnParticles(NavGraph graph, int updateCount)
 	{
-		NavGraph graph = getGraph();
-		if(graph == null)
-			return;
-
 		Vector3D playerLocation = new Vector3D(this.player.getLocation());
 
 		Set<GraphNode> closeNodes = new HashSet<>();
@@ -109,17 +127,22 @@ class NavGraphEditor
 			if(n.getPositionVector().distanceToSquared(playerLocation) < VISIBILITY_RANGE*VISIBILITY_RANGE)
 				closeNodes.add(n);
 
-		Set<GraphEdge> closeEdges = new HashSet<>();
-		for(GraphNode n : closeNodes)
-			closeEdges.addAll(n.getEdges());
-
 		for(GraphNode n : closeNodes)
 			spawnNodeParticles(n);
 
-		for(GraphEdge e : closeEdges)
-			spawnEdgeParticles(e);
+		int edgeParticleRarity = 1;
 
-		if(this.connectedNode != null)
+		if(updateCount%edgeParticleRarity == 0)
+		{
+			Set<GraphEdge> closeEdges = new HashSet<>();
+			for(GraphNode n : closeNodes)
+				closeEdges.addAll(n.getEdges());
+
+			for(GraphEdge e : closeEdges)
+				spawnEdgeParticles(e);
+		}
+
+		if(this.connectedNode != null && updateCount%edgeParticleRarity == 0)
 			spawnEdgeParticles(this.connectedNode.getPositionVector(), playerLocation);
 	}
 
@@ -175,7 +198,7 @@ class NavGraphEditor
 			}
 
 			this.connectedNode.addEdge(nearbyNode, 1);
-			this.connectedNode = nearbyNode;
+			this.connectedNode = null;
 			return;
 		}
 
@@ -210,13 +233,6 @@ class NavGraphEditor
 
 	void removeNode()
 	{
-		NavGraph graph = getGraph();
-		if(graph == null)
-		{
-			this.player.sendMessage("Creating node failed. No graph is covering this area.");
-			return;
-		}
-
 		GraphNode node = getNearbyNode();
 		if(node == null)
 		{
@@ -224,7 +240,41 @@ class NavGraphEditor
 			return;
 		}
 
+		// graph can't be null since a node has been found
+		NavGraph graph = getGraph();
 		graph.removeNode(node);
+
+		if(node == this.connectedNode)
+			this.connectedNode = null;
+	}
+
+	void info()
+	{
+		GraphNode node = getNearbyNode();
+		if(node == null)
+		{
+			this.player.sendMessage("Removing node failed. No node nearby.");
+			return;
+		}
+		NavGraph graph = getGraph();
+
+		this.player.sendMessage("Node '"+node.getId()+"' in graph '"+graph.getId()+"':");
+		this.player.sendMessage("  x: "+MathUtil.round(node.getX(), 2)+", y: "+MathUtil.round(node.getY(), 2)+", z: "+MathUtil
+				.round(node.getZ(), 2));
+
+		this.player.sendMessage("  connected to:");
+		if(node.getEdges().size() == 0)
+			this.player.sendMessage("    none");
+		else
+			for(GraphEdge edge : node.getEdges())
+			{
+				String edgeString = "    ";
+				edgeString += "'"+edge.getOther(node).getId()+"'";
+				edgeString += ", ";
+				edgeString += "mod: "+MathUtil.round(edge.getWeightModifier(), 3);
+
+				this.player.sendMessage(edgeString);
+			}
 	}
 
 }

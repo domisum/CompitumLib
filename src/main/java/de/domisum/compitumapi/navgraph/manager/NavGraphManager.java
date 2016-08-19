@@ -6,7 +6,9 @@ import de.domisum.compitumapi.CompitumAPI;
 import de.domisum.compitumapi.navgraph.NavGraph;
 import de.domisum.compitumapi.navgraph.edit.NavGraphEditManager;
 import de.domisum.compitumapi.navgraph.json.SerializationGraph;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.HashSet;
@@ -98,6 +100,14 @@ public class NavGraphManager
 	// -------
 	// SAVING
 	// -------
+	public void additionalSave()
+	{
+		saveGraphs();
+
+		for(Player p : Bukkit.getOnlinePlayers())
+			p.sendMessage("Saved graph data to disk.");
+	}
+
 	private void saveGraphs()
 	{
 		CompitumAPI.getLogger().info("Saving NavGraphs...");
@@ -105,7 +115,8 @@ public class NavGraphManager
 		File baseDir = new File(NAV_GRAPHS_DIRECTORY);
 		// noinspection ResultOfMethodCallIgnored
 		baseDir.mkdirs();
-		FileUtil.deleteDirectoryContents(baseDir);
+		// disable this since deleting a navgraph is quite a major thing to do, so don't risk losing them
+		// FileUtil.deleteDirectoryContents(baseDir);
 
 		for(NavGraph graph : this.graphs)
 		{

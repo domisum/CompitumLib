@@ -86,13 +86,18 @@ public class GraphNode
 		return edges;
 	}
 
-	public boolean isConnected(GraphNode other)
+	public GraphEdge getEdge(GraphNode other)
 	{
 		for(GraphEdge e : this.edges)
 			if(e.getOther(this) == other)
-				return true;
+				return e;
 
-		return false;
+		return null;
+	}
+
+	public boolean isConnected(GraphNode other)
+	{
+		return getEdge(other) != null;
 	}
 
 

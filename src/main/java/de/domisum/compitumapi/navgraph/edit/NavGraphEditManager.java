@@ -28,11 +28,15 @@ public class NavGraphEditManager
 	private BukkitTask updateTask;
 
 	// ITEMSTACKS
-	private List<ItemStack> editItemStacks = new ArrayList<>();
+	List<ItemStack> editItemStacks = new ArrayList<>();
 	ItemStack connectItemStack;
 	ItemStack disconnectItemStack;
 	ItemStack createNodeItemStack;
 	ItemStack removeNodeItemStack;
+	ItemStack infoItemStack;
+
+	// STATUS
+	private int updateCount = 0;
 
 
 	// -------
@@ -64,10 +68,11 @@ public class NavGraphEditManager
 	{
 		this.connectItemStack = new ItemStackBuilder(Material.SLIME_BALL).displayName(ChatColor.YELLOW+"Connect to closest node")
 				.build();
-		this.disconnectItemStack = new ItemStackBuilder(Material.SHEARS).displayName(ChatColor.RED+"Disconnect from node")
+		this.disconnectItemStack = new ItemStackBuilder(Material.SHEARS).displayName(ChatColor.GOLD+"Disconnect from node")
 				.build();
 		this.createNodeItemStack = new ItemStackBuilder(Material.RABBIT_FOOT).displayName(ChatColor.GREEN+"Create node").build();
 		this.removeNodeItemStack = new ItemStackBuilder(Material.BLAZE_POWDER).displayName(ChatColor.RED+"Remove node").build();
+		this.infoItemStack = new ItemStackBuilder(Material.BOOK).displayName(ChatColor.AQUA+"Node information").build();
 
 
 		// this determines the order of the itemstacks in the inventory
@@ -75,6 +80,7 @@ public class NavGraphEditManager
 		this.editItemStacks.add(this.createNodeItemStack);
 		this.editItemStacks.add(this.disconnectItemStack);
 		this.editItemStacks.add(this.removeNodeItemStack);
+		this.editItemStacks.add(this.infoItemStack);
 	}
 
 	private void registerCommand()
@@ -147,8 +153,10 @@ public class NavGraphEditManager
 				continue;
 			}
 
-			editor.update();
+			editor.update(this.updateCount);
 		}
+
+		this.updateCount++;
 	}
 
 
@@ -180,6 +188,7 @@ public class NavGraphEditManager
 		PlayerUtil.removeItemStacksFromInventory(player, this.editItemStacks);
 
 		player.sendMessage("NavGraph editing deactivated");
+		CompitumAPI.getNavGraphManager().additionalSave();
 	}
 
 
@@ -208,6 +217,12 @@ public class NavGraphEditManager
 	{
 		// noinspection ConstantConditions
 		getEditor(player).removeNode();
+	}
+
+	void info(Player player)
+	{
+		// noinspection ConstantConditions
+		getEditor(player).info();
 	}
 
 }

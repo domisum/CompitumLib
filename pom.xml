@@ -35,7 +35,7 @@
 		<dependency>
 			<groupId>com.darkblade12.particleeffect</groupId>
 			<artifactId>ParticleAPI</artifactId>
-			<version>LATEST</version>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 
