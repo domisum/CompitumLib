@@ -2,7 +2,7 @@ package de.domisum.compitumapi;
 
 import de.domisum.auxiliumapi.AuxiliumAPI;
 import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
-import de.domisum.compitumapi.navgraph.manager.NavGraphManager;
+import de.domisum.compitumapi.navgraph.NavGraphManager;
 import de.domisum.compitumapi.path.MaterialEvaluator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
