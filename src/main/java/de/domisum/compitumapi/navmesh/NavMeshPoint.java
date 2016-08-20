@@ -2,6 +2,7 @@ package de.domisum.compitumapi.navmesh;
 
 import de.domisum.auxiliumapi.data.container.math.Vector3D;
 import de.domisum.auxiliumapi.util.java.annotations.DeserializationNoArgsConstructor;
+import de.domisum.auxiliumapi.util.math.MathUtil;
 
 public class NavMeshPoint
 {
@@ -23,13 +24,13 @@ public class NavMeshPoint
 		this.id = "";
 	}
 
-	public NavMeshPoint(String id, double x, double y, double z)
+	NavMeshPoint(String id, double x, double y, double z)
 	{
 		this.id = id;
 
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this.x = MathUtil.round(x, 2);
+		this.y = MathUtil.round(y, 2);
+		this.z = MathUtil.round(z, 2);
 	}
 
 	@Override

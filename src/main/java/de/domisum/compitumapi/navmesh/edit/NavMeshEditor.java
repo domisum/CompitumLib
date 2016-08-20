@@ -22,7 +22,7 @@ class NavMeshEditor
 
 	// CONSTANTS
 	private static final double VISIBILITY_RANGE = 24;
-	private static final double LINE_PARTICLE_DISTANCE = 0.2;
+	private static final double LINE_PARTICLE_DISTANCE = 0.4;
 
 	private static final double POINT_SELECTION_MAX_DISTANCE = 1.5;
 
@@ -48,6 +48,11 @@ class NavMeshEditor
 		return this.player;
 	}
 
+
+	private NavMesh getNavMesh()
+	{
+		return CompitumAPI.getNavMeshManager().getNavMeshAt(this.player.getLocation());
+	}
 
 	private NavMeshPoint getNearestPoint()
 	{
@@ -76,6 +81,16 @@ class NavMeshEditor
 		return closestPoint;
 	}
 
+	private NavMeshTriangle getTriangle()
+	{
+		NavMesh mesh = getNavMesh();
+		if(mesh == null)
+			return null;
+
+		Location location = this.player.getLocation();
+		return mesh.getTriangleAt(location);
+	}
+
 
 	// -------
 	// UPDATE
@@ -96,15 +111,6 @@ class NavMeshEditor
 			meshName = "Mesh: '"+mesh.getId()+"'";
 
 		MessagingUtil.sendActionBarMessage(meshName, this.player);
-	}
-
-
-	// -------
-	// MESH
-	// -------
-	private NavMesh getNavMesh()
-	{
-		return CompitumAPI.getNavMeshManager().getNavMeshAt(this.player.getLocation());
 	}
 
 
@@ -175,7 +181,11 @@ class NavMeshEditor
 		}
 
 		Location location = this.player.getLocation();
-		return mesh.createPoint(location.getX(), location.getY(), location.getZ());
+		NavMeshPoint point = mesh.createPoint(location.getX(), location.getY(), location.getZ());
+		if(this.player.isSneaking())
+			this.selectedPoints.add(point);
+
+		return point;
 	}
 
 	void deletePoint()
@@ -189,6 +199,8 @@ class NavMeshEditor
 
 		NavMesh mesh = getNavMesh();
 		mesh.removePoint(point);
+
+		this.selectedPoints.remove(point);
 	}
 
 	void selectPoint()
@@ -270,7 +282,15 @@ class NavMeshEditor
 
 	void deleteTriangle()
 	{
+		NavMeshTriangle triangle = getTriangle();
+		if(triangle == null)
+		{
+			this.player.sendMessage("Deleting triangle failed. No triangle found at your position.");
+			return;
+		}
 
+		NavMesh mesh = getNavMesh();
+		mesh.deleteTriangle(triangle);
 	}
 
 }

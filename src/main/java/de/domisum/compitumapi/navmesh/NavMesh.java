@@ -85,6 +85,18 @@ public class NavMesh
 		return this.triangles;
 	}
 
+	public Set<NavMeshTriangle> getTrianglesUsingPoint(NavMeshPoint point)
+	{
+		Set<NavMeshTriangle> trianglesUsingPoint = new HashSet<>();
+
+		for(NavMeshTriangle triangle : this.triangles)
+			if(triangle.isUsingPoint(point))
+				trianglesUsingPoint.add(triangle);
+
+		return trianglesUsingPoint;
+	}
+
+
 	public NavMeshPoint getPoint(String id)
 	{
 		for(NavMeshPoint point : this.points)
@@ -103,15 +115,13 @@ public class NavMesh
 		return null;
 	}
 
-	public Set<NavMeshTriangle> getTrianglesUsingPoint(NavMeshPoint point)
+	public NavMeshTriangle getTriangleAt(Location location)
 	{
-		Set<NavMeshTriangle> trianglesUsingPoint = new HashSet<>();
-
 		for(NavMeshTriangle triangle : this.triangles)
-			if(triangle.isUsingPoint(point))
-				trianglesUsingPoint.add(triangle);
+			if(triangle.doesContain(location))
+				return triangle;
 
-		return trianglesUsingPoint;
+		return null;
 	}
 
 
@@ -146,6 +156,11 @@ public class NavMesh
 
 		this.triangles.add(triangle);
 		return triangle;
+	}
+
+	public void deleteTriangle(NavMeshTriangle triangle)
+	{
+		this.triangles.remove(triangle);
 	}
 
 

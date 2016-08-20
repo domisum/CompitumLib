@@ -65,7 +65,7 @@ public class NavMeshEditManager
 	private void createEditItemStacks()
 	{
 		this.createPointItemStack = new ItemStackBuilder(Material.SEEDS).displayName(ChatColor.GREEN+"Create new point").build();
-		this.deletePointItemStack = new ItemStackBuilder(Material.REDSTONE).displayName(ChatColor.RED+"Delete closest point")
+		this.deletePointItemStack = new ItemStackBuilder(Material.NETHER_STALK).displayName(ChatColor.RED+"Delete closest point")
 				.build();
 		this.selectPointItemStack = new ItemStackBuilder(Material.GOLD_INGOT).displayName(ChatColor.YELLOW+"Select closest point")
 				.build();
