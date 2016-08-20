@@ -61,6 +61,8 @@ class NavMeshEditListener implements Listener
 			editManager.getEditor(player).createTriangle();
 		else if(itemStack.isSimilar(editManager.deleteTriangleItemStack))
 			editManager.getEditor(player).deleteTriangle();
+		else if(itemStack.isSimilar(editManager.movePointItemStack))
+			editManager.getEditor(player).movePoint();
 	}
 
 	@EventHandler

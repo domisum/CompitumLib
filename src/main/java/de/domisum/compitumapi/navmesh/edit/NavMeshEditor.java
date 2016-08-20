@@ -29,6 +29,7 @@ class NavMeshEditor
 	// REFERENCES
 	private Player player;
 	private List<NavMeshPoint> selectedPoints = new ArrayList<>();
+	private NavMeshPoint movingPoint;
 
 
 	// -------
@@ -100,6 +101,9 @@ class NavMeshEditor
 		NavMesh mesh = getNavMesh();
 		if(mesh != null)
 			spawnParticles(mesh);
+
+		if(this.movingPoint != null)
+			this.movingPoint.setLocation(new Vector3D(this.player.getLocation()));
 
 		sendNearbyNavMeshName(mesh);
 	}
@@ -291,6 +295,26 @@ class NavMeshEditor
 
 		NavMesh mesh = getNavMesh();
 		mesh.deleteTriangle(triangle);
+	}
+
+
+	void movePoint()
+	{
+		if(this.movingPoint != null)
+		{
+			this.movingPoint = null;
+			return;
+		}
+
+		NavMeshPoint point = getNearestPoint();
+		if(point == null)
+		{
+			this.player.sendMessage("Moving point failed. No point is nearby.");
+			return;
+		}
+
+		this.movingPoint = point;
+		// movement itself is then done periodically in update-method
 	}
 
 }

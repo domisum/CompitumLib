@@ -79,4 +79,34 @@ public class NavMeshPoint
 		return new Vector3D(this.x, this.y, this.z);
 	}
 
+
+	// -------
+	// SETTERS
+	// -------
+	public void setX(double x)
+	{
+		this.x = x;
+	}
+
+	public void setY(double y)
+	{
+		this.y = y;
+	}
+
+	public void setZ(double z)
+	{
+		this.z = z;
+	}
+
+	public void setLocation(double x, double y, double z)
+	{
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+
+	public void setLocation(Vector3D location)
+	{
+		setLocation(location.x, location.y, location.z);
+	}
 }

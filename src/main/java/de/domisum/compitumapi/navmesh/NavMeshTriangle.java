@@ -31,15 +31,48 @@ public class NavMeshTriangle
 	// -------
 	// GETTERS
 	// -------
+	public Vector3D getCenter()
+	{
+		Vector3D sum = this.point1.getPositionVector().add(this.point2.getPositionVector().add(this.point3.getPositionVector()));
+		return sum.divide(3);
+	}
+
 	boolean isUsingPoint(NavMeshPoint point)
 	{
 		return this.point1 == point || this.point2 == point || this.point3 == point;
 	}
 
-	private Vector3D getCenter()
+	boolean isNeighbor(NavMeshTriangle other)
 	{
-		Vector3D sum = this.point1.getPositionVector().add(this.point2.getPositionVector().add(this.point3.getPositionVector()));
-		return sum.divide(3);
+		if(this.point1 == other.point1)
+		{
+			if(this.point2 == other.point2 && this.point3 == other.point3)
+				return true;
+			else if(this.point2 == other.point3 && this.point3 == other.point2)
+				return true;
+			else
+				return false;
+		}
+		else if(this.point2 == other.point1)
+		{
+			if(this.point1 == other.point2 && this.point3 == other.point3)
+				return true;
+			else if(this.point1 == other.point3 && this.point3 == other.point2)
+				return true;
+			else
+				return false;
+		}
+		else if(this.point3 == other.point1)
+		{
+			if(this.point1 == other.point2 && this.point2 == other.point3)
+				return true;
+			else if(this.point1 == other.point3 && this.point2 == other.point2)
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
 	}
 
 
@@ -60,6 +93,10 @@ public class NavMeshTriangle
 		return ((b1 == b2) && (b2 == b3));
 	}
 
+
+	// -------
+	// UTIL
+	// -------
 	private double sign(Vector3D p1, Vector3D p2, Vector3D p3)
 	{
 		return (p1.x-p3.x)*(p2.z-p3.z)-(p2.x-p3.x)*(p1.z-p3.z);

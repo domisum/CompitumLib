@@ -2,12 +2,16 @@ package de.domisum.compitumapi.navmesh;
 
 import de.domisum.auxiliumapi.data.container.math.Vector3D;
 import de.domisum.auxiliumapi.util.keys.Base64Key;
+import de.domisum.compitumapi.navgraph.GraphNode;
+import de.domisum.compitumapi.navgraph.NavGraph;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class NavMesh
@@ -26,6 +30,8 @@ public class NavMesh
 	private Set<NavMeshPoint> points = new HashSet<>();
 	private Set<NavMeshTriangle> triangles = new HashSet<>();
 
+	private NavGraph navGraph;
+
 
 	// -------
 	// CONSTRUCTOR
@@ -40,6 +46,8 @@ public class NavMesh
 		this.world = world;
 		this.points.addAll(points);
 		this.triangles.addAll(triangles);
+
+		generateNavGraph();
 	}
 
 
@@ -94,6 +102,17 @@ public class NavMesh
 				trianglesUsingPoint.add(triangle);
 
 		return trianglesUsingPoint;
+	}
+
+	public Set<NavMeshTriangle> getNeighborTriangles(NavMeshTriangle center)
+	{
+		Set<NavMeshTriangle> neighborTriangles = new HashSet<>();
+
+		for(NavMeshTriangle triangle : this.triangles)
+			if(center.isNeighbor(triangle))
+				neighborTriangles.add(triangle);
+
+		return neighborTriangles;
 	}
 
 
@@ -161,6 +180,34 @@ public class NavMesh
 	public void deleteTriangle(NavMeshTriangle triangle)
 	{
 		this.triangles.remove(triangle);
+	}
+
+
+	// -------
+	// PATHFINDING
+	// -------
+	private void generateNavGraph()
+	{
+		List<GraphNode> nodes = new ArrayList<>();
+		for(NavMeshTriangle triangle : this.triangles)
+		{
+			Vector3D triangleLocation = triangle.getCenter();
+			GraphNode node = new GraphNode(triangle.id, triangleLocation.x, triangleLocation.y, triangleLocation.z);
+			nodes.add(node);
+		}
+		this.navGraph = new NavGraph(this.id+"_navmesh", this.rangeCenter, this.range, this.world, nodes);
+
+		for(NavMeshTriangle triangle : this.triangles)
+		{
+			GraphNode node = this.navGraph.getNode(triangle.id);
+			Set<NavMeshTriangle> neighborTriangles = getNeighborTriangles(triangle);
+			for(NavMeshTriangle n : neighborTriangles)
+			{
+				GraphNode neighborNode = this.navGraph.getNode(n.id);
+				if(!node.isConnected(neighborNode))
+					node.addEdge(neighborNode, 1);
+			}
+		}
 	}
 
 
