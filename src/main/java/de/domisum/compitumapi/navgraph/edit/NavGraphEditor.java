@@ -253,7 +253,7 @@ class NavGraphEditor
 		GraphNode node = getNearbyNode();
 		if(node == null)
 		{
-			this.player.sendMessage("Removing node failed. No node nearby.");
+			this.player.sendMessage("Giving node info failed. No node nearby.");
 			return;
 		}
 		NavGraph graph = getGraph();

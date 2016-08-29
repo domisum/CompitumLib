@@ -317,4 +317,18 @@ class NavMeshEditor
 		// movement itself is then done periodically in update-method
 	}
 
+
+	void info()
+	{
+		NavMeshTriangle triangle = getTriangle();
+		if(triangle == null)
+		{
+			this.player.sendMessage("Giving info failed. No triangle nearby.");
+			return;
+		}
+		NavMesh mesh = getNavMesh();
+
+		this.player.sendMessage("Triangle '"+triangle.id+"' in graph '"+mesh.getId()+"':");
+	}
+
 }

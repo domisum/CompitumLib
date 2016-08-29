@@ -1,14 +1,20 @@
 package de.domisum.compitumapi.navmesh.edit;
 
+import de.domisum.auxiliumapi.util.DebugUtil;
 import de.domisum.compitumapi.CompitumAPI;
+import de.domisum.compitumapi.navmesh.NavMesh;
+import de.domisum.compitumapi.navmesh.NavMeshTriangle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
 
 class NavMeshEditListener implements Listener
 {
@@ -63,6 +69,8 @@ class NavMeshEditListener implements Listener
 			editManager.getEditor(player).deleteTriangle();
 		else if(itemStack.isSimilar(editManager.movePointItemStack))
 			editManager.getEditor(player).movePoint();
+		else if(itemStack.isSimilar(editManager.infoItemStack))
+			editManager.getEditor(player).info();
 	}
 
 	@EventHandler
@@ -78,6 +86,24 @@ class NavMeshEditListener implements Listener
 
 		editManager.endEditMode(player);
 		event.getItemDrop().remove();
+	}
+
+	@EventHandler
+	public void test(AsyncPlayerChatEvent event)
+	{
+		Player player = event.getPlayer();
+		String[] args = event.getMessage().split("\\s+");
+		if(args.length != 2)
+			return;
+
+		NavMesh mesh = CompitumAPI.getNavMeshManager().getNavMeshAt(player.getLocation());
+		NavMeshTriangle start = mesh.getTriangle(args[0]);
+		NavMeshTriangle end = mesh.getTriangle(args[1]);
+
+		List<NavMeshTriangle> path = mesh.findPath(start, end);
+
+		for(NavMeshTriangle triangle : path)
+			DebugUtil.say(triangle.id);
 	}
 
 }

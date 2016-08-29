@@ -84,7 +84,8 @@ public class NavMeshManager
 				navMesh = serializationNavMesh.convertToNavMesh(navMeshId);
 				this.meshes.add(navMesh);
 
-				CompitumAPI.getLogger().info("Loaded NavMesh '"+navMesh.getId()+"'");
+				CompitumAPI.getLogger()
+						.info("Loaded NavMesh '"+navMesh.getId()+"' with "+navMesh.getTriangles().size()+" triangles");
 			}
 			catch(Exception e)
 			{

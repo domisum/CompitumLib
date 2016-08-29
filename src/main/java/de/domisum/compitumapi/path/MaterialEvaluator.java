@@ -64,7 +64,6 @@ public class MaterialEvaluator
 
 	public static boolean canStandIn(int materialID)
 	{
-		// TODO check if this impacts performance much
 		if(!ready)
 			throw new IllegalStateException("CompitumAPI has to be anabled before usage!");
 

@@ -98,7 +98,7 @@ public class NavMeshPoint
 		this.z = z;
 	}
 
-	public void setLocation(double x, double y, double z)
+	private void setLocation(double x, double y, double z)
 	{
 		this.x = x;
 		this.y = y;

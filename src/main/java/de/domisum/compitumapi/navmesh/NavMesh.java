@@ -1,9 +1,11 @@
 package de.domisum.compitumapi.navmesh;
 
 import de.domisum.auxiliumapi.data.container.math.Vector3D;
+import de.domisum.auxiliumapi.util.DebugUtil;
 import de.domisum.auxiliumapi.util.keys.Base64Key;
 import de.domisum.compitumapi.navgraph.GraphNode;
 import de.domisum.compitumapi.navgraph.NavGraph;
+import de.domisum.compitumapi.navgraph.pathfinding.NavGraphAStar;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -69,7 +71,7 @@ public class NavMesh
 		return this.range;
 	}
 
-	public boolean isInRange(Location location)
+	boolean isInRange(Location location)
 	{
 		if(location.getWorld() != this.world)
 			return false;
@@ -104,19 +106,20 @@ public class NavMesh
 		return trianglesUsingPoint;
 	}
 
-	public Set<NavMeshTriangle> getNeighborTriangles(NavMeshTriangle center)
+	private Set<NavMeshTriangle> getNeighborTriangles(NavMeshTriangle center)
 	{
 		Set<NavMeshTriangle> neighborTriangles = new HashSet<>();
 
 		for(NavMeshTriangle triangle : this.triangles)
-			if(center.isNeighbor(triangle))
-				neighborTriangles.add(triangle);
+			if(center != triangle)
+				if(center.isNeighbor(triangle))
+					neighborTriangles.add(triangle);
 
 		return neighborTriangles;
 	}
 
 
-	public NavMeshPoint getPoint(String id)
+	private NavMeshPoint getPoint(String id)
 	{
 		for(NavMeshPoint point : this.points)
 			if(point.getId().equals(id))
@@ -188,6 +191,8 @@ public class NavMesh
 	// -------
 	private void generateNavGraph()
 	{
+		// long start = System.nanoTime();
+
 		List<GraphNode> nodes = new ArrayList<>();
 		for(NavMeshTriangle triangle : this.triangles)
 		{
@@ -203,11 +208,35 @@ public class NavMesh
 			Set<NavMeshTriangle> neighborTriangles = getNeighborTriangles(triangle);
 			for(NavMeshTriangle n : neighborTriangles)
 			{
+				if(triangle == n)
+					continue;
+
 				GraphNode neighborNode = this.navGraph.getNode(n.id);
 				if(!node.isConnected(neighborNode))
 					node.addEdge(neighborNode, 1);
 			}
 		}
+
+		// DebugUtil.say("generationDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 2)+"mys");
+	}
+
+	public List<NavMeshTriangle> findPath(NavMeshTriangle start, NavMeshTriangle end)
+	{
+		GraphNode startNode = this.navGraph.getNode(start.id);
+		GraphNode endNode = this.navGraph.getNode(end.id);
+
+		NavGraphAStar pathfinder = new NavGraphAStar(startNode, endNode);
+		pathfinder.findPath();
+		DebugUtil.say("duration: "+(int) pathfinder.getDurationMicro()+"mys");
+
+		if(pathfinder.getPath() == null)
+			return null;
+
+		List<NavMeshTriangle> triangles = new ArrayList<>();
+		for(GraphNode node : pathfinder.getPath())
+			triangles.add(getTriangle(node.getId()));
+
+		return triangles;
 	}
 
 

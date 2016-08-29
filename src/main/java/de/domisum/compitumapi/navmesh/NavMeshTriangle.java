@@ -27,11 +27,17 @@ public class NavMeshTriangle
 		this.point3 = point3;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "triangle["+this.point1.getId()+","+this.point2.getId()+","+this.point3.getId()+"]";
+	}
+
 
 	// -------
 	// GETTERS
 	// -------
-	public Vector3D getCenter()
+	Vector3D getCenter()
 	{
 		Vector3D sum = this.point1.getPositionVector().add(this.point2.getPositionVector().add(this.point3.getPositionVector()));
 		return sum.divide(3);
@@ -44,35 +50,30 @@ public class NavMeshTriangle
 
 	boolean isNeighbor(NavMeshTriangle other)
 	{
+		int same = 0;
+
 		if(this.point1 == other.point1)
-		{
-			if(this.point2 == other.point2 && this.point3 == other.point3)
-				return true;
-			else if(this.point2 == other.point3 && this.point3 == other.point2)
-				return true;
-			else
-				return false;
-		}
-		else if(this.point2 == other.point1)
-		{
-			if(this.point1 == other.point2 && this.point3 == other.point3)
-				return true;
-			else if(this.point1 == other.point3 && this.point3 == other.point2)
-				return true;
-			else
-				return false;
-		}
-		else if(this.point3 == other.point1)
-		{
-			if(this.point1 == other.point2 && this.point2 == other.point3)
-				return true;
-			else if(this.point1 == other.point3 && this.point2 == other.point2)
-				return true;
-			else
-				return false;
-		}
-		else
-			return false;
+			same++;
+		if(this.point1 == other.point2)
+			same++;
+		if(this.point1 == other.point3)
+			same++;
+
+		if(this.point2 == other.point1)
+			same++;
+		if(this.point2 == other.point2)
+			same++;
+		if(this.point2 == other.point3)
+			same++;
+
+		if(this.point3 == other.point1)
+			same++;
+		if(this.point3 == other.point2)
+			same++;
+		if(this.point3 == other.point3)
+			same++;
+
+		return same == 2;
 	}
 
 

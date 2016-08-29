@@ -35,6 +35,7 @@ public class NavMeshEditManager
 	ItemStack createTriangleItemStack;
 	ItemStack deleteTriangleItemStack;
 	ItemStack movePointItemStack;
+	ItemStack infoItemStack;
 	List<ItemStack> editItemStacks = new ArrayList<>();
 
 
@@ -77,7 +78,8 @@ public class NavMeshEditManager
 				.build();
 		this.deleteTriangleItemStack = new ItemStackBuilder(Material.BLAZE_POWDER).displayName(ChatColor.RED+"Delete triangle")
 				.build();
-		this.movePointItemStack = new ItemStackBuilder(Material.SADDLE).displayName(ChatColor.AQUA+"Move point").build();
+		this.movePointItemStack = new ItemStackBuilder(Material.SADDLE).displayName(ChatColor.DARK_AQUA+"Move point").build();
+		this.infoItemStack = new ItemStackBuilder(Material.BOOK).displayName(ChatColor.AQUA+"Point/triangle info").build();
 
 		this.editItemStacks.add(this.createPointItemStack);
 		this.editItemStacks.add(this.deletePointItemStack);
@@ -86,6 +88,7 @@ public class NavMeshEditManager
 		this.editItemStacks.add(this.createTriangleItemStack);
 		this.editItemStacks.add(this.deleteTriangleItemStack);
 		this.editItemStacks.add(this.movePointItemStack);
+		this.editItemStacks.add(this.infoItemStack);
 	}
 
 	private void registerCommand()
