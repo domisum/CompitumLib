@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>de.domisum</groupId>
 			<artifactId>AuxiliumAPI</artifactId>
-			<version>LATEST</version>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
