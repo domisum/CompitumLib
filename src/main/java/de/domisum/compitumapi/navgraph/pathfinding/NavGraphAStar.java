@@ -1,6 +1,7 @@
 package de.domisum.compitumapi.navgraph.pathfinding;
 
 import de.domisum.auxiliumapi.util.DebugUtil;
+import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.auxiliumapi.util.math.MathUtil;
 import de.domisum.compitumapi.navgraph.GraphEdge;
 import de.domisum.compitumapi.navgraph.GraphNode;
@@ -52,6 +53,7 @@ public class NavGraphAStar
 		return this.path;
 	}
 
+	@APIUsage
 	public boolean isPathFound()
 	{
 		return this.path != null;
