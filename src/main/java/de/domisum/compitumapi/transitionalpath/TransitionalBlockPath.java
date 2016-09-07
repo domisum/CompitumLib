@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TransitionalPath
+public class TransitionalBlockPath
 {
 
 	// REFERENCES
@@ -20,7 +20,7 @@ public class TransitionalPath
 	// -------
 	// CONSTRUCTOR
 	// -------
-	public TransitionalPath(TransitionalNode endNode)
+	public TransitionalBlockPath(TransitionalNode endNode)
 	{
 		this.endNode = endNode;
 

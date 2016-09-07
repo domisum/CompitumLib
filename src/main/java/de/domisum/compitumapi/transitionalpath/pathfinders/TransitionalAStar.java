@@ -4,7 +4,7 @@ import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.auxiliumapi.util.math.MathUtil;
 import de.domisum.compitumapi.path.MaterialEvaluator;
 import de.domisum.compitumapi.transitionalpath.SortedTransitionalNodeList;
-import de.domisum.compitumapi.transitionalpath.TransitionalPath;
+import de.domisum.compitumapi.transitionalpath.TransitionalBlockPath;
 import de.domisum.compitumapi.transitionalpath.node.TransitionType;
 import de.domisum.compitumapi.transitionalpath.node.TransitionalNode;
 import org.bukkit.Location;
@@ -45,7 +45,7 @@ public class TransitionalAStar
 	private Set<TransitionalNode> visitedNodes = new HashSet<>(this.maxNodeVisits);
 
 	// OUTPUT
-	private TransitionalPath path;
+	private TransitionalBlockPath path;
 	private Exception error;
 
 
@@ -70,7 +70,7 @@ public class TransitionalAStar
 	}
 
 	@APIUsage
-	public TransitionalPath getPath()
+	public TransitionalBlockPath getPath()
 	{
 		return this.path;
 	}
@@ -201,7 +201,7 @@ public class TransitionalAStar
 		// path finalization
 		// if the end node has a parent, a path has been found
 		if(this.endNode.getParent() != null)
-			this.path = new TransitionalPath(this.endNode);
+			this.path = new TransitionalBlockPath(this.endNode);
 		else
 			// this looks through the provided options and checks if an ability of the pathfinder is deactivated,
 			// if so it activates it and reruns the pathfinding. if there are no other options available, it returns
