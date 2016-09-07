@@ -10,9 +10,6 @@ import java.util.List;
 public class TransitionalBlockPath
 {
 
-	// REFERENCES
-	private TransitionalBlockNode endNode;
-
 	// PROPERTIES
 	private List<TransitionalBlockNode> nodes = new ArrayList<>();
 
@@ -22,14 +19,12 @@ public class TransitionalBlockPath
 	// -------
 	public TransitionalBlockPath(TransitionalBlockNode endNode)
 	{
-		this.endNode = endNode;
-
-		generatePath();
+		generatePath(endNode);
 	}
 
-	private void generatePath()
+	private void generatePath(TransitionalBlockNode endNode)
 	{
-		TransitionalBlockNode currentNode = this.endNode;
+		TransitionalBlockNode currentNode = endNode;
 		while(currentNode != null)
 		{
 			this.nodes.add(currentNode);
@@ -47,12 +42,6 @@ public class TransitionalBlockPath
 	public List<TransitionalBlockNode> getNodes()
 	{
 		return this.nodes;
-	}
-
-	@APIUsage
-	public double getLength()
-	{
-		return this.endNode.getWeight();
 	}
 
 }

@@ -26,7 +26,7 @@ public class TransitionalAStar
 	private int maxNodeVisits = 500;
 
 	private boolean canUseDiagonalMovement = true;
-	private boolean canUseLadders = true;
+	private boolean canUseLadders = false;
 
 	// INPUT
 	private Location startLocation;
@@ -34,7 +34,7 @@ public class TransitionalAStar
 
 	// STATUS
 	private boolean moveDiagonally = true;
-	private boolean useLadders = true;
+	private boolean useLadders = false;
 
 	private TransitionalBlockNode endNode;
 
@@ -99,8 +99,8 @@ public class TransitionalAStar
 		String diagnose = "";
 
 		diagnose += "found="+pathFound()+", ";
-		if(pathFound())
-			diagnose += "length="+getPath().getLength()+", ";
+		/*if(pathFound())
+			diagnose += "length="+getPath().getLength()+", ";*/
 
 		diagnose += "visitedNodes="+this.visitedNodes.size()+", ";
 		diagnose += "unvisitedNodes="+this.unvisitedNodes.getSize()+", ";
@@ -174,14 +174,14 @@ public class TransitionalAStar
 		{
 			if(this.unvisitedNodes.getSize() == 0)
 			{
-				// error = ...
+				this.error = new IllegalStateException("No unvisited nodes left to search");
 				// no unvisited nodes left, nowhere else to go ...
 				break;
 			}
 
 			if(this.visitedNodes.size() >= this.maxNodeVisits)
 			{
-				// error = ...
+				this.error = new IllegalArgumentException("Reached limit of nodes to search");
 				// reached limit of nodes to search
 				break;
 			}
