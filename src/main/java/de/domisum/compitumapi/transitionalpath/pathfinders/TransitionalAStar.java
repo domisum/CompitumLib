@@ -324,13 +324,13 @@ public class TransitionalAStar
 
 	private boolean isDiagonalMovementPossible(TransitionalBlockNode node, int dX, int dZ)
 	{
-		if(isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(dX, 0, 0)))
-			return true;
+		if(!isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(dX, 0, 0)))
+			return false;
 
-		if(isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(0, 0, dZ)))
-			return true;
+		if(!isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(0, 0, dZ)))
+			return false;
 
-		return false;
+		return true;
 	}
 
 	private boolean canStandAt(Location feetLocation)
