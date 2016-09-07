@@ -4,7 +4,7 @@ import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.auxiliumapi.util.math.MathUtil;
 import de.domisum.compitumapi.path.MaterialEvaluator;
 import de.domisum.compitumapi.transitionalpath.SortedTransitionalNodeList;
-import de.domisum.compitumapi.transitionalpath.TransitionalBlockPath;
+import de.domisum.compitumapi.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.compitumapi.transitionalpath.node.TransitionType;
 import de.domisum.compitumapi.transitionalpath.node.TransitionalNode;
 import org.bukkit.Location;

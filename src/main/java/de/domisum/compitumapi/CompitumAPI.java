@@ -5,6 +5,8 @@ import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.compitumapi.navgraph.NavGraphManager;
 import de.domisum.compitumapi.navmesh.NavMeshManager;
 import de.domisum.compitumapi.path.MaterialEvaluator;
+import de.domisum.compitumapi.transitionalpath.path.TransitionalPath;
+import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -106,6 +108,15 @@ public class CompitumAPI
 	public static NavMeshManager getNavMeshManager()
 	{
 		return getInstance().navMeshManager;
+	}
+
+
+	// -------
+	// PATHFINDING
+	// -------
+	public static TransitionalPath findPlayerPath(Location start, Location end)
+	{
+		return null;
 	}
 
 }

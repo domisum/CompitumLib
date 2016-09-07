@@ -1,4 +1,4 @@
-package de.domisum.compitumapi.transitionalpath;
+package de.domisum.compitumapi.transitionalpath.path;
 
 import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.compitumapi.transitionalpath.node.TransitionalNode;
