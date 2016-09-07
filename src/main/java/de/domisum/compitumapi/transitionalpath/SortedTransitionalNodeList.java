@@ -1,6 +1,7 @@
 package de.domisum.compitumapi.transitionalpath;
 
-import de.domisum.compitumapi.transitionalpath.node.TransitionalNode;
+import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
+import de.domisum.compitumapi.transitionalpath.node.TransitionalBlockNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,8 +12,8 @@ import java.util.Set;
 public class SortedTransitionalNodeList
 {
 
-	private List<TransitionalNode> nodes;
-	private Set<TransitionalNode> nodesContainsTester;
+	private List<TransitionalBlockNode> nodes;
+	private Set<TransitionalBlockNode> nodesContainsTester;
 
 
 	// -------
@@ -28,18 +29,18 @@ public class SortedTransitionalNodeList
 	// -------
 	// GETTERS
 	// -------
-	public TransitionalNode getAndRemoveFirst()
+	public TransitionalBlockNode getAndRemoveFirst()
 	{
 		if(this.nodes.isEmpty())
 			return null;
 
-		TransitionalNode firstNode = this.nodes.remove(0);
+		TransitionalBlockNode firstNode = this.nodes.remove(0);
 		this.nodesContainsTester.remove(firstNode);
 
 		return firstNode;
 	}
 
-	public boolean contains(TransitionalNode node)
+	public boolean contains(TransitionalBlockNode node)
 	{
 		return this.nodesContainsTester.contains(node);
 	}
@@ -49,14 +50,14 @@ public class SortedTransitionalNodeList
 		return this.nodes.size();
 	}
 
-	private double getValueToCompare(TransitionalNode node)
+	private double getValueToCompare(TransitionalBlockNode node)
 	{
 		return node.getEstimatedCombinedWeight();
 	}
 
 
 	@Deprecated
-	public List<TransitionalNode> getNodes()
+	public List<TransitionalBlockNode> getNodes()
 	{
 		return this.nodes;
 	}
@@ -65,14 +66,14 @@ public class SortedTransitionalNodeList
 	// -------
 	// CHANGERS
 	// -------
-	public void addSorted(TransitionalNode node)
+	public void addSorted(TransitionalBlockNode node)
 	{
 		// don't subtract one from the size since the element could be added after the last current entry
 		this.nodesContainsTester.add(node);
 		insertIntoList(node, 0, this.nodes.size());
 	}
 
-	private void insertIntoList(TransitionalNode node, int lowerBound, int upperBound)
+	private void insertIntoList(TransitionalBlockNode node, int lowerBound, int upperBound)
 	{
 		if(lowerBound == upperBound)
 		{
@@ -83,7 +84,7 @@ public class SortedTransitionalNodeList
 		double nodeValue = getValueToCompare(node);
 
 		int dividingIndex = (lowerBound+upperBound)/2;
-		TransitionalNode dividingNode = this.nodes.get(dividingIndex);
+		TransitionalBlockNode dividingNode = this.nodes.get(dividingIndex);
 		double dividingValue = getValueToCompare(dividingNode);
 
 		if(nodeValue > dividingValue)
@@ -99,6 +100,7 @@ public class SortedTransitionalNodeList
 	}
 
 
+	@APIUsage
 	public void sort()
 	{
 		Collections.sort(this.nodes, (n1, n2)->getValueToCompare(n1) > getValueToCompare(n2) ? 1 : -1);

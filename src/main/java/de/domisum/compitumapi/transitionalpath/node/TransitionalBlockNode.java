@@ -3,7 +3,7 @@ package de.domisum.compitumapi.transitionalpath.node;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class TransitionalNode
+public class TransitionalBlockNode
 {
 
 	// PROPERTIES
@@ -12,7 +12,7 @@ public class TransitionalNode
 	public final int z;
 
 	// SUCCESSOR
-	private TransitionalNode parent;
+	private TransitionalBlockNode parent;
 	private int transitionType = 0;
 
 	private double weightFromParent;
@@ -22,7 +22,7 @@ public class TransitionalNode
 	// -------
 	// CONSTRUCTOR
 	// -------
-	public TransitionalNode(int x, int y, int z)
+	public TransitionalBlockNode(int x, int y, int z)
 	{
 		this.x = x;
 		this.y = y;
@@ -31,10 +31,10 @@ public class TransitionalNode
 
 	public boolean equals(Object other)
 	{
-		if(!(other instanceof TransitionalNode))
+		if(!(other instanceof TransitionalBlockNode))
 			return false;
 
-		TransitionalNode o = (TransitionalNode) other;
+		TransitionalBlockNode o = (TransitionalBlockNode) other;
 
 		return o.x == this.x && o.y == this.y && o.z == this.z;
 	}
@@ -59,7 +59,7 @@ public class TransitionalNode
 	// -------
 	// GETTERS
 	// -------
-	public TransitionalNode getParent()
+	public TransitionalBlockNode getParent()
 	{
 		return this.parent;
 	}
@@ -93,7 +93,7 @@ public class TransitionalNode
 	// -------
 	// SETTERS
 	// -------
-	public void setParent(TransitionalNode parent, int transitionType, double additionalWeight)
+	public void setParent(TransitionalBlockNode parent, int transitionType, double additionalWeight)
 	{
 		this.parent = parent;
 		this.transitionType = transitionType;

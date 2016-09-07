@@ -6,7 +6,7 @@ import de.domisum.compitumapi.path.MaterialEvaluator;
 import de.domisum.compitumapi.transitionalpath.SortedTransitionalNodeList;
 import de.domisum.compitumapi.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.compitumapi.transitionalpath.node.TransitionType;
-import de.domisum.compitumapi.transitionalpath.node.TransitionalNode;
+import de.domisum.compitumapi.transitionalpath.node.TransitionalBlockNode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -36,13 +36,13 @@ public class TransitionalAStar
 	private boolean moveDiagonally = true;
 	private boolean useLadders = true;
 
-	private TransitionalNode endNode;
+	private TransitionalBlockNode endNode;
 
 	private long pathfindingStartNano;
 	private long pathfindingEndNano;
 
 	private SortedTransitionalNodeList unvisitedNodes = new SortedTransitionalNodeList(this.maxNodeVisits*3);
-	private Set<TransitionalNode> visitedNodes = new HashSet<>(this.maxNodeVisits);
+	private Set<TransitionalBlockNode> visitedNodes = new HashSet<>(this.maxNodeVisits);
 
 	// OUTPUT
 	private TransitionalBlockPath path;
@@ -111,13 +111,13 @@ public class TransitionalAStar
 
 
 	@Deprecated
-	public Set<TransitionalNode> getVisitedNodes()
+	public Set<TransitionalBlockNode> getVisitedNodes()
 	{
 		return this.visitedNodes;
 	}
 
 	@Deprecated
-	public Collection<TransitionalNode> getUnvisitedNodes()
+	public Collection<TransitionalBlockNode> getUnvisitedNodes()
 	{
 		return this.unvisitedNodes.getNodes();
 	}
@@ -163,9 +163,10 @@ public class TransitionalAStar
 		}
 
 		// preparation
-		TransitionalNode startNode = new TransitionalNode(this.startLocation.getBlockX(), this.startLocation.getBlockY(),
-				this.startLocation.getBlockZ());
-		this.endNode = new TransitionalNode(this.endLocation.getBlockX(), this.endLocation.getBlockY(), this.endLocation.getBlockZ());
+		TransitionalBlockNode startNode = new TransitionalBlockNode(this.startLocation.getBlockX(),
+				this.startLocation.getBlockY(), this.startLocation.getBlockZ());
+		this.endNode = new TransitionalBlockNode(this.endLocation.getBlockX(), this.endLocation.getBlockY(),
+				this.endLocation.getBlockZ());
 		this.unvisitedNodes.addSorted(startNode);
 
 		// pathfinding
@@ -185,7 +186,7 @@ public class TransitionalAStar
 				break;
 			}
 
-			TransitionalNode nodeToVisit = this.unvisitedNodes.getAndRemoveFirst();
+			TransitionalBlockNode nodeToVisit = this.unvisitedNodes.getAndRemoveFirst();
 			this.visitedNodes.add(nodeToVisit);
 
 			// pathing reached end node
@@ -211,7 +212,7 @@ public class TransitionalAStar
 	}
 
 
-	private void visitNode(TransitionalNode node)
+	private void visitNode(TransitionalBlockNode node)
 	{
 		lookForWalkableNodes(node);
 
@@ -219,7 +220,7 @@ public class TransitionalAStar
 			lookForLadderNodes(node);
 	}
 
-	private void lookForWalkableNodes(TransitionalNode node)
+	private void lookForWalkableNodes(TransitionalBlockNode node)
 	{
 		for(int dX = -1; dX <= 1; dX++)
 			for(int dZ = -1; dZ <= 1; dZ++)
@@ -245,7 +246,7 @@ public class TransitionalAStar
 					else if(sumAbs == 3)
 						weight = 1.73;
 
-					TransitionalNode newNode = new TransitionalNode(node.x+dX, node.y+dY, node.z+dZ);
+					TransitionalBlockNode newNode = new TransitionalBlockNode(node.x+dX, node.y+dY, node.z+dZ);
 					newNode.setParent(node, TransitionType.WALK, weight);
 
 
@@ -276,7 +277,7 @@ public class TransitionalAStar
 				}
 	}
 
-	private void lookForLadderNodes(TransitionalNode node)
+	private void lookForLadderNodes(TransitionalBlockNode node)
 	{
 		Location feetLocation = node.getLocation(this.startLocation.getWorld());
 
@@ -286,7 +287,7 @@ public class TransitionalAStar
 			if(location.getBlock().getType() != Material.LADDER)
 				continue;
 
-			TransitionalNode newNode = new TransitionalNode(node.x, node.y+dY, node.z);
+			TransitionalBlockNode newNode = new TransitionalBlockNode(node.x, node.y+dY, node.z);
 			newNode.setParent(node, TransitionType.CLIMB, CLIMBING_EXPENSE);
 
 			if(doesNodeAlreadyExist(newNode))
@@ -297,7 +298,7 @@ public class TransitionalAStar
 	}
 
 
-	private boolean doesNodeAlreadyExist(TransitionalNode node)
+	private boolean doesNodeAlreadyExist(TransitionalBlockNode node)
 	{
 		if(this.visitedNodes.contains(node))
 			return true;
@@ -308,7 +309,7 @@ public class TransitionalAStar
 		return false;
 	}
 
-	private void addNode(TransitionalNode node)
+	private void addNode(TransitionalBlockNode node)
 	{
 		node.setHeuristicWeight(getHeuristicWeight(node)*this.heuristicImportance);
 		this.unvisitedNodes.addSorted(node);
@@ -316,12 +317,12 @@ public class TransitionalAStar
 
 
 	// NODE VALIDATION
-	private boolean isValid(TransitionalNode node)
+	private boolean isValid(TransitionalBlockNode node)
 	{
 		return canStandAt(node.getLocation(this.startLocation.getWorld()));
 	}
 
-	private boolean isDiagonalMovementPossible(TransitionalNode node, int dX, int dZ)
+	private boolean isDiagonalMovementPossible(TransitionalBlockNode node, int dX, int dZ)
 	{
 		if(isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(dX, 0, 0)))
 			return true;
@@ -365,18 +366,18 @@ public class TransitionalAStar
 	// -------
 	// HEURISTIC
 	// -------
-	private double getHeuristicWeight(TransitionalNode node)
+	private double getHeuristicWeight(TransitionalBlockNode node)
 	{
 		return getEuclideanDistance(node);
 	}
 
 	@SuppressWarnings("unused")
-	private double getManhattanDistance(TransitionalNode node)
+	private double getManhattanDistance(TransitionalBlockNode node)
 	{
 		return Math.abs(node.x-this.endNode.x)+Math.abs(node.y-this.endNode.y)+Math.abs(node.z-this.endNode.z);
 	}
 
-	private double getEuclideanDistance(TransitionalNode node)
+	private double getEuclideanDistance(TransitionalBlockNode node)
 	{
 		int dX = this.endNode.x-node.x;
 		int dY = this.endNode.y-node.y;
