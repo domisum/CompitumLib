@@ -239,6 +239,7 @@ public class TransitionalAStar
 						continue;
 
 
+					// TODO punish 90° turns
 					int sumAbs = Math.abs(dX)+Math.abs(dY)+Math.abs(dZ);
 					double weight = 1;
 					if(sumAbs == 2)
