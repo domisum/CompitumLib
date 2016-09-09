@@ -2,7 +2,8 @@ package de.domisum.compitumapi.transitionalpath.pathfinders;
 
 import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.auxiliumapi.util.math.MathUtil;
-import de.domisum.compitumapi.path.MaterialEvaluator;
+import de.domisum.compitumapi.evaluator.MaterialEvaluator;
+import de.domisum.compitumapi.evaluator.StairEvaluator;
 import de.domisum.compitumapi.transitionalpath.SortedTransitionalNodeList;
 import de.domisum.compitumapi.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.compitumapi.transitionalpath.node.TransitionType;
@@ -239,16 +240,7 @@ public class TransitionalAStar
 						continue;
 
 
-					// TODO punish 90° turns
-					int sumAbs = Math.abs(dX)+Math.abs(dY)+Math.abs(dZ);
-					double weight = 1;
-					if(sumAbs == 2)
-						weight = 1.41;
-					else if(sumAbs == 3)
-						weight = 1.73;
-
 					TransitionalBlockNode newNode = new TransitionalBlockNode(node.x+dX, node.y+dY, node.z+dZ);
-					newNode.setParent(node, TransitionType.WALK, weight);
 
 
 					if(doesNodeAlreadyExist(newNode))
@@ -273,7 +265,32 @@ public class TransitionalAStar
 							continue;
 
 
+					// get transition type (walk up stairs, jump up blocks)
+					int transitionType = TransitionType.WALK;
+					if(dY == 1)
+					{
+						boolean isStair = StairEvaluator.isStair(node, newNode, this.startLocation.getWorld());
+						if(!isStair)
+							transitionType = TransitionType.JUMP;
+					}
+
+
+					// calculate weight
+					// TODO punish 90° turns
+					int sumAbs = Math.abs(dX)+Math.abs(dY)+Math.abs(dZ);
+					double weight = 1;
+					if(sumAbs == 2)
+						weight = 1.41;
+					else if(sumAbs == 3)
+						weight = 1.73;
+
+					// punish jumps to favor stair climbing
+					if(transitionType == TransitionType.JUMP)
+						weight += 0.5;
+
+
 					// actually add the node to the pool
+					newNode.setParent(node, transitionType, weight);
 					addNode(newNode);
 				}
 	}

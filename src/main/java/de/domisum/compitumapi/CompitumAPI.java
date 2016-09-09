@@ -3,9 +3,10 @@ package de.domisum.compitumapi;
 import de.domisum.auxiliumapi.AuxiliumAPI;
 import de.domisum.auxiliumapi.util.bukkit.LocationUtil;
 import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
+import de.domisum.compitumapi.evaluator.StairEvaluator;
 import de.domisum.compitumapi.navgraph.NavGraphManager;
 import de.domisum.compitumapi.navmesh.NavMeshManager;
-import de.domisum.compitumapi.path.MaterialEvaluator;
+import de.domisum.compitumapi.evaluator.MaterialEvaluator;
 import de.domisum.compitumapi.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.compitumapi.transitionalpath.path.TransitionalPath;
 import de.domisum.compitumapi.transitionalpath.path.TransitionalPathSmoother;
@@ -63,6 +64,8 @@ public class CompitumAPI
 		AuxiliumAPI.enable(this.plugin);
 
 		MaterialEvaluator.prepareEvaluation();
+		StairEvaluator.prepareEvaluation();
+
 		this.navGraphManager = new NavGraphManager();
 		this.navGraphManager.initiialize();
 		this.navMeshManager = new NavMeshManager();

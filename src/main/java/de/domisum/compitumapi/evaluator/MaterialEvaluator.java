@@ -1,4 +1,4 @@
-package de.domisum.compitumapi.path;
+package de.domisum.compitumapi.evaluator;
 
 import org.bukkit.Material;
 

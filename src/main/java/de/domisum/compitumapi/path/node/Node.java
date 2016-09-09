@@ -1,6 +1,6 @@
 package de.domisum.compitumapi.path.node;
 
-import de.domisum.compitumapi.path.MaterialEvaluator;
+import de.domisum.compitumapi.evaluator.MaterialEvaluator;
 import de.domisum.compitumapi.path.pathfinders.AStar;
 import org.bukkit.Location;
 import org.bukkit.World;
