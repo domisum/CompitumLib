@@ -15,6 +15,10 @@ import java.util.logging.Logger;
 public class CompitumAPI
 {
 
+	// SETTINGS
+	private static boolean navGraphsEnabled = false;
+	private static boolean navMeshesEnabled = false;
+
 	// REFERENCES
 	private static CompitumAPI instance;
 	private Plugin plugin;
@@ -60,10 +64,16 @@ public class CompitumAPI
 		MaterialEvaluator.prepareEvaluation();
 		StairEvaluator.prepareEvaluation();
 
-		this.navGraphManager = new NavGraphManager();
-		this.navGraphManager.initiialize();
-		this.navMeshManager = new NavMeshManager();
-		this.navMeshManager.initiialize();
+		if(navGraphsEnabled)
+		{
+			this.navGraphManager = new NavGraphManager();
+			this.navGraphManager.initiialize();
+		}
+		if(navMeshesEnabled)
+		{
+			this.navMeshManager = new NavMeshManager();
+			this.navMeshManager.initiialize();
+		}
 
 		getLogger().info(this.getClass().getSimpleName()+" has been enabled");
 	}
@@ -102,13 +112,35 @@ public class CompitumAPI
 	@APIUsage
 	public static NavGraphManager getNavGraphManager()
 	{
+		if(!navGraphsEnabled)
+			throw new IllegalStateException("The usage of NavGraphs has to be enabled first!");
+
 		return getInstance().navGraphManager;
 	}
 
 	@APIUsage
 	public static NavMeshManager getNavMeshManager()
 	{
+		if(!navMeshesEnabled)
+			throw new IllegalStateException("The usage of NavMeshes has to be enabled first!");
+
 		return getInstance().navMeshManager;
+	}
+
+
+	// -------
+	// SETTERS
+	// -------
+	@APIUsage
+	public static void enableNavGraphs()
+	{
+		navGraphsEnabled = true;
+	}
+
+	@APIUsage
+	public static void enableNavMeshes()
+	{
+		navMeshesEnabled = true;
 	}
 
 }
