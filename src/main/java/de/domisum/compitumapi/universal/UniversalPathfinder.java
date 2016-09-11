@@ -47,6 +47,13 @@ public class UniversalPathfinder
 	}
 
 	@APIUsage
+	public boolean isPathFound()
+	{
+		return path != null;
+	}
+
+
+	@APIUsage
 	public String getDiagnose()
 	{
 		return diagnose;
