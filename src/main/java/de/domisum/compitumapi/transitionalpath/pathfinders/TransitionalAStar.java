@@ -47,7 +47,7 @@ public class TransitionalAStar
 
 	// OUTPUT
 	private TransitionalBlockPath path;
-	private Exception error;
+	private String error;
 
 
 	// -------
@@ -78,7 +78,7 @@ public class TransitionalAStar
 
 
 	@APIUsage
-	public Exception getError()
+	public String getError()
 	{
 		return this.error;
 	}
@@ -159,7 +159,7 @@ public class TransitionalAStar
 		// validation
 		if(this.startLocation.getWorld() != this.endLocation.getWorld())
 		{
-			this.error = new IllegalArgumentException("The start and the end location are not in the same world!");
+			this.error = "The start and the end location are not in the same world!";
 			return;
 		}
 
@@ -175,14 +175,12 @@ public class TransitionalAStar
 		{
 			if(this.unvisitedNodes.getSize() == 0)
 			{
-				this.error = new IllegalStateException("No unvisited nodes left to search");
 				// no unvisited nodes left, nowhere else to go ...
 				break;
 			}
 
 			if(this.visitedNodes.size() >= this.maxNodeVisits)
 			{
-				this.error = new IllegalArgumentException("Reached limit of nodes to search");
 				// reached limit of nodes to search
 				break;
 			}
@@ -202,7 +200,7 @@ public class TransitionalAStar
 
 		// path finalization
 		// if the end node has a parent, a path has been found
-		if(this.endNode.getParent() != null)
+		if(this.endNode.getParent() != null || startNode.equals(endNode))
 			this.path = new TransitionalBlockPath(this.endNode);
 		else
 			// this looks through the provided options and checks if an ability of the pathfinder is deactivated,

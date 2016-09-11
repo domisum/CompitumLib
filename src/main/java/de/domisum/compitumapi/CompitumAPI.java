@@ -1,17 +1,11 @@
 package de.domisum.compitumapi;
 
 import de.domisum.auxiliumapi.AuxiliumAPI;
-import de.domisum.auxiliumapi.util.bukkit.LocationUtil;
 import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
+import de.domisum.compitumapi.evaluator.MaterialEvaluator;
 import de.domisum.compitumapi.evaluator.StairEvaluator;
 import de.domisum.compitumapi.navgraph.NavGraphManager;
 import de.domisum.compitumapi.navmesh.NavMeshManager;
-import de.domisum.compitumapi.evaluator.MaterialEvaluator;
-import de.domisum.compitumapi.transitionalpath.path.TransitionalBlockPath;
-import de.domisum.compitumapi.transitionalpath.path.TransitionalPath;
-import de.domisum.compitumapi.transitionalpath.path.TransitionalPathSmoother;
-import de.domisum.compitumapi.transitionalpath.pathfinders.TransitionalAStar;
-import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -115,51 +109,6 @@ public class CompitumAPI
 	public static NavMeshManager getNavMeshManager()
 	{
 		return getInstance().navMeshManager;
-	}
-
-
-	// -------
-	// PATHFINDING
-	// -------
-	@APIUsage
-	public static TransitionalPath findPlayerPath(Location start, Location target)
-	{
-		return findPlayerPathFromWorld(start, target);
-	}
-
-	@APIUsage
-	public static TransitionalPath findPlayerPathFromWorld(Location start, Location target)
-	{
-		start = fixPathfindingLocation(start);
-		target = fixPathfindingLocation(target);
-
-		TransitionalAStar pathfinder = new TransitionalAStar(start, target);
-		pathfinder.findPath();
-		if(!pathfinder.pathFound())
-		{
-			getLogger().severe("Pathfinding failed:");
-			if(pathfinder.getError() != null)
-				pathfinder.getError().printStackTrace();
-			getLogger().severe(pathfinder.getDiagnose());
-			return null;
-		}
-		TransitionalBlockPath blockPath = pathfinder.getPath();
-
-		TransitionalPathSmoother smoother = new TransitionalPathSmoother(blockPath);
-		smoother.convert();
-
-		return smoother.getSmoothPath();
-	}
-
-	private static Location fixPathfindingLocation(Location location)
-	{
-		location = LocationUtil.getFloorCenter(location);
-
-		String materialName = location.getBlock().getType().name();
-		if(materialName.contains("SLAB") || materialName.contains("STEP"))
-			location = location.add(0, 1, 0);
-
-		return location;
 	}
 
 }
