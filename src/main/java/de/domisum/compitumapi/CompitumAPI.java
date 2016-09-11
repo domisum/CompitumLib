@@ -127,6 +127,18 @@ public class CompitumAPI
 		return getInstance().navMeshManager;
 	}
 
+	@APIUsage
+	public static boolean areNavGraphsEnabled()
+	{
+		return navGraphsEnabled;
+	}
+
+	@APIUsage
+	public static boolean areNavMeshesEnabled()
+	{
+		return navMeshesEnabled;
+	}
+
 
 	// -------
 	// SETTERS
@@ -134,12 +146,18 @@ public class CompitumAPI
 	@APIUsage
 	public static void enableNavGraphs()
 	{
+		if(getInstance() != null)
+			throw new IllegalStateException("NavGraphs have to be enabled before enabling CompitumAPI");
+
 		navGraphsEnabled = true;
 	}
 
 	@APIUsage
 	public static void enableNavMeshes()
 	{
+		if(getInstance() != null)
+			throw new IllegalStateException("NavMeshes have to be enabled before enabling CompitumAPI");
+
 		navMeshesEnabled = true;
 	}
 
