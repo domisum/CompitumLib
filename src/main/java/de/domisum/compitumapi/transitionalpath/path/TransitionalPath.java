@@ -30,6 +30,9 @@ public class TransitionalPath
 
 	public Duo<Vector3D, Integer> getWaypoint(int index)
 	{
+		if(index >= this.waypoints.size() || index < 0)
+			return null;
+
 		return this.waypoints.get(index);
 	}
 
