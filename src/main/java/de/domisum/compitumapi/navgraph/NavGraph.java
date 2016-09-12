@@ -1,7 +1,7 @@
 package de.domisum.compitumapi.navgraph;
 
-import de.domisum.auxiliumapi.data.container.math.Vector3D;
-import de.domisum.auxiliumapi.util.keys.Base64Key;
+import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.util.keys.Base64Key;
 import org.bukkit.Location;
 import org.bukkit.World;
 

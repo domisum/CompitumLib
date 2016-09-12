@@ -1,13 +1,14 @@
 package de.domisum.compitumapi.transitionalpath.pathfinders;
 
-import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
-import de.domisum.auxiliumapi.util.math.MathUtil;
+
 import de.domisum.compitumapi.evaluator.MaterialEvaluator;
 import de.domisum.compitumapi.evaluator.StairEvaluator;
 import de.domisum.compitumapi.transitionalpath.SortedTransitionalNodeList;
-import de.domisum.compitumapi.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.compitumapi.transitionalpath.node.TransitionType;
 import de.domisum.compitumapi.transitionalpath.node.TransitionalBlockNode;
+import de.domisum.compitumapi.transitionalpath.path.TransitionalBlockPath;
+import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.math.MathUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 

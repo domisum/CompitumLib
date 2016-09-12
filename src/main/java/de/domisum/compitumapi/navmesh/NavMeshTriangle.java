@@ -1,6 +1,6 @@
 package de.domisum.compitumapi.navmesh;
 
-import de.domisum.auxiliumapi.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import org.bukkit.Location;
 
 public class NavMeshTriangle

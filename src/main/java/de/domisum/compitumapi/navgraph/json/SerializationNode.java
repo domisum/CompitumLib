@@ -1,10 +1,10 @@
 package de.domisum.compitumapi.navgraph.json;
 
-import de.domisum.auxiliumapi.data.container.Duo;
-import de.domisum.auxiliumapi.util.java.annotations.DeserializationNoArgsConstructor;
-import de.domisum.auxiliumapi.util.java.annotations.SetByDeserialization;
 import de.domisum.compitumapi.navgraph.GraphEdge;
 import de.domisum.compitumapi.navgraph.GraphNode;
+import de.domisum.lib.auxilium.data.container.Duo;
+import de.domisum.lib.auxilium.util.java.annotations.DeserializationNoArgsConstructor;
+import de.domisum.lib.auxilium.util.java.annotations.SetByDeserialization;
 
 import java.util.ArrayList;
 import java.util.List;

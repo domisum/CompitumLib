@@ -1,11 +1,11 @@
 package de.domisum.compitumapi;
 
-import de.domisum.auxiliumapi.AuxiliumAPI;
-import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.compitumapi.evaluator.MaterialEvaluator;
 import de.domisum.compitumapi.evaluator.StairEvaluator;
 import de.domisum.compitumapi.navgraph.NavGraphManager;
 import de.domisum.compitumapi.navmesh.NavMeshManager;
+import de.domisum.lib.auxilium.AuxiliumLib;
+import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,7 +59,7 @@ public class CompitumAPI
 
 	private void onEnable()
 	{
-		AuxiliumAPI.enable(this.plugin);
+		AuxiliumLib.enable(this.plugin);
 
 		MaterialEvaluator.prepareEvaluation();
 		StairEvaluator.prepareEvaluation();
@@ -84,6 +84,8 @@ public class CompitumAPI
 			this.navGraphManager.terminate();
 		if(this.navMeshManager != null)
 			this.navMeshManager.terminate();
+
+		AuxiliumLib.disable();
 
 		getLogger().info(this.getClass().getSimpleName()+" has been disabled");
 	}

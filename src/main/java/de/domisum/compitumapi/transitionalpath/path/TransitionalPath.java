@@ -1,7 +1,7 @@
 package de.domisum.compitumapi.transitionalpath.path;
 
-import de.domisum.auxiliumapi.data.container.Duo;
-import de.domisum.auxiliumapi.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.data.container.Duo;
+import de.domisum.lib.auxilium.data.container.math.Vector3D;
 
 import java.util.List;
 

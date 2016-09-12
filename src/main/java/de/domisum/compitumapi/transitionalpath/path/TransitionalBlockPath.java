@@ -1,7 +1,7 @@
 package de.domisum.compitumapi.transitionalpath.path;
 
-import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
 import de.domisum.compitumapi.transitionalpath.node.TransitionalBlockNode;
+import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 
 import java.util.ArrayList;
 import java.util.Collections;

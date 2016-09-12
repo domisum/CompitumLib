@@ -1,8 +1,8 @@
 package de.domisum.compitumapi.navgraph.edit;
 
-import de.domisum.auxiliumapi.util.bukkit.ItemStackBuilder;
-import de.domisum.auxiliumapi.util.bukkit.PlayerUtil;
 import de.domisum.compitumapi.CompitumAPI;
+import de.domisum.lib.auxilium.util.bukkit.ItemStackBuilder;
+import de.domisum.lib.auxilium.util.bukkit.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

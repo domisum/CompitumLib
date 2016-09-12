@@ -1,8 +1,9 @@
 package de.domisum.compitumapi.path.pathprocessors;
 
-import de.domisum.auxiliumapi.util.bukkit.LocationUtil;
+
 import de.domisum.compitumapi.path.RawPath;
 import de.domisum.compitumapi.path.node.Node;
+import de.domisum.lib.auxilium.util.bukkit.LocationUtil;
 import org.bukkit.Location;
 
 import java.util.ArrayList;

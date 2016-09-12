@@ -1,13 +1,13 @@
 package de.domisum.compitumapi.navmesh.edit;
 
 import com.darkblade12.particleeffect.ParticleEffect;
-import de.domisum.auxiliumapi.data.container.InterchangableDuo;
-import de.domisum.auxiliumapi.data.container.math.Vector3D;
-import de.domisum.auxiliumapi.util.bukkit.MessagingUtil;
 import de.domisum.compitumapi.CompitumAPI;
 import de.domisum.compitumapi.navmesh.NavMesh;
 import de.domisum.compitumapi.navmesh.NavMeshPoint;
 import de.domisum.compitumapi.navmesh.NavMeshTriangle;
+import de.domisum.lib.auxilium.data.container.InterchangableDuo;
+import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.util.bukkit.MessagingUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

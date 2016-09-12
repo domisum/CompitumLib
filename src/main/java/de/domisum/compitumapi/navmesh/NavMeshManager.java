@@ -1,10 +1,10 @@
 package de.domisum.compitumapi.navmesh;
 
-import de.domisum.auxiliumapi.util.FileUtil;
-import de.domisum.auxiliumapi.util.java.GsonUtil;
 import de.domisum.compitumapi.CompitumAPI;
 import de.domisum.compitumapi.navmesh.edit.NavMeshEditManager;
 import de.domisum.compitumapi.navmesh.json.SerializationNavMesh;
+import de.domisum.lib.auxilium.util.FileUtil;
+import de.domisum.lib.auxilium.util.java.GsonUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

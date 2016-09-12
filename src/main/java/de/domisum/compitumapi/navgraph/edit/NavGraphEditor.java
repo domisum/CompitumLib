@@ -1,13 +1,13 @@
 package de.domisum.compitumapi.navgraph.edit;
 
 import com.darkblade12.particleeffect.ParticleEffect;
-import de.domisum.auxiliumapi.data.container.math.Vector3D;
-import de.domisum.auxiliumapi.util.bukkit.MessagingUtil;
-import de.domisum.auxiliumapi.util.math.MathUtil;
 import de.domisum.compitumapi.CompitumAPI;
 import de.domisum.compitumapi.navgraph.GraphEdge;
 import de.domisum.compitumapi.navgraph.GraphNode;
 import de.domisum.compitumapi.navgraph.NavGraph;
+import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.util.bukkit.MessagingUtil;
+import de.domisum.lib.auxilium.util.math.MathUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

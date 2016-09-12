@@ -1,11 +1,11 @@
 package de.domisum.compitumapi.navgraph.json;
 
-import de.domisum.auxiliumapi.data.container.Duo;
-import de.domisum.auxiliumapi.data.container.math.Vector3D;
-import de.domisum.auxiliumapi.util.java.annotations.DeserializationNoArgsConstructor;
-import de.domisum.auxiliumapi.util.java.annotations.SetByDeserialization;
 import de.domisum.compitumapi.navgraph.GraphNode;
 import de.domisum.compitumapi.navgraph.NavGraph;
+import de.domisum.lib.auxilium.data.container.Duo;
+import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.util.java.annotations.DeserializationNoArgsConstructor;
+import de.domisum.lib.auxilium.util.java.annotations.SetByDeserialization;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;

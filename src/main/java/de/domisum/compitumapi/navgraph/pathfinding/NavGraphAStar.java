@@ -1,10 +1,10 @@
 package de.domisum.compitumapi.navgraph.pathfinding;
 
-import de.domisum.auxiliumapi.util.DebugUtil;
-import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
-import de.domisum.auxiliumapi.util.math.MathUtil;
 import de.domisum.compitumapi.navgraph.GraphEdge;
 import de.domisum.compitumapi.navgraph.GraphNode;
+import de.domisum.lib.auxilium.util.DebugUtil;
+import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.math.MathUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

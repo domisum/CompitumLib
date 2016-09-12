@@ -1,6 +1,6 @@
 package de.domisum.compitumapi.navgraph;
 
-import de.domisum.auxiliumapi.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.data.container.math.Vector3D;
 
 import java.util.ArrayList;
 import java.util.Iterator;

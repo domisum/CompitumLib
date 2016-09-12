@@ -1,11 +1,12 @@
 package de.domisum.compitumapi.universal;
 
-import de.domisum.auxiliumapi.util.bukkit.LocationUtil;
-import de.domisum.auxiliumapi.util.java.annotations.APIUsage;
+
 import de.domisum.compitumapi.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.compitumapi.transitionalpath.path.TransitionalPath;
 import de.domisum.compitumapi.transitionalpath.path.TransitionalPathSmoother;
 import de.domisum.compitumapi.transitionalpath.pathfinders.TransitionalAStar;
+import de.domisum.lib.auxilium.util.bukkit.LocationUtil;
+import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import org.bukkit.Location;
 
 @APIUsage

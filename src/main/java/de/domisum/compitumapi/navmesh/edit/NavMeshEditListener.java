@@ -1,9 +1,9 @@
 package de.domisum.compitumapi.navmesh.edit;
 
-import de.domisum.auxiliumapi.util.DebugUtil;
 import de.domisum.compitumapi.CompitumAPI;
 import de.domisum.compitumapi.navmesh.NavMesh;
 import de.domisum.compitumapi.navmesh.NavMeshTriangle;
+import de.domisum.lib.auxilium.util.DebugUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
