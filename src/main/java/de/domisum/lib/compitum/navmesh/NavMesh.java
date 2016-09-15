@@ -1,19 +1,20 @@
 package de.domisum.lib.compitum.navmesh;
 
-import de.domisum.lib.compitum.navgraph.NavGraph;
-import de.domisum.lib.compitum.navgraph.GraphNode;
-import de.domisum.lib.compitum.navgraph.pathfinding.NavGraphAStar;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.DebugUtil;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
+import de.domisum.lib.compitum.navgraph.GraphNode;
+import de.domisum.lib.compitum.navgraph.NavGraph;
+import de.domisum.lib.compitum.navgraph.pathfinding.NavGraphAStar;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class NavMesh
@@ -29,8 +30,8 @@ public class NavMesh
 
 	// REFERENCES
 	private World world;
-	private Set<NavMeshPoint> points = new HashSet<>();
-	private Set<NavMeshTriangle> triangles = new HashSet<>();
+	private Map<String, NavMeshPoint> points = new HashMap<>();
+	private Map<String, NavMeshTriangle> triangles = new HashMap<>();
 
 	private NavGraph navGraph;
 
@@ -46,8 +47,10 @@ public class NavMesh
 		this.range = range;
 
 		this.world = world;
-		this.points.addAll(points);
-		this.triangles.addAll(triangles);
+		for(NavMeshPoint p : points)
+			this.points.put(p.getId(), p);
+		for(NavMeshTriangle t : triangles)
+			this.triangles.put(t.id, t);
 
 		generateNavGraph();
 	}
@@ -56,6 +59,7 @@ public class NavMesh
 	// -------
 	// GETTERS
 	// -------
+	// GENERAL
 	public String getId()
 	{
 		return this.id;
@@ -85,21 +89,30 @@ public class NavMesh
 	}
 
 
-	public Set<NavMeshPoint> getPoints()
+	// POINT
+	public Collection<NavMeshPoint> getPoints()
 	{
-		return this.points;
+		return this.points.values();
 	}
 
-	public Set<NavMeshTriangle> getTriangles()
+
+	private NavMeshPoint getPoint(String id)
 	{
-		return this.triangles;
+		return points.get(id);
+	}
+
+
+	// TRIANGLE
+	public Collection<NavMeshTriangle> getTriangles()
+	{
+		return this.triangles.values();
 	}
 
 	public Set<NavMeshTriangle> getTrianglesUsingPoint(NavMeshPoint point)
 	{
 		Set<NavMeshTriangle> trianglesUsingPoint = new HashSet<>();
 
-		for(NavMeshTriangle triangle : this.triangles)
+		for(NavMeshTriangle triangle : this.triangles.values())
 			if(triangle.isUsingPoint(point))
 				trianglesUsingPoint.add(triangle);
 
@@ -110,7 +123,7 @@ public class NavMesh
 	{
 		Set<NavMeshTriangle> neighborTriangles = new HashSet<>();
 
-		for(NavMeshTriangle triangle : this.triangles)
+		for(NavMeshTriangle triangle : this.triangles.values())
 			if(center != triangle)
 				if(center.isNeighbor(triangle))
 					neighborTriangles.add(triangle);
@@ -119,27 +132,14 @@ public class NavMesh
 	}
 
 
-	private NavMeshPoint getPoint(String id)
-	{
-		for(NavMeshPoint point : this.points)
-			if(point.getId().equals(id))
-				return point;
-
-		return null;
-	}
-
 	public NavMeshTriangle getTriangle(String id)
 	{
-		for(NavMeshTriangle triangle : this.triangles)
-			if(triangle.id.equals(id))
-				return triangle;
-
-		return null;
+		return triangles.get(id);
 	}
 
 	public NavMeshTriangle getTriangleAt(Location location)
 	{
-		for(NavMeshTriangle triangle : this.triangles)
+		for(NavMeshTriangle triangle : this.triangles.values())
 			if(triangle.doesContain(location))
 				return triangle;
 
@@ -150,39 +150,33 @@ public class NavMesh
 	// -------
 	// CHANGERS
 	// -------
+	// POINT
 	public NavMeshPoint createPoint(double x, double y, double z)
 	{
 		NavMeshPoint point = new NavMeshPoint(getUnusedId(), x, y, z);
 
-		this.points.add(point);
+		this.points.put(point.getId(), point);
 		return point;
 	}
 
 	public void removePoint(NavMeshPoint point)
 	{
-		this.points.remove(point);
-
-		Iterator<NavMeshTriangle> iterator = this.triangles.iterator();
-		while(iterator.hasNext())
-		{
-			NavMeshTriangle triangle = iterator.next();
-			if(triangle.isUsingPoint(point))
-				iterator.remove();
-		}
+		points.remove(point.getId());
 	}
 
 
+	// TRIANGLE
 	public NavMeshTriangle createTriangle(NavMeshPoint point1, NavMeshPoint point2, NavMeshPoint point3)
 	{
 		NavMeshTriangle triangle = new NavMeshTriangle(getUnusedId(), point1, point2, point3);
 
-		this.triangles.add(triangle);
+		this.triangles.put(triangle.id, triangle);
 		return triangle;
 	}
 
 	public void deleteTriangle(NavMeshTriangle triangle)
 	{
-		this.triangles.remove(triangle);
+		this.triangles.remove(triangle.id);
 	}
 
 
@@ -194,7 +188,7 @@ public class NavMesh
 		// long start = System.nanoTime();
 
 		List<GraphNode> nodes = new ArrayList<>();
-		for(NavMeshTriangle triangle : this.triangles)
+		for(NavMeshTriangle triangle : this.triangles.values())
 		{
 			Vector3D triangleLocation = triangle.getCenter();
 			GraphNode node = new GraphNode(triangle.id, triangleLocation.x, triangleLocation.y, triangleLocation.z);
@@ -202,7 +196,7 @@ public class NavMesh
 		}
 		this.navGraph = new NavGraph(this.id+"_navmesh", this.rangeCenter, this.range, this.world, nodes);
 
-		for(NavMeshTriangle triangle : this.triangles)
+		for(NavMeshTriangle triangle : this.triangles.values())
 		{
 			GraphNode node = this.navGraph.getNode(triangle.id);
 			Set<NavMeshTriangle> neighborTriangles = getNeighborTriangles(triangle);
