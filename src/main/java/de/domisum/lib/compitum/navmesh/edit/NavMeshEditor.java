@@ -26,6 +26,9 @@ class NavMeshEditor
 
 	private static final double POINT_SELECTION_MAX_DISTANCE = 1.5;
 
+	// PROPERTIES
+	private boolean snapPointsToBlockCorner = true;
+
 	// REFERENCES
 	private Player player;
 	private List<NavMeshPoint> selectedPoints = new ArrayList<>();
@@ -103,7 +106,21 @@ class NavMeshEditor
 			spawnParticles(mesh);
 
 		if(this.movingPoint != null)
-			this.movingPoint.setLocation(new Vector3D(this.player.getLocation()));
+		{
+			Location location = player.getLocation();
+
+			double pX = location.getX();
+			double pY = location.getY();
+			double pZ = location.getZ();
+			if(snapPointsToBlockCorner)
+			{
+				pX = Math.round(pX);
+				pY = Math.round(pY);
+				pZ = Math.round(pZ);
+			}
+
+			this.movingPoint.setLocation(new Vector3D(pX, pY, pZ));
+		}
 
 		sendNearbyNavMeshName(mesh);
 	}
@@ -185,7 +202,19 @@ class NavMeshEditor
 		}
 
 		Location location = this.player.getLocation();
-		NavMeshPoint point = mesh.createPoint(location.getX(), location.getY(), location.getZ());
+
+		double pX = location.getX();
+		double pY = location.getY();
+		double pZ = location.getZ();
+		if(snapPointsToBlockCorner)
+		{
+			pX = Math.round(pX);
+			pY = Math.round(pY);
+			pZ = Math.round(pZ);
+		}
+
+		NavMeshPoint point = mesh.createPoint(pX, pY, pZ);
+
 		if(this.player.isSneaking())
 			this.selectedPoints.add(point);
 
@@ -260,7 +289,7 @@ class NavMeshEditor
 
 		if(this.selectedPoints.size() < 2)
 		{
-			this.player.sendMessage("Creating triangle failed. Too few points selected ("+this.selectedPoints.size()+").");
+			this.player.sendMessage("Creating triangle failed. Not enough points selected ("+this.selectedPoints.size()+").");
 			return;
 		}
 
