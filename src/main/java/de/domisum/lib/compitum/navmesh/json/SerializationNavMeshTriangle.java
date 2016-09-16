@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum.navmesh.json;
 
-import de.domisum.lib.compitum.navmesh.NavMeshPoint;
-import de.domisum.lib.compitum.navmesh.NavMeshTriangle;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.auxilium.util.java.annotations.DeserializationNoArgsConstructor;
 import de.domisum.lib.auxilium.util.java.annotations.SetByDeserialization;
 

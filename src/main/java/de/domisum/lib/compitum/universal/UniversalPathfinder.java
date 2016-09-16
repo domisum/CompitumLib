@@ -1,12 +1,16 @@
 package de.domisum.lib.compitum.universal;
 
 
+import de.domisum.lib.auxilium.util.bukkit.LocationUtil;
+import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.compitum.CompitumLib;
+import de.domisum.lib.compitum.navmesh.NavMesh;
+import de.domisum.lib.compitum.navmesh.NavMeshManager;
+import de.domisum.lib.compitum.navmesh.path.NavMeshTrianglePathfinder;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPathSmoother;
 import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalAStar;
-import de.domisum.lib.auxilium.util.bukkit.LocationUtil;
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import org.bukkit.Location;
 
 @APIUsage
@@ -73,6 +77,25 @@ public class UniversalPathfinder
 	@APIUsage
 	public void findPath()
 	{
+		navMeshCheck:
+		if(CompitumLib.areNavMeshesEnabled())
+		{
+			NavMeshManager nmm = CompitumLib.getNavMeshManager();
+			NavMesh meshAtStart = nmm.getNavMeshAt(start);
+			if(meshAtStart == null)
+				break navMeshCheck;
+
+			NavMesh meshAtTarget = nmm.getNavMeshAt(target);
+			if(meshAtTarget == null)
+				break navMeshCheck;
+
+			if(meshAtStart != meshAtTarget)
+				break navMeshCheck;
+
+			useNavMesh(meshAtStart);
+			return;
+		}
+
 		useWorldAStar();
 	}
 
@@ -93,6 +116,20 @@ public class UniversalPathfinder
 		TransitionalPathSmoother smoother = new TransitionalPathSmoother(blockPath);
 		smoother.convert();
 		path = smoother.getSmoothPath();
+	}
+
+	private void useNavMesh(NavMesh navMesh)
+	{
+		NavMeshTrianglePathfinder pathfinder = new NavMeshTrianglePathfinder(start, target, navMesh);
+		pathfinder.findPath();
+		diagnose = pathfinder.getDiagnose();
+		if(!pathfinder.pathFound())
+		{
+			this.error = pathfinder.getError();
+			return;
+		}
+
+		path = pathfinder.getPath();
 	}
 
 

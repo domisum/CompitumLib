@@ -2,8 +2,8 @@ package de.domisum.lib.compitum.navmesh.edit;
 
 import com.darkblade12.particleeffect.ParticleEffect;
 import de.domisum.lib.compitum.navmesh.NavMesh;
-import de.domisum.lib.compitum.navmesh.NavMeshPoint;
-import de.domisum.lib.compitum.navmesh.NavMeshTriangle;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.auxilium.data.container.InterchangableDuo;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;

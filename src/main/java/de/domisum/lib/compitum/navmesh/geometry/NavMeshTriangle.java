@@ -1,7 +1,10 @@
-package de.domisum.lib.compitum.navmesh;
+package de.domisum.lib.compitum.navmesh.geometry;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import org.bukkit.Location;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NavMeshTriangle
 {
@@ -9,10 +12,11 @@ public class NavMeshTriangle
 	// PROPERTIES
 	public final String id;
 
-	// REFERENCES
 	public final NavMeshPoint point1;
 	public final NavMeshPoint point2;
 	public final NavMeshPoint point3;
+
+	public final Map<NavMeshTriangle, NavMeshTrianglePortal> neighbors = new HashMap<>();
 
 
 	// -------
@@ -33,51 +37,44 @@ public class NavMeshTriangle
 		return "triangle["+this.point1.getId()+","+this.point2.getId()+","+this.point3.getId()+"]";
 	}
 
+	@Override
+	public int hashCode()
+	{
+		return this.id.hashCode();
+	}
+
 
 	// -------
 	// GETTERS
 	// -------
-	Vector3D getCenter()
+
+	// INTRINSIC
+	public Vector3D getCenter()
 	{
 		Vector3D sum = this.point1.getPositionVector().add(this.point2.getPositionVector().add(this.point3.getPositionVector()));
 		return sum.divide(3);
 	}
 
-	boolean isUsingPoint(NavMeshPoint point)
+
+	// RELATIONAL
+	public boolean isUsingPoint(NavMeshPoint point)
 	{
 		return this.point1 == point || this.point2 == point || this.point3 == point;
 	}
 
 	boolean isNeighbor(NavMeshTriangle other)
 	{
-		int same = 0;
+		return this.neighbors.containsKey(other);
+	}
 
-		if(this.point1 == other.point1)
-			same++;
-		if(this.point1 == other.point2)
-			same++;
-		if(this.point1 == other.point3)
-			same++;
-
-		if(this.point2 == other.point1)
-			same++;
-		if(this.point2 == other.point2)
-			same++;
-		if(this.point2 == other.point3)
-			same++;
-
-		if(this.point3 == other.point1)
-			same++;
-		if(this.point3 == other.point2)
-			same++;
-		if(this.point3 == other.point3)
-			same++;
-
-		return same == 2;
+	public NavMeshTrianglePortal getPortalTo(NavMeshTriangle other)
+	{
+		return this.neighbors.get(other);
 	}
 
 
-	boolean doesContain(Location location)
+	// WORLD
+	public boolean doesContain(Location location)
 	{
 		if(Math.abs(getCenter().y-location.getY()) > 3)
 			return false;
@@ -92,6 +89,16 @@ public class NavMeshTriangle
 		boolean b3 = sign(p, c, a) < 0;
 
 		return ((b1 == b2) && (b2 == b3));
+	}
+
+
+	// -------
+	// CHANGERS
+	// -------
+	public void makeNeighbors(NavMeshTriangle other, NavMeshTrianglePortal portal)
+	{
+		this.neighbors.put(other, portal);
+		other.neighbors.put(this, portal);
 	}
 
 

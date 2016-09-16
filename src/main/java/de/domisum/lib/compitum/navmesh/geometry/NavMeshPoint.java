@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.navmesh;
+package de.domisum.lib.compitum.navmesh.geometry;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.annotations.DeserializationNoArgsConstructor;
@@ -24,7 +24,7 @@ public class NavMeshPoint
 		this.id = "";
 	}
 
-	NavMeshPoint(String id, double x, double y, double z)
+	public NavMeshPoint(String id, double x, double y, double z)
 	{
 		this.id = id;
 

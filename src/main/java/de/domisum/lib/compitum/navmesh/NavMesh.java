@@ -3,9 +3,12 @@ package de.domisum.lib.compitum.navmesh;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.DebugUtil;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
+import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.compitum.navgraph.GraphNode;
 import de.domisum.lib.compitum.navgraph.NavGraph;
-import de.domisum.lib.compitum.navgraph.pathfinding.NavGraphAStar;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshTrianglePortal;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -52,13 +55,42 @@ public class NavMesh
 		for(NavMeshTriangle t : triangles)
 			this.triangles.put(t.id, t);
 
+		fillInNeighbors();
 		generateNavGraph();
+	}
+
+	private void fillInNeighbors()
+	{
+		long start = System.nanoTime();
+
+		for(NavMeshTriangle triangle : this.triangles.values())
+			fillInNeighborsFor(triangle);
+
+		DebugUtil.say("neighboringDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 0)+"mys");
+	}
+
+	private void fillInNeighborsFor(NavMeshTriangle triangle)
+	{
+		for(NavMeshTriangle t : this.triangles.values())
+		{
+			if(triangle == t)
+				continue;
+
+			Set<NavMeshPoint> commonPoints = getCommonPoints(triangle, t);
+
+			if(commonPoints.size() == 2)
+			{
+				NavMeshTrianglePortal portal = new NavMeshTrianglePortal(triangle, t, commonPoints);
+				triangle.makeNeighbors(t, portal);
+			}
+		}
 	}
 
 
 	// -------
 	// GETTERS
 	// -------
+
 	// GENERAL
 	public String getId()
 	{
@@ -89,6 +121,12 @@ public class NavMesh
 	}
 
 
+	public NavGraph getNavGraph()
+	{
+		return this.navGraph;
+	}
+
+
 	// POINT
 	public Collection<NavMeshPoint> getPoints()
 	{
@@ -98,7 +136,7 @@ public class NavMesh
 
 	private NavMeshPoint getPoint(String id)
 	{
-		return points.get(id);
+		return this.points.get(id);
 	}
 
 
@@ -119,22 +157,10 @@ public class NavMesh
 		return trianglesUsingPoint;
 	}
 
-	private Set<NavMeshTriangle> getNeighborTriangles(NavMeshTriangle center)
-	{
-		Set<NavMeshTriangle> neighborTriangles = new HashSet<>();
-
-		for(NavMeshTriangle triangle : this.triangles.values())
-			if(center != triangle)
-				if(center.isNeighbor(triangle))
-					neighborTriangles.add(triangle);
-
-		return neighborTriangles;
-	}
-
 
 	public NavMeshTriangle getTriangle(String id)
 	{
-		return triangles.get(id);
+		return this.triangles.get(id);
 	}
 
 	public NavMeshTriangle getTriangleAt(Location location)
@@ -161,7 +187,7 @@ public class NavMesh
 
 	public void removePoint(NavMeshPoint point)
 	{
-		points.remove(point.getId());
+		this.points.remove(point.getId());
 	}
 
 
@@ -169,8 +195,9 @@ public class NavMesh
 	public NavMeshTriangle createTriangle(NavMeshPoint point1, NavMeshPoint point2, NavMeshPoint point3)
 	{
 		NavMeshTriangle triangle = new NavMeshTriangle(getUnusedId(), point1, point2, point3);
-
 		this.triangles.put(triangle.id, triangle);
+		fillInNeighborsFor(triangle);
+
 		return triangle;
 	}
 
@@ -185,7 +212,7 @@ public class NavMesh
 	// -------
 	private void generateNavGraph()
 	{
-		// long start = System.nanoTime();
+		long start = System.nanoTime();
 
 		List<GraphNode> nodes = new ArrayList<>();
 		for(NavMeshTriangle triangle : this.triangles.values())
@@ -199,38 +226,15 @@ public class NavMesh
 		for(NavMeshTriangle triangle : this.triangles.values())
 		{
 			GraphNode node = this.navGraph.getNode(triangle.id);
-			Set<NavMeshTriangle> neighborTriangles = getNeighborTriangles(triangle);
-			for(NavMeshTriangle n : neighborTriangles)
+			for(NavMeshTriangle n : triangle.neighbors.keySet())
 			{
-				if(triangle == n)
-					continue;
-
 				GraphNode neighborNode = this.navGraph.getNode(n.id);
 				if(!node.isConnected(neighborNode))
 					node.addEdge(neighborNode, 1);
 			}
 		}
 
-		// DebugUtil.say("generationDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 2)+"mys");
-	}
-
-	public List<NavMeshTriangle> findPath(NavMeshTriangle start, NavMeshTriangle end)
-	{
-		GraphNode startNode = this.navGraph.getNode(start.id);
-		GraphNode endNode = this.navGraph.getNode(end.id);
-
-		NavGraphAStar pathfinder = new NavGraphAStar(startNode, endNode);
-		pathfinder.findPath();
-		DebugUtil.say("duration: "+(int) pathfinder.getDurationMicro()+"mys");
-
-		if(pathfinder.getPath() == null)
-			return null;
-
-		List<NavMeshTriangle> triangles = new ArrayList<>();
-		for(GraphNode node : pathfinder.getPath())
-			triangles.add(getTriangle(node.getId()));
-
-		return triangles;
+		DebugUtil.say("generationDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 2)+"mys");
 	}
 
 
@@ -245,6 +249,62 @@ public class NavMesh
 		while(getPoint(id) != null || getTriangle(id) != null);
 
 		return id;
+	}
+
+	@SuppressWarnings("unused")
+	private boolean areTrianglesAdjacent(NavMeshTriangle triangle1, NavMeshTriangle triangle2)
+	{
+		int same = 0;
+
+		if(triangle1.point1 == triangle2.point1)
+			same++;
+		if(triangle1.point1 == triangle2.point2)
+			same++;
+		if(triangle1.point1 == triangle2.point3)
+			same++;
+
+		if(triangle1.point2 == triangle2.point1)
+			same++;
+		if(triangle1.point2 == triangle2.point2)
+			same++;
+		if(triangle1.point2 == triangle2.point3)
+			same++;
+
+		if(triangle1.point3 == triangle2.point1)
+			same++;
+		if(triangle1.point3 == triangle2.point2)
+			same++;
+		if(triangle1.point3 == triangle2.point3)
+			same++;
+
+		return same == 2;
+	}
+
+	private Set<NavMeshPoint> getCommonPoints(NavMeshTriangle triangle1, NavMeshTriangle triangle2)
+	{
+		Set<NavMeshPoint> commonPoints = new HashSet<>();
+		if(triangle1.point1 == triangle2.point1)
+			commonPoints.add(triangle1.point1);
+		if(triangle1.point1 == triangle2.point2)
+			commonPoints.add(triangle1.point1);
+		if(triangle1.point1 == triangle2.point3)
+			commonPoints.add(triangle1.point1);
+
+		if(triangle1.point2 == triangle2.point1)
+			commonPoints.add(triangle1.point2);
+		if(triangle1.point2 == triangle2.point2)
+			commonPoints.add(triangle1.point2);
+		if(triangle1.point2 == triangle2.point3)
+			commonPoints.add(triangle1.point2);
+
+		if(triangle1.point3 == triangle2.point1)
+			commonPoints.add(triangle1.point3);
+		if(triangle1.point3 == triangle2.point2)
+			commonPoints.add(triangle1.point3);
+		if(triangle1.point3 == triangle2.point3)
+			commonPoints.add(triangle1.point3);
+
+		return commonPoints;
 	}
 
 }
