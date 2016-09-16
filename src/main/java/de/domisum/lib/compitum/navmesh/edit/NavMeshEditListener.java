@@ -1,9 +1,6 @@
 package de.domisum.lib.compitum.navmesh.edit;
 
 import de.domisum.lib.compitum.CompitumLib;
-import de.domisum.lib.compitum.navmesh.NavMesh;
-import de.domisum.lib.compitum.navmesh.NavMeshTriangle;
-import de.domisum.lib.auxilium.util.DebugUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,8 +10,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-
-import java.util.List;
 
 class NavMeshEditListener implements Listener
 {
@@ -91,7 +86,7 @@ class NavMeshEditListener implements Listener
 	@EventHandler
 	public void test(AsyncPlayerChatEvent event)
 	{
-		Player player = event.getPlayer();
+		/*Player player = event.getPlayer();
 		String[] args = event.getMessage().split("\\s+");
 		if(args.length != 2)
 			return;
@@ -103,7 +98,7 @@ class NavMeshEditListener implements Listener
 		List<NavMeshTriangle> path = mesh.findPath(start, end);
 
 		for(NavMeshTriangle triangle : path)
-			DebugUtil.say(triangle.id);
+			DebugUtil.say(triangle.id);*/
 	}
 
 }
