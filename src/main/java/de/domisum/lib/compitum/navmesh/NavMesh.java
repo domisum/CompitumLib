@@ -33,8 +33,8 @@ public class NavMesh
 
 	// REFERENCES
 	private World world;
-	private Map<String, NavMeshPoint> points = new HashMap<>();
-	private Map<String, NavMeshTriangle> triangles = new HashMap<>();
+	private Map<String, NavMeshPoint> points = new HashMap<>(); // <id, point>
+	private Map<String, NavMeshTriangle> triangles = new HashMap<>(); // <id, triangle>
 
 	private NavGraph navGraph;
 
@@ -187,6 +187,9 @@ public class NavMesh
 
 	public void removePoint(NavMeshPoint point)
 	{
+		for(NavMeshTriangle t : getTrianglesUsingPoint(point))
+			deleteTriangle(t);
+
 		this.points.remove(point.getId());
 	}
 
