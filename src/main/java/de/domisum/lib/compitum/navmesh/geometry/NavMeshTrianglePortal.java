@@ -51,7 +51,7 @@ public class NavMeshTrianglePortal
 	public LineSegment3D getPlayerLineSegment()
 	{
 		if(this.playerLineSegment == null)
-			this.playerLineSegment = getFullLineSegment().getShortenedBothEnds(0.4);
+			this.playerLineSegment = getFullLineSegment().getShortenedBothEnds(0.49);
 
 		return this.playerLineSegment;
 	}
