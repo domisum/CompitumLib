@@ -299,7 +299,7 @@ public class NavMeshTrianglePathfinder
 
 	private void findPortalEndpoints(NavMeshTriangle from, NavMeshTriangle to)
 	{
-		LineSegment3D portalLineSegment = from.getPortalTo(to).getPlayerLineSegment();
+		LineSegment3D portalLineSegment = from.getPortalTo(to).getFullLineSegment();
 
 		this.portalEndpointLeft = portalLineSegment.a;
 		this.portalEndpointRight = portalLineSegment.b;

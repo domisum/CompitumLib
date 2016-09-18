@@ -17,7 +17,6 @@ public class NavMeshTrianglePortal
 
 	// STATUS
 	private LineSegment3D fullLineSegment;
-	private LineSegment3D playerLineSegment;
 
 
 	// -------
@@ -40,20 +39,12 @@ public class NavMeshTrianglePortal
 	// -------
 	// GETTERS
 	// -------
-	private LineSegment3D getFullLineSegment()
+	public LineSegment3D getFullLineSegment()
 	{
 		if(this.fullLineSegment == null)
 			this.fullLineSegment = new LineSegment3D(this.point1.getPositionVector(), this.point2.getPositionVector());
 
 		return this.fullLineSegment;
-	}
-
-	public LineSegment3D getPlayerLineSegment()
-	{
-		if(this.playerLineSegment == null)
-			this.playerLineSegment = getFullLineSegment();//.getShortenedBothEnds(0.49);
-
-		return this.playerLineSegment;
 	}
 
 }
