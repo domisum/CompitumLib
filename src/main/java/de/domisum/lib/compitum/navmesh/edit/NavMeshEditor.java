@@ -28,6 +28,8 @@ class NavMeshEditor
 
 	// PROPERTIES
 	private boolean snapPointsToBlockCorner = true;
+	private boolean showTriangleConnections = false;
+	private boolean showTriangleNavigationConnections = false;
 
 	// REFERENCES
 	private Player player;
@@ -163,9 +165,11 @@ class NavMeshEditor
 
 			for(NavMeshTriangle neighbor : triangle.neighbors.keySet())
 			{
-				triangleConnections.add(new InterchangableDuo<>(triangle.getCenter(), neighbor.getCenter()));
-				triangleHeuristicConnections
-						.add(new InterchangableDuo<>(triangle.getHeuristicCenter(), neighbor.getHeuristicCenter()));
+				if(this.showTriangleConnections)
+					triangleConnections.add(new InterchangableDuo<>(triangle.getCenter(), neighbor.getCenter()));
+				if(this.showTriangleNavigationConnections)
+					triangleHeuristicConnections
+							.add(new InterchangableDuo<>(triangle.getHeuristicCenter(), neighbor.getHeuristicCenter()));
 			}
 		}
 
