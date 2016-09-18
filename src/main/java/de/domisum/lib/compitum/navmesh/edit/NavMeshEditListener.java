@@ -1,6 +1,7 @@
 package de.domisum.lib.compitum.navmesh.edit;
 
 import de.domisum.lib.compitum.CompitumLib;
+import de.domisum.lib.compitum.navmesh.NavMesh;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,8 +49,6 @@ class NavMeshEditListener implements Listener
 		if(!editManager.isActiveFor(player))
 			return;
 
-		event.setCancelled(true);
-
 		if(itemStack.isSimilar(editManager.createPointItemStack))
 			editManager.getEditor(player).createPoint();
 		else if(itemStack.isSimilar(editManager.deletePointItemStack))
@@ -66,6 +65,10 @@ class NavMeshEditListener implements Listener
 			editManager.getEditor(player).movePoint();
 		else if(itemStack.isSimilar(editManager.infoItemStack))
 			editManager.getEditor(player).info();
+		else
+			return;
+
+		event.setCancelled(true);
 	}
 
 	@EventHandler
@@ -86,6 +89,14 @@ class NavMeshEditListener implements Listener
 	@EventHandler
 	public void test(AsyncPlayerChatEvent event)
 	{
+		Player player = event.getPlayer();
+
+		NavMesh mesh = CompitumLib.getNavMeshManager().getNavMeshAt(player.getLocation());
+		if(mesh == null)
+			return;
+
+		mesh.reduceHeuristicCenterDistances(0.5);
+
 		/*Player player = event.getPlayer();
 		String[] args = event.getMessage().split("\\s+");
 		if(args.length != 2)
