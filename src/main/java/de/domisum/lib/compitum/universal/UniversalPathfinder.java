@@ -1,7 +1,6 @@
 package de.domisum.lib.compitum.universal;
 
 
-import de.domisum.lib.auxilium.util.bukkit.LocationUtil;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.NavMesh;
@@ -48,26 +47,26 @@ public class UniversalPathfinder
 	@APIUsage
 	public TransitionalPath getPath()
 	{
-		return path;
+		return this.path;
 	}
 
 	@APIUsage
 	public boolean isPathFound()
 	{
-		return path != null;
+		return this.path != null;
 	}
 
 
 	@APIUsage
 	public String getDiagnose()
 	{
-		return diagnose;
+		return this.diagnose;
 	}
 
 	@APIUsage
 	public String getError()
 	{
-		return error;
+		return this.error;
 	}
 
 
@@ -81,11 +80,11 @@ public class UniversalPathfinder
 		if(CompitumLib.areNavMeshesEnabled())
 		{
 			NavMeshManager nmm = CompitumLib.getNavMeshManager();
-			NavMesh meshAtStart = nmm.getNavMeshAt(start);
+			NavMesh meshAtStart = nmm.getNavMeshAt(this.start);
 			if(meshAtStart == null)
 				break navMeshCheck;
 
-			NavMesh meshAtTarget = nmm.getNavMeshAt(target);
+			NavMesh meshAtTarget = nmm.getNavMeshAt(this.target);
 			if(meshAtTarget == null)
 				break navMeshCheck;
 
@@ -102,9 +101,9 @@ public class UniversalPathfinder
 
 	private void useWorldAStar()
 	{
-		TransitionalAStar pathfinder = new TransitionalAStar(start, target);
+		TransitionalAStar pathfinder = new TransitionalAStar(this.start, this.target);
 		pathfinder.findPath();
-		diagnose = pathfinder.getDiagnose();
+		this.diagnose = pathfinder.getDiagnose();
 
 		if(!pathfinder.pathFound())
 		{
@@ -115,28 +114,28 @@ public class UniversalPathfinder
 
 		TransitionalPathSmoother smoother = new TransitionalPathSmoother(blockPath);
 		smoother.convert();
-		path = smoother.getSmoothPath();
+		this.path = smoother.getSmoothPath();
 	}
 
 	private void useNavMesh(NavMesh navMesh)
 	{
-		NavMeshTrianglePathfinder pathfinder = new NavMeshTrianglePathfinder(start, target, navMesh);
+		NavMeshTrianglePathfinder pathfinder = new NavMeshTrianglePathfinder(this.start, this.target, navMesh);
 		pathfinder.findPath();
-		diagnose = pathfinder.getDiagnose();
+		this.diagnose = pathfinder.getDiagnose();
 		if(!pathfinder.pathFound())
 		{
 			this.error = pathfinder.getError();
 			return;
 		}
 
-		path = pathfinder.getPath();
+		this.path = pathfinder.getPath();
 	}
 
 
 	@APIUsage
 	public static Location fixPathfindingLocation(Location location)
 	{
-		location = LocationUtil.getFloorCenter(location);
+		location.setY(Math.floor(location.getY()));
 
 		String materialName = location.getBlock().getType().name();
 		if(materialName.contains("SLAB") || materialName.contains("STEP"))
