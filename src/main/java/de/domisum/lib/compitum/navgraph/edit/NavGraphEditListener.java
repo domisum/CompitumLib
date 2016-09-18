@@ -57,6 +57,10 @@ class NavGraphEditListener implements Listener
 			editManager.removeNode(player);
 		else if(itemStack.isSimilar(editManager.infoItemStack))
 			editManager.info(player);
+		else
+			return;
+
+		event.setCancelled(true);
 	}
 
 	@EventHandler
