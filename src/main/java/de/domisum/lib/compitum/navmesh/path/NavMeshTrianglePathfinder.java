@@ -4,7 +4,6 @@ package de.domisum.lib.compitum.navmesh.path;
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.auxilium.util.DebugUtil;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.compitum.navgraph.GraphNode;
@@ -174,8 +173,6 @@ public class NavMeshTrianglePathfinder
 	// TRIANGLE TRAVERSAL
 	private void findPathThroughTriangles()
 	{
-		DebugUtil.say("--------------------------------------------START--------------------------------------------");
-
 		triangleTraversal:
 		{
 			this.currentPosition = new Vector3D(this.startLocation);
@@ -192,10 +189,6 @@ public class NavMeshTrianglePathfinder
 				traverseTriangle();
 		}
 
-		DebugUtil.say("WAYPOINTS:");
-		for(Duo<Vector3D, Integer> wp : this.waypoints)
-			DebugUtil.say(wp.a);
-
 		this.path = new TransitionalPath(this.waypoints);
 	}
 
@@ -206,18 +199,8 @@ public class NavMeshTrianglePathfinder
 				this.triangleSequence.get(this.currentTriangleIndex+1) :
 				null;
 
-		DebugUtil.say("");
-		DebugUtil.say("tri: "+triangle.id);
-		DebugUtil.say("triAfter: "+(triangleAfter != null ? triangleAfter.id : null));
-		DebugUtil.say("currentPos: "+this.currentPosition);
-		DebugUtil.say("visLeft: "+this.visLeft);
-		DebugUtil.say("visRight: "+this.visRight);
-		DebugUtil.say("portalLeft: "+this.portalEndpointLeft);
-		DebugUtil.say("portalRight: "+this.portalEndpointRight);
-
 		if(triangleAfter == null) // last triangle
 		{
-			DebugUtil.say("#endTriangle");
 			// visLeft can be null if the transition into the last triangle was a turn
 			if(this.visLeft != null)
 			{
@@ -241,7 +224,6 @@ public class NavMeshTrianglePathfinder
 		// either first triangle processing or after new corner
 		else if(this.visLeft == null) // if visLeft is null, then visRight is also null
 		{
-			DebugUtil.say("#vision points null");
 			findPortalEndpoints(triangle, triangleAfter);
 			this.visLeft = this.portalEndpointLeft;
 			this.visRight = this.portalEndpointRight;
@@ -250,8 +232,6 @@ public class NavMeshTrianglePathfinder
 		}
 		else
 		{
-			DebugUtil.say("#default");
-
 			findPortalEndpoints(triangle, triangleAfter);
 
 			Vector3D towardsVisLeft = this.visLeft.subtract(this.currentPosition);
@@ -266,7 +246,6 @@ public class NavMeshTrianglePathfinder
 			// check if portal is out on one side
 			if(isLeftOf(towardsVisRight, towardsPortalEndpointLeft, true) && !leftSame && !rightSame) // right turn
 			{
-				DebugUtil.say("---rightTurn");
 				newWaypoint(this.visRight, TransitionType.WALK);
 
 				this.currentTriangleIndex = this.visRightTriangleIndex;
@@ -274,7 +253,6 @@ public class NavMeshTrianglePathfinder
 			}
 			else if(isLeftOf(towardsPortalEndpointRight, towardsVisLeft, true) && !leftSame && !rightSame) // left turn
 			{
-				DebugUtil.say("---leftTurn");
 				newWaypoint(this.visLeft, TransitionType.WALK);
 
 				this.currentTriangleIndex = this.visLeftTriangleIndex;
@@ -284,13 +262,11 @@ public class NavMeshTrianglePathfinder
 			// confine movement cone
 			if(isLeftOf(towardsVisLeft, towardsPortalEndpointLeft, true)) // left
 			{
-				DebugUtil.say("---visConeLeft");
 				this.visLeft = this.portalEndpointLeft;
 				this.visLeftTriangleIndex = this.currentTriangleIndex;
 			}
 			if(isLeftOf(towardsPortalEndpointRight, towardsVisRight, true)) // right
 			{
-				DebugUtil.say("---visConeRight");
 				this.visRight = this.portalEndpointRight;
 				this.visRightTriangleIndex = this.currentTriangleIndex;
 			}
