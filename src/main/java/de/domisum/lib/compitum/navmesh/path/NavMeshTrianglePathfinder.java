@@ -247,8 +247,8 @@ public class NavMeshTrianglePathfinder
 					currentPosition = lastVisLeft;
 					waypoints.add(new Duo<>(currentPosition, TransitionType.WALK));
 					int iCurrent = i;
-					i = lastVisLeftTriangleIndex+1; // no need for +1 because the loop automatically increases by one
-					lastTriangle = this.triangleSequence.get(lastVisLeftTriangleIndex+1);
+					//i = lastVisLeftTriangleIndex+1; // no need for +1 because the loop automatically increases by one
+					//lastTriangle = this.triangleSequence.get(lastVisLeftTriangleIndex+1);
 
 					lastVisLeft = pointLeft;
 					lastVisRight = pointRight;
@@ -257,7 +257,8 @@ public class NavMeshTrianglePathfinder
 
 					// breaks the updating because the left and right last vis should only be updated if no turn occurs
 					// continue instead of break so the custom lastTriangle doesn't get updated
-					continue;
+					//continue;
+					break portalProcessing;
 				}
 				// right turn
 				else if(isLeftOf(towardsLastVisRight, towardsPointLeft, false))
@@ -267,8 +268,8 @@ public class NavMeshTrianglePathfinder
 					currentPosition = lastVisRight;
 					waypoints.add(new Duo<>(currentPosition, TransitionType.WALK));
 					int iCurrent = i;
-					i = lastVisRightTriangleIndex+1; // no need for +1 because the loop automatically increases by one
-					lastTriangle = this.triangleSequence.get(lastVisRightTriangleIndex+1);
+					//i = lastVisRightTriangleIndex+1; // no need for +1 because the loop automatically increases by one
+					//lastTriangle = this.triangleSequence.get(lastVisRightTriangleIndex+1);
 
 					lastVisLeft = pointLeft;
 					lastVisRight = pointRight;
@@ -277,7 +278,8 @@ public class NavMeshTrianglePathfinder
 
 					// breaks the updating because the left and right last vis should only be updated if no turn occurs
 					// continue instead of break so the custom lastTriangle doesn't get updated
-					continue;
+					//continue;
+					break portalProcessing;
 				}
 
 
