@@ -142,6 +142,11 @@ public class NavMeshTrianglePathfinder
 
 		GraphNode startNode = navGraph.getNode(this.startTriangle.id);
 		GraphNode targetNode = navGraph.getNode(targetTriangle.id);
+		if(startNode == targetNode)
+		{
+			this.triangleSequence.add(this.startTriangle);
+			return;
+		}
 
 		NavGraphAStar pathfinder = new NavGraphAStar(startNode, targetNode);
 		pathfinder.findPath();
@@ -155,7 +160,16 @@ public class NavMeshTrianglePathfinder
 
 	private void findPathThroughTriangles()
 	{
+		DebugUtil.say("-------------------------------------------------START-------------------------------------------------");
+
 		List<Duo<Vector3D, Integer>> waypoints = new ArrayList<>();
+
+		if(this.triangleSequence.size() == 1)
+		{
+			waypoints.add(new Duo<>(new Vector3D(this.targetLocation), TransitionType.WALK));
+			this.path = new TransitionalPath(waypoints);
+			return;
+		}
 
 		Vector3D targetPosition = new Vector3D(this.targetLocation);
 		Vector3D currentPosition = new Vector3D(this.startLocation);
@@ -196,7 +210,7 @@ public class NavMeshTrianglePathfinder
 
 				Vector3D towardsPointLeft = pointLeft.subtract(lastTriangleCenter);
 				Vector3D towardsPointRight = pointRight.subtract(lastTriangleCenter);
-				if(isLeftOf(towardsPointRight, towardsPointLeft))
+				if(isLeftOf(towardsPointRight, towardsPointLeft, false))
 				{
 					Vector3D temp = pointLeft;
 					pointLeft = pointRight;
@@ -226,7 +240,7 @@ public class NavMeshTrianglePathfinder
 
 				// check if one point is outside on the other side
 				// left turn
-				if(isLeftOf(towardsPointRight, towardsLastVisLeft))
+				if(isLeftOf(towardsPointRight, towardsLastVisLeft, false))
 				{
 					DebugUtil.say("leftTurn");
 
@@ -246,7 +260,7 @@ public class NavMeshTrianglePathfinder
 					continue;
 				}
 				// right turn
-				else if(isLeftOf(towardsLastVisRight, towardsPointLeft))
+				else if(isLeftOf(towardsLastVisRight, towardsPointLeft, false))
 				{
 					DebugUtil.say("rightTurn");
 
@@ -268,20 +282,18 @@ public class NavMeshTrianglePathfinder
 
 
 				// update the last vis variables if they are further inwards
-				if(isLeftOf(towardsPointRight, towardsLastVisRight))
+				if(isLeftOf(towardsPointRight, towardsLastVisRight, true))
 				{
 					DebugUtil.say("update lastVisRight");
 					lastVisRight = pointRight;
-					towardsLastVisRight = lastVisRight.subtract(currentPosition);
 
 					lastVisRightTriangleIndex = i;
 				}
 
-				if(isLeftOf(towardsLastVisLeft, towardsPointLeft))
+				if(isLeftOf(towardsLastVisLeft, towardsPointLeft, true))
 				{
 					DebugUtil.say("update lastVisLeft");
 					lastVisLeft = pointLeft;
-					towardsLastVisLeft = lastVisLeft.subtract(currentPosition);
 
 					lastVisLeftTriangleIndex = i;
 				}
@@ -299,7 +311,7 @@ public class NavMeshTrianglePathfinder
 		towardsLastVisLeft = lastVisLeft.subtract(currentPosition);
 		towardsLastVisRight = lastVisRight.subtract(currentPosition);
 		// switch points if needed for last
-		if(isLeftOf(towardsLastVisRight, towardsLastVisLeft))
+		if(isLeftOf(towardsLastVisRight, towardsLastVisLeft, false))
 		{
 			Vector3D temp = lastVisLeft;
 			lastVisLeft = lastVisRight;
@@ -311,13 +323,13 @@ public class NavMeshTrianglePathfinder
 		}
 
 		// left turn
-		if(isLeftOf(towardsTarget, towardsLastVisLeft))
+		if(isLeftOf(towardsTarget, towardsLastVisLeft, false))
 		{
 			DebugUtil.say("endLeftTurn");
 			waypoints.add(new Duo<>(lastVisLeft, TransitionType.WALK));
 		}
 		// right turn
-		else if(isLeftOf(towardsLastVisRight, towardsLastVisLeft))
+		else if(isLeftOf(towardsLastVisRight, towardsTarget, false))
 		{
 			waypoints.add(new Duo<>(lastVisRight, TransitionType.WALK));
 			DebugUtil.say("endRightTurn");
@@ -339,15 +351,12 @@ public class NavMeshTrianglePathfinder
 	// -------
 	// UTIL
 	// -------
-	private static boolean isLeftOf(Vector3D v1, Vector3D v2)
+	private static boolean isLeftOf(Vector3D v1, Vector3D v2, boolean onZero)
 	{
 		double y = getCrossProductY(v1, v2);
 
 		if(y == 0)
-		{
-			//DebugUtil.say("ZERRO");
-			return false;
-		}
+			return onZero;
 
 		return y < 0;
 	}
