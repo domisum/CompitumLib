@@ -4,7 +4,6 @@ package de.domisum.lib.compitum.navmesh.path;
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
 import de.domisum.lib.auxilium.util.math.MathUtil;
@@ -46,9 +45,7 @@ public class NavMeshTrianglePathfinder
 	private Vector3D portalEndpointLeft;
 	private Vector3D portalEndpointRight;
 
-	// benchmarking
-	private long pathfindingStartNano;
-	private long pathfindingEndNano;
+	private ProfilerStopWatch stopWatch;
 
 	// OUTPUT
 	private TransitionalPath path;
@@ -93,7 +90,7 @@ public class NavMeshTrianglePathfinder
 
 	private long getNanoDuration()
 	{
-		return this.pathfindingEndNano-this.pathfindingStartNano;
+		return this.stopWatch.getElapsedNano();
 	}
 
 	private double getMsDuration()
@@ -124,10 +121,10 @@ public class NavMeshTrianglePathfinder
 	@APIUsage
 	public void findPath()
 	{
-		DebugUtil.say("");
-		ProfilerStopWatch stopWatch = new ProfilerStopWatch("navMeshPathfinder");
+		/*DebugUtil.say("");*/
+		this.stopWatch = new ProfilerStopWatch("navMeshPathfinder");
 		ProfilerStopWatch stopWatchSeq;
-		ProfilerStopWatch stopWatchThrough = null;
+		ProfilerStopWatch stopWatchThrough;
 
 		// validation
 		if(this.startLocation.getWorld() != this.targetLocation.getWorld())
@@ -149,7 +146,7 @@ public class NavMeshTrianglePathfinder
 			stopWatchThrough.stop();
 		}
 
-		stopWatch.stop();
+		this.stopWatch.stop();
 
 		/*DebugUtil.say(stopWatchSeq);
 		DebugUtil.say(stopWatchThrough);
