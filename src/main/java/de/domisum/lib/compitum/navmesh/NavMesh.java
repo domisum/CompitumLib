@@ -207,6 +207,7 @@ public class NavMesh
 	public void deleteTriangle(NavMeshTriangle triangle)
 	{
 		this.triangles.remove(triangle.id);
+		triangle.clearNeighbors();
 	}
 
 
@@ -217,10 +218,13 @@ public class NavMesh
 	{
 		long start = System.nanoTime();
 
+		for(int i = 0; i < 10; i++)
+			reduceHeuristicCenterDistances(0.2);
+
 		List<GraphNode> nodes = new ArrayList<>();
 		for(NavMeshTriangle triangle : this.triangles.values())
 		{
-			Vector3D triangleLocation = triangle.getCenter();
+			Vector3D triangleLocation = triangle.getHeuristicCenter();
 			GraphNode node = new GraphNode(triangle.id, triangleLocation.x, triangleLocation.y, triangleLocation.z);
 			nodes.add(node);
 		}
@@ -238,6 +242,29 @@ public class NavMesh
 		}
 
 		DebugUtil.say("generationDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 2)+"mys");
+	}
+
+	public void reduceHeuristicCenterDistances(double factor)
+	{
+		for(NavMeshTriangle triangle : this.triangles.values())
+		{
+			Set<NavMeshTriangle> neighbors = triangle.neighbors.keySet();
+			if(neighbors.size() <= 1)
+				continue;
+
+			Vector3D neighborSum = new Vector3D();
+			for(NavMeshTriangle n : neighbors)
+				neighborSum = neighborSum.add(n.getHeuristicCenter());
+
+			Vector3D neighborAverage = neighborSum.divide(neighbors.size());
+			Vector3D currentHeuristicCenter = triangle.getHeuristicCenter();
+			Vector3D fromCurrentToAverage = neighborAverage.subtract(currentHeuristicCenter);
+
+			Vector3D newHeuristicCenter = currentHeuristicCenter
+					.moveTowards(neighborAverage, fromCurrentToAverage.length()*factor);
+			if(triangle.doesContain(newHeuristicCenter))
+				triangle.setHeuristicCenter(newHeuristicCenter);
+		}
 	}
 
 
