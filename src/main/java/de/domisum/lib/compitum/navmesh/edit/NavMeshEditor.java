@@ -102,21 +102,23 @@ class NavMeshEditor
 	void update()
 	{
 		NavMesh mesh = getNavMesh();
+
 		if(mesh != null)
-			spawnParticles(mesh);
+			if(CompitumLib.getNavMeshManager().getEditManager().getUpdateCount()%3 == 0)
+				spawnParticles(mesh);
 
 		if(this.movingPoint != null)
 		{
-			Location location = player.getLocation();
+			Location location = this.player.getLocation();
 
 			double pX = location.getX();
 			double pY = location.getY();
 			double pZ = location.getZ();
-			if(snapPointsToBlockCorner)
+			if(this.snapPointsToBlockCorner)
 			{
-				pX = Math.round(pX);
-				pY = Math.round(pY);
-				pZ = Math.round(pZ);
+				pX = Math.floor(pX)+0.5;
+				pY = Math.floor(pY);
+				pZ = Math.floor(pZ)+0.5;
 			}
 
 			this.movingPoint.setLocation(new Vector3D(pX, pY, pZ));
@@ -150,16 +152,31 @@ class NavMeshEditor
 				triangles.addAll(mesh.getTrianglesUsingPoint(point));
 			}
 
-		Set<InterchangableDuo<Vector3D, Vector3D>> lines = new HashSet<>();
+		Set<InterchangableDuo<Vector3D, Vector3D>> triangleLines = new HashSet<>();
+		Set<InterchangableDuo<Vector3D, Vector3D>> triangleConnections = new HashSet<>();
+		Set<InterchangableDuo<Vector3D, Vector3D>> triangleHeuristicConnections = new HashSet<>();
 		for(NavMeshTriangle triangle : triangles)
 		{
-			lines.add(new InterchangableDuo<>(triangle.point1.getPositionVector(), triangle.point2.getPositionVector()));
-			lines.add(new InterchangableDuo<>(triangle.point2.getPositionVector(), triangle.point3.getPositionVector()));
-			lines.add(new InterchangableDuo<>(triangle.point3.getPositionVector(), triangle.point1.getPositionVector()));
+			triangleLines.add(new InterchangableDuo<>(triangle.point1.getPositionVector(), triangle.point2.getPositionVector()));
+			triangleLines.add(new InterchangableDuo<>(triangle.point2.getPositionVector(), triangle.point3.getPositionVector()));
+			triangleLines.add(new InterchangableDuo<>(triangle.point3.getPositionVector(), triangle.point1.getPositionVector()));
+
+			for(NavMeshTriangle neighbor : triangle.neighbors.keySet())
+			{
+				triangleConnections.add(new InterchangableDuo<>(triangle.getCenter(), neighbor.getCenter()));
+				triangleHeuristicConnections
+						.add(new InterchangableDuo<>(triangle.getHeuristicCenter(), neighbor.getHeuristicCenter()));
+			}
 		}
 
-		for(InterchangableDuo<Vector3D, Vector3D> line : lines)
-			spawnLineParticles(line.a, line.b);
+		for(InterchangableDuo<Vector3D, Vector3D> line : triangleLines)
+			spawnLineParticles(line.a, line.b, ParticleEffect.FLAME, LINE_PARTICLE_DISTANCE);
+
+		for(InterchangableDuo<Vector3D, Vector3D> line : triangleConnections)
+			spawnLineParticles(line.a, line.b, ParticleEffect.DRAGON_BREATH, LINE_PARTICLE_DISTANCE*1.3);
+
+		for(InterchangableDuo<Vector3D, Vector3D> line : triangleHeuristicConnections)
+			spawnLineParticles(line.a, line.b, ParticleEffect.VILLAGER_HAPPY, LINE_PARTICLE_DISTANCE*1.5);
 	}
 
 	private void spawnPointParticles(NavMeshPoint point)
@@ -175,16 +192,16 @@ class NavMeshEditor
 		particleEffect.display(0, 0, 0, 0, 1, location, this.player);
 	}
 
-	private void spawnLineParticles(Vector3D start, Vector3D end)
+	private void spawnLineParticles(Vector3D start, Vector3D end, ParticleEffect effect, double distance)
 	{
 		Vector3D delta = end.subtract(start);
-		for(double d = 0; d < delta.length(); d += LINE_PARTICLE_DISTANCE)
+		for(double d = 0; d < delta.length(); d += distance)
 		{
 			Vector3D offset = delta.normalize().multiply(d);
 			Vector3D vectorLocation = start.add(offset);
 			Location location = vectorLocation.toLocation(this.player.getWorld()).add(0, 0.5, 0);
 
-			ParticleEffect.FLAME.display(0, 0, 0, 0, 1, location, this.player);
+			effect.display(0, 0, 0, 0, 1, location, this.player);
 		}
 	}
 
@@ -206,11 +223,11 @@ class NavMeshEditor
 		double pX = location.getX();
 		double pY = location.getY();
 		double pZ = location.getZ();
-		if(snapPointsToBlockCorner)
+		if(this.snapPointsToBlockCorner)
 		{
-			pX = Math.round(pX);
-			pY = Math.round(pY);
-			pZ = Math.round(pZ);
+			pX = Math.floor(pX)+0.5;
+			pY = Math.floor(pY);
+			pZ = Math.floor(pZ)+0.5;
 		}
 
 		NavMeshPoint point = mesh.createPoint(pX, pY, pZ);
