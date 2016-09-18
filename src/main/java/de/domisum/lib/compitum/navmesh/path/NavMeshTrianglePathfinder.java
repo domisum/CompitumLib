@@ -12,7 +12,6 @@ import de.domisum.lib.compitum.navgraph.NavGraph;
 import de.domisum.lib.compitum.navgraph.pathfinding.NavGraphAStar;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
-import de.domisum.lib.compitum.navmesh.geometry.NavMeshTrianglePortal;
 import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
 import org.bukkit.Location;
@@ -30,9 +29,23 @@ public class NavMeshTrianglePathfinder
 
 	private NavMesh navMesh;
 
-	private NavMeshTriangle startTriangle;
 	private List<NavMeshTriangle> triangleSequence = new ArrayList<>();
 
+	private List<Duo<Vector3D, Integer>> waypoints = new ArrayList<>();
+	// triangle traversal
+	private Vector3D currentPosition;
+	private Vector3D targetPosition;
+	private Vector3D visLeft;
+	private Vector3D visRight;
+	private int visLeftTriangleIndex;
+	private int visRightTriangleIndex;
+
+	private int currentTriangleIndex = 0;
+
+	private Vector3D portalEndpointLeft;
+	private Vector3D portalEndpointRight;
+
+	// benchmarking
 	private long pathfindingStartNano;
 	private long pathfindingEndNano;
 
@@ -134,17 +147,17 @@ public class NavMeshTrianglePathfinder
 	private void findTriangleSequence()
 	{
 		NavGraph navGraph = this.navMesh.getNavGraph();
-		this.startTriangle = this.navMesh.getTriangleAt(this.startLocation);
+		NavMeshTriangle startTriangle = this.navMesh.getTriangleAt(this.startLocation);
 		NavMeshTriangle targetTriangle = this.navMesh.getTriangleAt(this.targetLocation);
 
-		if(this.startTriangle == null || targetTriangle == null)
+		if(startTriangle == null || targetTriangle == null)
 			return;
 
-		GraphNode startNode = navGraph.getNode(this.startTriangle.id);
+		GraphNode startNode = navGraph.getNode(startTriangle.id);
 		GraphNode targetNode = navGraph.getNode(targetTriangle.id);
 		if(startNode == targetNode)
 		{
-			this.triangleSequence.add(this.startTriangle);
+			this.triangleSequence.add(startTriangle);
 			return;
 		}
 
@@ -158,195 +171,155 @@ public class NavMeshTrianglePathfinder
 			this.triangleSequence.add(this.navMesh.getTriangle(node.getId()));
 	}
 
+	// TRIANGLE TRAVERSAL
 	private void findPathThroughTriangles()
 	{
-		DebugUtil.say("-------------------------------------------------START-------------------------------------------------");
+		DebugUtil.say("--------------------------------------------START--------------------------------------------");
 
-		List<Duo<Vector3D, Integer>> waypoints = new ArrayList<>();
-
-		if(this.triangleSequence.size() == 1)
+		triangleTraversal:
 		{
-			waypoints.add(new Duo<>(new Vector3D(this.targetLocation), TransitionType.WALK));
-			this.path = new TransitionalPath(waypoints);
-			return;
+			this.currentPosition = new Vector3D(this.startLocation);
+			this.targetPosition = new Vector3D(this.targetLocation);
+
+			if(this.triangleSequence.size() == 1)
+			{
+				this.waypoints.add(new Duo<>(this.targetPosition, TransitionType.WALK));
+				break triangleTraversal;
+			}
+
+			for(this.currentTriangleIndex = 0;
+			    this.currentTriangleIndex < this.triangleSequence.size(); this.currentTriangleIndex++)
+				traverseTriangle();
 		}
 
-		Vector3D targetPosition = new Vector3D(this.targetLocation);
-		Vector3D currentPosition = new Vector3D(this.startLocation);
+		DebugUtil.say("WAYPOINTS:");
+		for(Duo<Vector3D, Integer> wp : this.waypoints)
+			DebugUtil.say(wp.a);
 
-		Vector3D lastVisLeft = null;
-		Vector3D lastVisRight = null;
-		Vector3D towardsLastVisLeft;
-		Vector3D towardsLastVisRight;
+		this.path = new TransitionalPath(this.waypoints);
+	}
 
-		int lastVisRightTriangleIndex = -1;
-		int lastVisLeftTriangleIndex = -1;
+	private void traverseTriangle()
+	{
+		NavMeshTriangle triangle = this.triangleSequence.get(this.currentTriangleIndex);
+		NavMeshTriangle triangleAfter = this.currentTriangleIndex+1 < this.triangleSequence.size() ?
+				this.triangleSequence.get(this.currentTriangleIndex+1) :
+				null;
 
-		NavMeshTriangle lastTriangle = null;
-		for(int i = 0; i < this.triangleSequence.size(); i++)
+		DebugUtil.say("");
+		DebugUtil.say("tri: "+triangle.id);
+		DebugUtil.say("triAfter: "+(triangleAfter != null ? triangleAfter.id : null));
+		DebugUtil.say("currentPos: "+this.currentPosition);
+		DebugUtil.say("visLeft: "+this.visLeft);
+		DebugUtil.say("visRight: "+this.visRight);
+		DebugUtil.say("portalLeft: "+this.portalEndpointLeft);
+		DebugUtil.say("portalRight: "+this.portalEndpointRight);
+
+		if(triangleAfter == null) // last triangle
 		{
-			NavMeshTriangle t = this.triangleSequence.get(i);
-			for(int j = 0; j < 3; j++)
-				DebugUtil.say("");
-			DebugUtil.say("triangle: "+t.id);
-			DebugUtil.say("lastTriangle: "+(lastTriangle == null ? null : lastTriangle.id));
-			DebugUtil.say("currentPos: "+currentPosition);
-			DebugUtil.say("lastVisLeft: "+lastVisLeft);
-			DebugUtil.say("lastVisRight: "+lastVisRight);
-
-			portalProcessing:
+			DebugUtil.say("#endTriangle");
+			// visLeft can be null if the transition into the last triangle was a turn
+			if(this.visLeft != null)
 			{
-				if(t == this.startTriangle)
-					break portalProcessing;
+				Vector3D towardsVisLeft = this.visLeft.subtract(this.currentPosition);
+				Vector3D towardsVisRight = this.visRight.subtract(this.currentPosition);
 
-				NavMeshTrianglePortal portal = lastTriangle.getPortalTo(t);
-				LineSegment3D portalLineSegment = portal.getPlayerLineSegment();
+				Vector3D towardsTarget = this.targetPosition.subtract(this.currentPosition);
 
-				// find out current left and right
-				Vector3D pointLeft = portalLineSegment.a;
-				Vector3D pointRight = portalLineSegment.b;
-
-				Vector3D lastTriangleCenter = lastTriangle.getCenter();
-
-				Vector3D towardsPointLeft = pointLeft.subtract(lastTriangleCenter);
-				Vector3D towardsPointRight = pointRight.subtract(lastTriangleCenter);
-				if(isLeftOf(towardsPointRight, towardsPointLeft, false))
+				if(isLeftOf(towardsVisRight, towardsTarget, false)) // right curve
 				{
-					Vector3D temp = pointLeft;
-					pointLeft = pointRight;
-					pointRight = temp;
+					newWaypoint(this.visRight, TransitionType.WALK);
 				}
-
-				towardsPointLeft = pointLeft.subtract(currentPosition);
-				towardsPointRight = pointRight.subtract(currentPosition);
-
-				DebugUtil.say("pointLeft: "+pointLeft);
-				DebugUtil.say("pointRight: "+pointRight);
-
-				// initial iteration or last iteration found a new base point
-				if(lastVisLeft == null) // if that is the case, lastVisRight will be null too
+				else if(isLeftOf(towardsTarget, towardsVisLeft, false)) // left curve
 				{
-					lastVisLeft = pointLeft;
-					lastVisRight = pointRight;
-					lastVisLeftTriangleIndex = i;
-					lastVisRightTriangleIndex = i;
-
-					break portalProcessing;
-				}
-
-				towardsLastVisLeft = lastVisLeft.subtract(currentPosition);
-				towardsLastVisRight = lastVisRight.subtract(currentPosition);
-
-
-				// check if one point is outside on the other side
-				// left turn
-				if(isLeftOf(towardsPointRight, towardsLastVisLeft, false))
-				{
-					DebugUtil.say("leftTurn");
-
-					currentPosition = lastVisLeft;
-					waypoints.add(new Duo<>(currentPosition, TransitionType.WALK));
-					int iCurrent = i;
-					//i = lastVisLeftTriangleIndex+1; // no need for +1 because the loop automatically increases by one
-					//lastTriangle = this.triangleSequence.get(lastVisLeftTriangleIndex+1);
-
-					lastVisLeft = pointLeft;
-					lastVisRight = pointRight;
-					lastVisLeftTriangleIndex = iCurrent;
-					lastVisRightTriangleIndex = iCurrent;
-
-					// breaks the updating because the left and right last vis should only be updated if no turn occurs
-					// continue instead of break so the custom lastTriangle doesn't get updated
-					//continue;
-					break portalProcessing;
-				}
-				// right turn
-				else if(isLeftOf(towardsLastVisRight, towardsPointLeft, false))
-				{
-					DebugUtil.say("rightTurn");
-
-					currentPosition = lastVisRight;
-					waypoints.add(new Duo<>(currentPosition, TransitionType.WALK));
-					int iCurrent = i;
-					//i = lastVisRightTriangleIndex+1; // no need for +1 because the loop automatically increases by one
-					//lastTriangle = this.triangleSequence.get(lastVisRightTriangleIndex+1);
-
-					lastVisLeft = pointLeft;
-					lastVisRight = pointRight;
-					lastVisLeftTriangleIndex = iCurrent;
-					lastVisRightTriangleIndex = iCurrent;
-
-					// breaks the updating because the left and right last vis should only be updated if no turn occurs
-					// continue instead of break so the custom lastTriangle doesn't get updated
-					//continue;
-					break portalProcessing;
-				}
-
-
-				// update the last vis variables if they are further inwards
-				if(isLeftOf(towardsPointRight, towardsLastVisRight, true))
-				{
-					DebugUtil.say("update lastVisRight");
-					lastVisRight = pointRight;
-
-					lastVisRightTriangleIndex = i;
-				}
-
-				if(isLeftOf(towardsLastVisLeft, towardsPointLeft, true))
-				{
-					DebugUtil.say("update lastVisLeft");
-					lastVisLeft = pointLeft;
-
-					lastVisLeftTriangleIndex = i;
+					newWaypoint(this.visLeft, TransitionType.WALK);
 				}
 			}
 
-			lastTriangle = t;
+			this.waypoints.add(new Duo<>(this.targetPosition, TransitionType.WALK));
 		}
-
-		DebugUtil.say("endCurrentPos: "+currentPosition);
-		DebugUtil.say("endLastVisLeft: "+lastVisLeft);
-		DebugUtil.say("endLastVisRight: "+lastVisRight);
-
-		// now check if the target is visible through the portal left by the lastVis points, if not add another corner to the path
-		Vector3D towardsTarget = targetPosition.subtract(currentPosition);
-		towardsLastVisLeft = lastVisLeft.subtract(currentPosition);
-		towardsLastVisRight = lastVisRight.subtract(currentPosition);
-		// switch points if needed for last
-		if(isLeftOf(towardsLastVisRight, towardsLastVisLeft, false))
+		// either first triangle processing or after new corner
+		else if(this.visLeft == null) // if visLeft is null, then visRight is also null
 		{
-			Vector3D temp = lastVisLeft;
-			lastVisLeft = lastVisRight;
-			lastVisRight = temp;
-
-			temp = towardsLastVisLeft;
-			towardsLastVisLeft = towardsLastVisRight;
-			towardsLastVisRight = temp;
+			DebugUtil.say("#vision points null");
+			findPortalEndpoints(triangle, triangleAfter);
+			this.visLeft = this.portalEndpointLeft;
+			this.visRight = this.portalEndpointRight;
+			this.visLeftTriangleIndex = this.currentTriangleIndex;
+			this.visRightTriangleIndex = this.currentTriangleIndex;
 		}
-
-		// left turn
-		if(isLeftOf(towardsTarget, towardsLastVisLeft, false))
+		else
 		{
-			DebugUtil.say("endLeftTurn");
-			waypoints.add(new Duo<>(lastVisLeft, TransitionType.WALK));
+			DebugUtil.say("#default");
+
+			findPortalEndpoints(triangle, triangleAfter);
+
+			Vector3D towardsVisLeft = this.visLeft.subtract(this.currentPosition);
+			Vector3D towardsVisRight = this.visRight.subtract(this.currentPosition);
+
+			Vector3D towardsPortalEndpointLeft = this.portalEndpointLeft.subtract(this.currentPosition);
+			Vector3D towardsPortalEndpointRight = this.portalEndpointRight.subtract(this.currentPosition);
+
+			boolean leftSame = isSame(this.visLeft, this.currentPosition);
+			boolean rightSame = isSame(this.visRight, this.currentPosition);
+
+			// check if portal is out on one side
+			if(isLeftOf(towardsVisRight, towardsPortalEndpointLeft, true) && !leftSame && !rightSame) // right turn
+			{
+				DebugUtil.say("---rightTurn");
+				newWaypoint(this.visRight, TransitionType.WALK);
+
+				this.currentTriangleIndex = this.visRightTriangleIndex;
+				return;
+			}
+			else if(isLeftOf(towardsPortalEndpointRight, towardsVisLeft, true) && !leftSame && !rightSame) // left turn
+			{
+				DebugUtil.say("---leftTurn");
+				newWaypoint(this.visLeft, TransitionType.WALK);
+
+				this.currentTriangleIndex = this.visLeftTriangleIndex;
+				return;
+			}
+
+			// confine movement cone
+			if(isLeftOf(towardsVisLeft, towardsPortalEndpointLeft, true)) // left
+			{
+				DebugUtil.say("---visConeLeft");
+				this.visLeft = this.portalEndpointLeft;
+				this.visLeftTriangleIndex = this.currentTriangleIndex;
+			}
+			if(isLeftOf(towardsPortalEndpointRight, towardsVisRight, true)) // right
+			{
+				DebugUtil.say("---visConeRight");
+				this.visRight = this.portalEndpointRight;
+				this.visRightTriangleIndex = this.currentTriangleIndex;
+			}
 		}
-		// right turn
-		else if(isLeftOf(towardsLastVisRight, towardsTarget, false))
+	}
+
+	private void findPortalEndpoints(NavMeshTriangle from, NavMeshTriangle to)
+	{
+		LineSegment3D portalLineSegment = from.getPortalTo(to).getPlayerLineSegment();
+
+		this.portalEndpointLeft = portalLineSegment.a;
+		this.portalEndpointRight = portalLineSegment.b;
+
+		Vector3D fromCenter = from.getCenter();
+		if(isLeftOf(this.portalEndpointRight.subtract(fromCenter), this.portalEndpointLeft.subtract(fromCenter), false))
 		{
-			waypoints.add(new Duo<>(lastVisRight, TransitionType.WALK));
-			DebugUtil.say("endRightTurn");
+			Vector3D temp = this.portalEndpointLeft;
+			this.portalEndpointLeft = this.portalEndpointRight;
+			this.portalEndpointRight = temp;
 		}
+	}
 
-		// target
-		waypoints.add(new Duo<>(targetPosition, TransitionType.WALK));
+	private void newWaypoint(Vector3D position, int transitionType)
+	{
+		this.waypoints.add(new Duo<>(position, transitionType));
+		this.currentPosition = position;
 
-		for(int i = 0; i < 3; i++)
-			DebugUtil.say("");
-		DebugUtil.say("waypoints:");
-		for(Duo<Vector3D, Integer> w : waypoints)
-			DebugUtil.say(w.a);
-
-		this.path = new TransitionalPath(waypoints);
+		this.visLeft = null;
+		this.visRight = null;
 	}
 
 
@@ -366,6 +339,15 @@ public class NavMeshTrianglePathfinder
 	private static double getCrossProductY(Vector3D v1, Vector3D v2)
 	{
 		return v1.crossProduct(v2).y;
+	}
+
+
+	private static boolean isSame(Vector3D a, Vector3D b)
+	{
+		if(a == null)
+			return b == null;
+
+		return a.equals(b);
 	}
 
 }
