@@ -4,6 +4,7 @@ import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import org.bukkit.Location;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class NavMeshTriangle
@@ -17,6 +18,9 @@ public class NavMeshTriangle
 	public final NavMeshPoint point3;
 
 	public final Map<NavMeshTriangle, NavMeshTrianglePortal> neighbors = new HashMap<>();
+
+	// STATUS
+	private Vector3D heuristicCenter;
 
 
 	// -------
@@ -55,6 +59,14 @@ public class NavMeshTriangle
 		return sum.divide(3);
 	}
 
+	public Vector3D getHeuristicCenter()
+	{
+		if(this.heuristicCenter == null)
+			return getCenter();
+
+		return this.heuristicCenter;
+	}
+
 
 	// RELATIONAL
 	public boolean isUsingPoint(NavMeshPoint point)
@@ -76,19 +88,32 @@ public class NavMeshTriangle
 	// WORLD
 	public boolean doesContain(Location location)
 	{
-		if(Math.abs(getCenter().y-location.getY()) > 3)
+		return doesContain(new Vector3D(location));
+	}
+
+	public boolean doesContain(Vector3D point)
+	{
+		if(Math.abs(getCenter().y-point.y) > 3)
 			return false;
 
 		Vector3D a = this.point1.getPositionVector();
 		Vector3D b = this.point2.getPositionVector();
 		Vector3D c = this.point3.getPositionVector();
-		Vector3D p = new Vector3D(location);
 
-		boolean b1 = sign(p, a, b) < 0;
-		boolean b2 = sign(p, b, c) < 0;
-		boolean b3 = sign(p, c, a) < 0;
+		boolean b1 = sign(point, a, b) < 0;
+		boolean b2 = sign(point, b, c) < 0;
+		boolean b3 = sign(point, c, a) < 0;
 
 		return ((b1 == b2) && (b2 == b3));
+	}
+
+
+	// -------
+	// SETTERS
+	// -------
+	public void setHeuristicCenter(Vector3D heuristicCenter)
+	{
+		this.heuristicCenter = heuristicCenter;
 	}
 
 
@@ -99,6 +124,18 @@ public class NavMeshTriangle
 	{
 		this.neighbors.put(other, portal);
 		other.neighbors.put(this, portal);
+	}
+
+	public void removeNeighbor(NavMeshTriangle other)
+	{
+		this.neighbors.remove(other);
+		other.neighbors.remove(this);
+	}
+
+	public void clearNeighbors()
+	{
+		for(NavMeshTriangle n : new HashSet<>(this.neighbors.keySet()))
+			removeNeighbor(n);
 	}
 
 
