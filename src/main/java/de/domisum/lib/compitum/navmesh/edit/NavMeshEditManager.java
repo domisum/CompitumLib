@@ -21,7 +21,7 @@ public class NavMeshEditManager
 {
 
 	// CONSTANTS
-	private static final int TASK_INTERVAL_TICKS = 5;
+	private static final int TASK_INTERVAL_TICKS = 3;
 
 	// REFERENCES
 	private Set<NavMeshEditor> editors = new HashSet<>();
@@ -37,6 +37,9 @@ public class NavMeshEditManager
 	ItemStack movePointItemStack;
 	ItemStack infoItemStack;
 	List<ItemStack> editItemStacks = new ArrayList<>();
+
+	// STATUS
+	private int updateCount;
 
 
 	// -------
@@ -100,6 +103,11 @@ public class NavMeshEditManager
 	// -------
 	// GETTERS
 	// -------
+	public int getUpdateCount()
+	{
+		return this.updateCount;
+	}
+
 	boolean isActiveFor(Player player)
 	{
 		return getEditor(player) != null;
@@ -163,6 +171,8 @@ public class NavMeshEditManager
 
 			editor.update();
 		}
+
+		this.updateCount++;
 	}
 
 
