@@ -4,7 +4,9 @@ package de.domisum.lib.compitum.navmesh.path;
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
 import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.compitum.navgraph.GraphNode;
 import de.domisum.lib.compitum.navgraph.NavGraph;
@@ -96,7 +98,7 @@ public class NavMeshTrianglePathfinder
 
 	private double getMsDuration()
 	{
-		return MathUtil.round(getNanoDuration()/1000d/1000, 2);
+		return MathUtil.round(getNanoDuration()/1000d/1000, 3);
 	}
 
 	@APIUsage
@@ -122,7 +124,10 @@ public class NavMeshTrianglePathfinder
 	@APIUsage
 	public void findPath()
 	{
-		this.pathfindingStartNano = System.nanoTime();
+		DebugUtil.say("");
+		ProfilerStopWatch stopWatch = new ProfilerStopWatch("navMeshPathfinder");
+		ProfilerStopWatch stopWatchSeq;
+		ProfilerStopWatch stopWatchThrough = null;
 
 		// validation
 		if(this.startLocation.getWorld() != this.targetLocation.getWorld())
@@ -133,14 +138,22 @@ public class NavMeshTrianglePathfinder
 
 		pathfinding:
 		{
+			stopWatchSeq = new ProfilerStopWatch("triangleSequence");
 			findTriangleSequence();
+			stopWatchSeq.stop();
 			if(this.triangleSequence.size() == 0)
 				break pathfinding;
 
+			stopWatchThrough = new ProfilerStopWatch("pathThroughTriangles");
 			findPathThroughTriangles();
+			stopWatchThrough.stop();
 		}
 
-		this.pathfindingEndNano = System.nanoTime();
+		stopWatch.stop();
+
+		/*DebugUtil.say(stopWatchSeq);
+		DebugUtil.say(stopWatchThrough);
+		DebugUtil.say(stopWatch);*/
 	}
 
 	private void findTriangleSequence()

@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum.navmesh;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.auxilium.util.DebugUtil;
+import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
 import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.compitum.navgraph.GraphNode;
@@ -165,6 +165,8 @@ public class NavMesh
 
 	public NavMeshTriangle getTriangleAt(Location location)
 	{
+		// TODO optimize this, might become bottleneck with thousands of triangles
+
 		for(NavMeshTriangle triangle : this.triangles.values())
 			if(triangle.doesContain(location))
 				return triangle;

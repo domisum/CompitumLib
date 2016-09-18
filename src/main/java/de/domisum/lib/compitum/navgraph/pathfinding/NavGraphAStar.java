@@ -2,7 +2,7 @@ package de.domisum.lib.compitum.navgraph.pathfinding;
 
 import de.domisum.lib.compitum.navgraph.GraphEdge;
 import de.domisum.lib.compitum.navgraph.GraphNode;
-import de.domisum.lib.auxilium.util.DebugUtil;
+import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.math.MathUtil;
 
