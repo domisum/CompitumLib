@@ -3,15 +3,14 @@ package de.domisum.lib.compitum.transitionalpath.node;
 public class TransitionType
 {
 
-	public static int NONE = -1;
-	public static int WALK = 1;
+	public static final int WALK = 1;
 	/**
 	 * This JUMP is a simple walking jump from a block below to another block above.
 	 * For a parcour jump over a hole LEAP is used.
 	 */
-	public static int JUMP = 2;
-	public static int CLIMB = 3;
-	public static int FALL = 4;
-	public static int LEAP = 5;
+	public static final int JUMP = 2;
+	public static final int CLIMB = 3;
+	public static final int FALL = 4;
+	public static final int LEAP = 5;
 
 }
