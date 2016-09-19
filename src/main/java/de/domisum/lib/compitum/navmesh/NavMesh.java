@@ -4,19 +4,15 @@ import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
 import de.domisum.lib.auxilium.util.math.MathUtil;
-import de.domisum.lib.compitum.navgraph.GraphNode;
-import de.domisum.lib.compitum.navgraph.NavGraph;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTrianglePortal;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,8 +32,6 @@ public class NavMesh
 	private Map<String, NavMeshPoint> points = new HashMap<>(); // <id, point>
 	private Map<String, NavMeshTriangle> triangles = new HashMap<>(); // <id, triangle>
 
-	private NavGraph navGraph;
-
 
 	// -------
 	// CONSTRUCTOR
@@ -56,41 +50,12 @@ public class NavMesh
 			this.triangles.put(t.id, t);
 
 		fillInNeighbors();
-		generateNavGraph();
-	}
-
-	private void fillInNeighbors()
-	{
-		long start = System.nanoTime();
-
-		for(NavMeshTriangle triangle : this.triangles.values())
-			fillInNeighborsFor(triangle);
-
-		DebugUtil.say("neighboringDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 0)+"mys");
-	}
-
-	private void fillInNeighborsFor(NavMeshTriangle triangle)
-	{
-		for(NavMeshTriangle t : this.triangles.values())
-		{
-			if(triangle == t)
-				continue;
-
-			Set<NavMeshPoint> commonPoints = getCommonPoints(triangle, t);
-
-			if(commonPoints.size() == 2)
-			{
-				NavMeshTrianglePortal portal = new NavMeshTrianglePortal(triangle, t, commonPoints);
-				triangle.makeNeighbors(t, portal);
-			}
-		}
 	}
 
 
 	// -------
 	// GETTERS
 	// -------
-
 	// GENERAL
 	public String getId()
 	{
@@ -118,12 +83,6 @@ public class NavMesh
 	public World getWorld()
 	{
 		return this.world;
-	}
-
-
-	public NavGraph getNavGraph()
-	{
-		return this.navGraph;
 	}
 
 
@@ -158,7 +117,7 @@ public class NavMesh
 	}
 
 
-	public NavMeshTriangle getTriangle(String id)
+	private NavMeshTriangle getTriangle(String id)
 	{
 		return this.triangles.get(id);
 	}
@@ -216,35 +175,33 @@ public class NavMesh
 	// -------
 	// PATHFINDING
 	// -------
-	private void generateNavGraph()
+	private void fillInNeighbors()
 	{
 		long start = System.nanoTime();
 
-		for(int i = 0; i < 10; i++)
-			reduceHeuristicCenterDistances(0.2);
-
-		List<GraphNode> nodes = new ArrayList<>();
 		for(NavMeshTriangle triangle : this.triangles.values())
-		{
-			Vector3D triangleLocation = triangle.getHeuristicCenter();
-			GraphNode node = new GraphNode(triangle.id, triangleLocation.x, triangleLocation.y, triangleLocation.z);
-			nodes.add(node);
-		}
-		this.navGraph = new NavGraph(this.id+"_navmesh", this.rangeCenter, this.range, this.world, nodes);
+			fillInNeighborsFor(triangle);
 
-		for(NavMeshTriangle triangle : this.triangles.values())
+		DebugUtil.say("neighboringDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 0)+"mys");
+	}
+
+	private void fillInNeighborsFor(NavMeshTriangle triangle)
+	{
+		for(NavMeshTriangle t : this.triangles.values())
 		{
-			GraphNode node = this.navGraph.getNode(triangle.id);
-			for(NavMeshTriangle n : triangle.neighbors.keySet())
+			if(triangle == t)
+				continue;
+
+			Set<NavMeshPoint> commonPoints = getCommonPoints(triangle, t);
+
+			if(commonPoints.size() == 2)
 			{
-				GraphNode neighborNode = this.navGraph.getNode(n.id);
-				if(!node.isConnected(neighborNode))
-					node.addEdge(neighborNode, 1);
+				NavMeshTrianglePortal portal = new NavMeshTrianglePortal(triangle, t, commonPoints);
+				triangle.makeNeighbors(t, portal);
 			}
 		}
-
-		DebugUtil.say("generationDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 2)+"mys");
 	}
+
 
 	public void reduceHeuristicCenterDistances(double factor)
 	{
