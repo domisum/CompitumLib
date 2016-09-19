@@ -1,40 +1,27 @@
 package de.domisum.lib.compitum.navmesh.path;
 
-
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
-import de.domisum.lib.auxilium.util.math.MathUtil;
-import de.domisum.lib.compitum.navgraph.GraphNode;
-import de.domisum.lib.compitum.navgraph.NavGraph;
-import de.domisum.lib.compitum.navgraph.pathfinding.NavGraphAStar;
-import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
-import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@APIUsage
-public class NavMeshTrianglePathfinder
+public class NavMeshTriangleTraverser
 {
 
 	// INPUT
-	private Location startLocation;
-	private Location targetLocation;
+	private Vector3D startPosition;
+	private Vector3D targetPosition;
+	private List<NavMeshTriangle> triangleSequence;
 
-	private NavMesh navMesh;
-
-	private List<NavMeshTriangle> triangleSequence = new ArrayList<>();
-
+	// STATUS
 	private List<Duo<Vector3D, Integer>> waypoints = new ArrayList<>();
 	// triangle traversal
 	private Vector3D currentPosition;
-	private Vector3D targetPosition;
 	private Vector3D visLeft;
 	private Vector3D visRight;
 	private int visLeftTriangleIndex;
@@ -45,148 +32,47 @@ public class NavMeshTrianglePathfinder
 	private Vector3D portalEndpointLeft;
 	private Vector3D portalEndpointRight;
 
-	private ProfilerStopWatch stopWatch;
+	private ProfilerStopWatch stopWatch = new ProfilerStopWatch("triangleTraverser");
 
 	// OUTPUT
-	private TransitionalPath path;
-	private String error;
 
 
 	// -------
 	// CONSTRUCTOR
 	// -------
-	@APIUsage
-	public NavMeshTrianglePathfinder(Location startLocation, Location targetLocation, NavMesh navMesh)
+	public NavMeshTriangleTraverser(Vector3D startPosition, Vector3D targetPosition, List<NavMeshTriangle> triangleSequence)
 	{
-		this.startLocation = startLocation;
-		this.targetLocation = targetLocation;
+		this.startPosition = startPosition;
+		this.targetPosition = targetPosition;
 
-		this.navMesh = navMesh;
+		this.triangleSequence = triangleSequence;
 	}
 
 
 	// -------
 	// GETTERS
 	// -------
-	@APIUsage
-	public boolean pathFound()
+	public List<Duo<Vector3D, Integer>> getWaypoints()
 	{
-		return this.path != null;
+		return this.waypoints;
 	}
 
-	@APIUsage
-	public TransitionalPath getPath()
+	public ProfilerStopWatch getStopWatch()
 	{
-		return this.path;
-	}
-
-
-	@APIUsage
-	public String getError()
-	{
-		return this.error;
-	}
-
-
-	private long getNanoDuration()
-	{
-		return this.stopWatch.getElapsedNano();
-	}
-
-	private double getMsDuration()
-	{
-		return MathUtil.round(getNanoDuration()/1000d/1000, 3);
-	}
-
-	@APIUsage
-	public String getDiagnose()
-	{
-		String diagnose = "";
-
-		diagnose += "found="+pathFound()+", ";
-		/*if(pathFound())
-			diagnose += "length="+getPath().getLength()+", ";*/
-
-		/*diagnose += "visitedNodes="+this.visitedNodes.size()+", ";
-		diagnose += "unvisitedNodes="+this.unvisitedNodes.getSize()+", ";*/
-		diagnose += "durationMs="+getMsDuration()+", ";
-
-		return diagnose;
+		return this.stopWatch;
 	}
 
 
 	// -------
-	// PATHFINDING
+	// TRAVERSAL
 	// -------
-	@APIUsage
-	public void findPath()
+	public void traverseTriangles()
 	{
-		/*DebugUtil.say("");*/
-		this.stopWatch = new ProfilerStopWatch("navMeshPathfinder");
-		ProfilerStopWatch stopWatchSeq;
-		ProfilerStopWatch stopWatchThrough;
+		this.stopWatch.start();
 
-		// validation
-		if(this.startLocation.getWorld() != this.targetLocation.getWorld())
-		{
-			this.error = "The start and target location are not in the same world";
-			return;
-		}
-
-		pathfinding:
-		{
-			stopWatchSeq = new ProfilerStopWatch("triangleSequence");
-			findTriangleSequence();
-			stopWatchSeq.stop();
-			if(this.triangleSequence.size() == 0)
-				break pathfinding;
-
-			stopWatchThrough = new ProfilerStopWatch("pathThroughTriangles");
-			findPathThroughTriangles();
-			stopWatchThrough.stop();
-		}
-
-		this.stopWatch.stop();
-
-		/*DebugUtil.say(stopWatchSeq);
-		DebugUtil.say(stopWatchThrough);
-		DebugUtil.say(stopWatch);*/
-	}
-
-	private void findTriangleSequence()
-	{
-		NavGraph navGraph = this.navMesh.getNavGraph();
-		NavMeshTriangle startTriangle = this.navMesh.getTriangleAt(this.startLocation);
-		NavMeshTriangle targetTriangle = this.navMesh.getTriangleAt(this.targetLocation);
-
-		if(startTriangle == null || targetTriangle == null)
-			return;
-
-		GraphNode startNode = navGraph.getNode(startTriangle.id);
-		GraphNode targetNode = navGraph.getNode(targetTriangle.id);
-		if(startNode == targetNode)
-		{
-			this.triangleSequence.add(startTriangle);
-			return;
-		}
-
-		NavGraphAStar pathfinder = new NavGraphAStar(startNode, targetNode);
-		pathfinder.findPath();
-
-		if(pathfinder.getPath() == null)
-			return;
-
-		for(GraphNode node : pathfinder.getPath())
-			this.triangleSequence.add(this.navMesh.getTriangle(node.getId()));
-	}
-
-	// TRIANGLE TRAVERSAL
-	private void findPathThroughTriangles()
-	{
 		triangleTraversal:
 		{
-			this.currentPosition = new Vector3D(this.startLocation);
-			this.targetPosition = new Vector3D(this.targetLocation);
+			this.currentPosition = this.startPosition;
 
 			if(this.triangleSequence.size() == 1)
 			{
@@ -199,7 +85,7 @@ public class NavMeshTrianglePathfinder
 				traverseTriangle();
 		}
 
-		this.path = new TransitionalPath(this.waypoints);
+		this.stopWatch.stop();
 	}
 
 	private void traverseTriangle()
@@ -314,17 +200,12 @@ public class NavMeshTrianglePathfinder
 	// -------
 	private static boolean isLeftOf(Vector3D v1, Vector3D v2, boolean onZero)
 	{
-		double y = getCrossProductY(v1, v2);
+		double crossY = v1.crossProduct(v2).y;
 
-		if(y == 0)
+		if(crossY == 0)
 			return onZero;
 
-		return y < 0;
-	}
-
-	private static double getCrossProductY(Vector3D v1, Vector3D v2)
-	{
-		return v1.crossProduct(v2).y;
+		return crossY < 0;
 	}
 
 

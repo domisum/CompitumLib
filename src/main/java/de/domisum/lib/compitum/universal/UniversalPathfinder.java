@@ -5,7 +5,7 @@ import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.NavMeshManager;
-import de.domisum.lib.compitum.navmesh.path.NavMeshTrianglePathfinder;
+import de.domisum.lib.compitum.navmesh.path.NavMeshPathfinder;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPathSmoother;
@@ -119,7 +119,7 @@ public class UniversalPathfinder
 
 	private void useNavMesh(NavMesh navMesh)
 	{
-		NavMeshTrianglePathfinder pathfinder = new NavMeshTrianglePathfinder(this.start, this.target, navMesh);
+		NavMeshPathfinder pathfinder = new NavMeshPathfinder(this.start, this.target, navMesh);
 		pathfinder.findPath();
 		this.diagnose = pathfinder.getDiagnose();
 		if(!pathfinder.pathFound())
