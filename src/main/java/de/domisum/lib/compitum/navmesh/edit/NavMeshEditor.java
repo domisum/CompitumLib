@@ -27,7 +27,10 @@ class NavMeshEditor
 	private static final double POINT_SELECTION_MAX_DISTANCE = 1.5;
 
 	// PROPERTIES
-	private boolean snapPointsToBlockCorner = true;
+	// editor
+	private boolean snapPointsToBlockCenter = true;
+
+	// display
 	private boolean showTriangleConnections = false;
 	private boolean showTriangleNavigationConnections = false;
 
@@ -116,7 +119,7 @@ class NavMeshEditor
 			double pX = location.getX();
 			double pY = location.getY();
 			double pZ = location.getZ();
-			if(this.snapPointsToBlockCorner)
+			if(this.snapPointsToBlockCenter)
 			{
 				pX = Math.floor(pX)+0.5;
 				pY = Math.floor(pY);
@@ -211,6 +214,22 @@ class NavMeshEditor
 
 
 	// -------
+	// COMMAND
+	// -------
+	void executeCommand(String[] args)
+	{
+		if(args.length == 1)
+		{
+			if(args[0].equalsIgnoreCase("snap"))
+			{
+				this.snapPointsToBlockCenter = !this.snapPointsToBlockCenter;
+				this.player.sendMessage("Snap to block center: "+this.snapPointsToBlockCenter);
+			}
+		}
+	}
+
+
+	// -------
 	// EDITING
 	// -------
 	NavMeshPoint createPoint()
@@ -227,7 +246,7 @@ class NavMeshEditor
 		double pX = location.getX();
 		double pY = location.getY();
 		double pZ = location.getZ();
-		if(this.snapPointsToBlockCorner)
+		if(this.snapPointsToBlockCenter)
 		{
 			pX = Math.floor(pX)+0.5;
 			pY = Math.floor(pY);

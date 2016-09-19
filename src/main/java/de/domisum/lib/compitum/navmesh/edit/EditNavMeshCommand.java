@@ -40,10 +40,7 @@ class EditNavMeshCommand extends BukkitCommand
 		Player player = (Player) sender;
 
 		NavMeshEditManager editManager = CompitumLib.getNavMeshManager().getEditManager();
-		if(editManager.isActiveFor(player))
-			editManager.endEditMode(player);
-		else
-			editManager.startEditMode(player);
+		editManager.executeCommand(player, args);
 
 		return true;
 	}

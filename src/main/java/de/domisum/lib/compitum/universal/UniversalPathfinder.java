@@ -121,8 +121,10 @@ public class UniversalPathfinder
 	{
 		NavMeshPathfinder pathfinder = new NavMeshPathfinder(this.start, this.target, navMesh);
 		pathfinder.findPath();
-		this.diagnose = pathfinder.getDiagnose();
-		if(!pathfinder.pathFound())
+		this.path = pathfinder.getPath();
+
+		//this.diagnose = pathfinder.getDiagnose();
+		if(this.path == null)
 		{
 			this.error = pathfinder.getError();
 			return;

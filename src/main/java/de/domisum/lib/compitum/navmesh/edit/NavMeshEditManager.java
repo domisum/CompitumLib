@@ -103,7 +103,12 @@ public class NavMeshEditManager
 	// -------
 	// GETTERS
 	// -------
-	public int getUpdateCount()
+	private boolean isUpdateTaskRunning()
+	{
+		return this.updateTask != null;
+	}
+
+	int getUpdateCount()
 	{
 		return this.updateCount;
 	}
@@ -144,12 +149,6 @@ public class NavMeshEditManager
 		this.updateTask = null;
 	}
 
-	private boolean isUpdateTaskRunning()
-	{
-		return this.updateTask != null;
-	}
-
-
 	private void update()
 	{
 		if(this.editors.size() == 0)
@@ -179,7 +178,25 @@ public class NavMeshEditManager
 	// -------
 	// EDITING MODE
 	// -------
-	void startEditMode(Player player)
+	void executeCommand(Player player, String[] args)
+	{
+		if(args.length == 0)
+		{
+			if(isActiveFor(player))
+				endEditMode(player);
+			else
+				startEditMode(player);
+
+			return;
+		}
+
+		if(!isActiveFor(player))
+			startEditMode(player);
+
+		getEditor(player).executeCommand(args);
+	}
+
+	private void startEditMode(Player player)
 	{
 		if(isActiveFor(player))
 			return;
