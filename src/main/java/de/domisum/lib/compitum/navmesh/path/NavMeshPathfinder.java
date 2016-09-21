@@ -3,7 +3,6 @@ package de.domisum.lib.compitum.navmesh.path;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
-import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
@@ -106,11 +105,11 @@ public class NavMeshPathfinder
 		this.stopWatch.stop();
 
 
-		DebugUtil.say("");
+		/*DebugUtil.say("");
 		DebugUtil.say(getStopWatch());
-		DebugUtil.say(triangleFindingStopWatch);
+		DebugUtil.say(this.triangleFindingStopWatch);
 		DebugUtil.say(trianglePathfinder.getStopWatch());
-		DebugUtil.say(triangleTraverser.getStopWatch());
+		DebugUtil.say(triangleTraverser.getStopWatch());*/
 	}
 
 }
