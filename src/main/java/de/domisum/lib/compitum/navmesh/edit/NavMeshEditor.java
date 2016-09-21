@@ -1,13 +1,15 @@
 package de.domisum.lib.compitum.navmesh.edit;
 
 import com.darkblade12.particleeffect.ParticleEffect;
-import de.domisum.lib.compitum.navmesh.NavMesh;
-import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
-import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
-import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.auxilium.data.container.InterchangableDuo;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.bukkit.MessagingUtil;
+import de.domisum.lib.compitum.CompitumLib;
+import de.domisum.lib.compitum.navmesh.NavMesh;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
+import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
+import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,6 +17,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 class NavMeshEditor
@@ -24,7 +27,7 @@ class NavMeshEditor
 	private static final double VISIBILITY_RANGE = 24;
 	private static final double LINE_PARTICLE_DISTANCE = 0.4;
 
-	private static final double POINT_SELECTION_MAX_DISTANCE = 1.5;
+	private static final double SELECTION_MAX_DISTANCE = 1.5;
 
 	// PROPERTIES
 	// editor
@@ -38,6 +41,9 @@ class NavMeshEditor
 	private Player player;
 	private List<NavMeshPoint> selectedPoints = new ArrayList<>();
 	private NavMeshPoint movingPoint;
+
+	private Vector3D ladderPosition;
+	private NavMeshTriangle ladderTriangle;
 
 
 	// -------
@@ -71,20 +77,20 @@ class NavMeshEditor
 
 		Vector3D playerLocation = new Vector3D(this.player.getLocation());
 
-		double closesDistanceSquared = Double.MAX_VALUE;
+		double minDistanceSquared = Double.MAX_VALUE;
 		NavMeshPoint closestPoint = null;
 
 		for(NavMeshPoint point : mesh.getPoints())
 		{
 			double distanceSquared = point.getPositionVector().distanceToSquared(playerLocation);
-			if(distanceSquared < closesDistanceSquared)
+			if(distanceSquared < minDistanceSquared)
 			{
 				closestPoint = point;
-				closesDistanceSquared = distanceSquared;
+				minDistanceSquared = distanceSquared;
 			}
 		}
 
-		if(closesDistanceSquared > POINT_SELECTION_MAX_DISTANCE*POINT_SELECTION_MAX_DISTANCE)
+		if(minDistanceSquared > SELECTION_MAX_DISTANCE*SELECTION_MAX_DISTANCE)
 			return null;
 
 		return closestPoint;
@@ -98,6 +104,36 @@ class NavMeshEditor
 
 		Location location = this.player.getLocation();
 		return mesh.getTriangleAt(location);
+	}
+
+	private NavMeshLadder getNearestNavMeshLadder(NavMeshTriangle triangle)
+	{
+		double minDistanceSquared = Double.MAX_VALUE;
+		NavMeshLadder closestLadder = null;
+
+		for(NavMeshTriangleTransition transition : triangle.neighbors.values())
+			if(transition instanceof NavMeshLadder)
+			{
+				NavMeshLadder ladder = (NavMeshLadder) transition;
+				Vector3D ladderPosition;
+
+				if(ladder.getTriangleBottom() == triangle)
+					ladderPosition = ladder.getPositionBottom();
+				else
+					ladderPosition = ladder.getPositionTop();
+
+				double distanceSquared = ladderPosition.distanceToSquared(new Vector3D(this.player.getLocation()));
+				if(distanceSquared < minDistanceSquared)
+				{
+					minDistanceSquared = distanceSquared;
+					closestLadder = ladder;
+				}
+			}
+
+		if(minDistanceSquared > SELECTION_MAX_DISTANCE*SELECTION_MAX_DISTANCE)
+			return null;
+
+		return closestLadder;
 	}
 
 
@@ -160,19 +196,34 @@ class NavMeshEditor
 		Set<InterchangableDuo<Vector3D, Vector3D>> triangleLines = new HashSet<>();
 		Set<InterchangableDuo<Vector3D, Vector3D>> triangleConnections = new HashSet<>();
 		Set<InterchangableDuo<Vector3D, Vector3D>> triangleHeuristicConnections = new HashSet<>();
+		Set<InterchangableDuo<Vector3D, Vector3D>> ladderLines = new HashSet<>();
+
 		for(NavMeshTriangle triangle : triangles)
 		{
 			triangleLines.add(new InterchangableDuo<>(triangle.point1.getPositionVector(), triangle.point2.getPositionVector()));
 			triangleLines.add(new InterchangableDuo<>(triangle.point2.getPositionVector(), triangle.point3.getPositionVector()));
 			triangleLines.add(new InterchangableDuo<>(triangle.point3.getPositionVector(), triangle.point1.getPositionVector()));
 
-			for(NavMeshTriangle neighbor : triangle.neighbors.keySet())
+			for(Map.Entry<NavMeshTriangle, NavMeshTriangleTransition> entry : triangle.neighbors.entrySet())
 			{
+				NavMeshTriangle neighbor = entry.getKey();
+				NavMeshTriangleTransition transition = entry.getValue();
+
 				if(this.showTriangleConnections)
 					triangleConnections.add(new InterchangableDuo<>(triangle.getCenter(), neighbor.getCenter()));
 				if(this.showTriangleNavigationConnections)
 					triangleHeuristicConnections
 							.add(new InterchangableDuo<>(triangle.getHeuristicCenter(), neighbor.getHeuristicCenter()));
+
+				if(transition instanceof NavMeshLadder)
+				{
+					NavMeshLadder ladder = (NavMeshLadder) transition;
+					Vector3D cornerPoint = new Vector3D(ladder.getPositionBottom().x, ladder.getPositionTop().y,
+							ladder.getPositionBottom().z);
+
+					ladderLines.add(new InterchangableDuo<>(ladder.getPositionBottom(), cornerPoint));
+					ladderLines.add(new InterchangableDuo<>(cornerPoint, ladder.getPositionTop()));
+				}
 			}
 		}
 
@@ -184,17 +235,21 @@ class NavMeshEditor
 
 		for(InterchangableDuo<Vector3D, Vector3D> line : triangleHeuristicConnections)
 			spawnLineParticles(line.a, line.b, ParticleEffect.VILLAGER_HAPPY, LINE_PARTICLE_DISTANCE*1.5);
+
+		for(InterchangableDuo<Vector3D, Vector3D> line : ladderLines)
+			spawnLineParticles(line.a, line.b, ParticleEffect.FIREWORKS_SPARK, LINE_PARTICLE_DISTANCE);
 	}
 
 	private void spawnPointParticles(NavMeshPoint point)
 	{
 		Location location = point.getPositionVector().toLocation(this.player.getWorld());
 
-		ParticleEffect particleEffect = ParticleEffect.FIREWORKS_SPARK;
+		ParticleEffect particleEffect = ParticleEffect.DAMAGE_INDICATOR;
 		if(this.selectedPoints.contains(point))
-			particleEffect = ParticleEffect.DAMAGE_INDICATOR;
-		else
-			location.add(0, 1, 0);
+		{
+			particleEffect = ParticleEffect.HEART;
+			location = location.add(0, 0.3, 0);
+		}
 
 		particleEffect.display(0, 0, 0, 0, 1, location, this.player);
 	}
@@ -224,8 +279,28 @@ class NavMeshEditor
 			{
 				this.snapPointsToBlockCenter = !this.snapPointsToBlockCenter;
 				this.player.sendMessage("Snap to block center: "+this.snapPointsToBlockCenter);
+				return;
+			}
+			if(args[0].equalsIgnoreCase("con"))
+			{
+				this.showTriangleConnections = !this.showTriangleConnections;
+				this.player.sendMessage("Show triangle connections: "+this.showTriangleConnections);
+				return;
+			}
+			if(args[0].equalsIgnoreCase("navCon"))
+			{
+				this.showTriangleNavigationConnections = !this.showTriangleNavigationConnections;
+				this.player.sendMessage("Show triangle navigation connections: "+this.showTriangleNavigationConnections);
+				return;
 			}
 		}
+
+		String argsRecombined = "";
+		for(String arg : args)
+			argsRecombined += arg+" ";
+		argsRecombined = argsRecombined.trim();
+
+		this.player.sendMessage("The arguments '"+argsRecombined+"' are invalid.");
 	}
 
 
@@ -364,6 +439,12 @@ class NavMeshEditor
 
 		NavMesh mesh = getNavMesh();
 		mesh.deleteTriangle(triangle);
+
+		if(this.ladderTriangle == triangle)
+		{
+			this.ladderTriangle = null;
+			this.ladderPosition = null;
+		}
 	}
 
 
@@ -398,6 +479,60 @@ class NavMeshEditor
 		NavMesh mesh = getNavMesh();
 
 		this.player.sendMessage("Triangle '"+triangle.id+"' in graph '"+mesh.getId()+"':");
+	}
+
+
+	void createLadder()
+	{
+		if(this.player.isSneaking())
+		{
+			// canceling ladder creation
+			if(this.ladderTriangle != null)
+			{
+				this.ladderTriangle = null;
+				this.ladderPosition = null;
+				return;
+			}
+
+			// deleting triangle
+			NavMeshTriangle triangle = getTriangle();
+			if(triangle == null)
+			{
+				this.player.sendMessage("Deleting ladder failed. No triangle nearby.");
+				return;
+			}
+
+			NavMeshLadder ladder = getNearestNavMeshLadder(triangle);
+			if(ladder == null)
+			{
+				this.player.sendMessage("Deleting ladder failed. No ladder on this triangle.");
+				return;
+			}
+
+			getNavMesh().removeLadder(ladder);
+			return;
+		}
+
+		NavMeshTriangle triangle = getTriangle();
+		if(triangle == null)
+		{
+			this.player.sendMessage("Creating ladder failed. The point has to be on a triangle.");
+			return;
+		}
+
+		if(this.ladderTriangle == null) // first point
+		{
+			this.ladderTriangle = triangle;
+			this.ladderPosition = new Vector3D(this.player.getLocation());
+
+			return;
+		}
+
+		// second point
+		Vector3D otherLadderPosition = new Vector3D(this.player.getLocation());
+		getNavMesh().createLadder(this.ladderTriangle, this.ladderPosition, triangle, otherLadderPosition);
+		this.ladderTriangle = null;
+		this.ladderPosition = null;
 	}
 
 }

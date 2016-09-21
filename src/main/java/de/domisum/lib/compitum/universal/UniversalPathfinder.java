@@ -27,7 +27,7 @@ public class UniversalPathfinder
 	private TransitionalPath path;
 
 	private String diagnose;
-	private String error;
+	private String failure;
 
 
 	// -------
@@ -64,9 +64,9 @@ public class UniversalPathfinder
 	}
 
 	@APIUsage
-	public String getError()
+	public String getFailure()
 	{
-		return this.error;
+		return this.failure;
 	}
 
 
@@ -107,7 +107,7 @@ public class UniversalPathfinder
 
 		if(!pathfinder.pathFound())
 		{
-			this.error = pathfinder.getError();
+			this.failure = pathfinder.getFailure();
 			return;
 		}
 		TransitionalBlockPath blockPath = pathfinder.getPath();
@@ -126,7 +126,7 @@ public class UniversalPathfinder
 		//this.diagnose = pathfinder.getDiagnose();
 		if(this.path == null)
 		{
-			this.error = pathfinder.getError();
+			this.failure = getFailure();
 			return;
 		}
 

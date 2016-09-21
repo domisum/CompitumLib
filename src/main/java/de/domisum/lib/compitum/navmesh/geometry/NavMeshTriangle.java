@@ -1,6 +1,8 @@
 package de.domisum.lib.compitum.navmesh.geometry;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.compitum.CompitumLib;
+import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import org.bukkit.Location;
 
 import java.util.HashMap;
@@ -17,7 +19,7 @@ public class NavMeshTriangle
 	public final NavMeshPoint point2;
 	public final NavMeshPoint point3;
 
-	public final Map<NavMeshTriangle, NavMeshTrianglePortal> neighbors = new HashMap<>();
+	public final Map<NavMeshTriangle, NavMeshTriangleTransition> neighbors = new HashMap<>();
 
 	// STATUS
 	private Vector3D heuristicCenter;
@@ -74,12 +76,7 @@ public class NavMeshTriangle
 		return this.point1 == point || this.point2 == point || this.point3 == point;
 	}
 
-	boolean isNeighbor(NavMeshTriangle other)
-	{
-		return this.neighbors.containsKey(other);
-	}
-
-	public NavMeshTrianglePortal getPortalTo(NavMeshTriangle other)
+	public NavMeshTriangleTransition getTransitionTo(NavMeshTriangle other)
 	{
 		return this.neighbors.get(other);
 	}
@@ -120,10 +117,18 @@ public class NavMeshTriangle
 	// -------
 	// CHANGERS
 	// -------
-	public void makeNeighbors(NavMeshTriangle other, NavMeshTrianglePortal portal)
+	public void makeNeighbors(NavMeshTriangle other, NavMeshTriangleTransition transition)
 	{
-		this.neighbors.put(other, portal);
-		other.neighbors.put(this, portal);
+		if(this.neighbors.containsKey(other))
+		{
+			NavMeshTriangleTransition currentTransition = this.neighbors.get(other);
+			if(currentTransition == transition)
+				CompitumLib.getLogger()
+						.warning("Overridden NavMesh neighbor: "+currentTransition+"' overridden by '"+transition+"'");
+		}
+
+		this.neighbors.put(other, transition);
+		other.neighbors.put(this, transition);
 	}
 
 	public void removeNeighbor(NavMeshTriangle other)

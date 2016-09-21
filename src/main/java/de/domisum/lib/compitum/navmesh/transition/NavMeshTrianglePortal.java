@@ -1,11 +1,14 @@
-package de.domisum.lib.compitum.navmesh.geometry;
+package de.domisum.lib.compitum.navmesh.transition;
 
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
+import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-public class NavMeshTrianglePortal
+public class NavMeshTrianglePortal implements NavMeshTriangleTransition
 {
 
 	// REFERENCES
@@ -17,6 +20,7 @@ public class NavMeshTrianglePortal
 
 	// STATUS
 	private LineSegment3D fullLineSegment;
+	private double triangleHeuristicCenterDistance = -1;
 
 
 	// -------
@@ -45,6 +49,22 @@ public class NavMeshTrianglePortal
 			this.fullLineSegment = new LineSegment3D(this.point1.getPositionVector(), this.point2.getPositionVector());
 
 		return this.fullLineSegment;
+	}
+
+	@Override
+	public int getTransitionType()
+	{
+		return TransitionType.WALK;
+	}
+
+	@Override
+	public double getWeight()
+	{
+		if(this.triangleHeuristicCenterDistance == -1)
+			this.triangleHeuristicCenterDistance = this.triangle2.getHeuristicCenter()
+					.subtract(this.triangle1.getHeuristicCenter()).length();
+
+		return this.triangleHeuristicCenterDistance;
 	}
 
 }

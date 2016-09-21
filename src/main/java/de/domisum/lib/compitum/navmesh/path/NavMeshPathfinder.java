@@ -1,10 +1,17 @@
 package de.domisum.lib.compitum.navmesh.path;
 
 
+import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
+import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
 import de.domisum.lib.compitum.navmesh.NavMesh;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
+import de.domisum.lib.compitum.navmesh.path.traversal.NavMeshTriangleTraverser;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
 import org.bukkit.Location;
+
+import java.util.List;
 
 @APIUsage
 public class NavMeshPathfinder
@@ -16,11 +23,12 @@ public class NavMeshPathfinder
 	private NavMesh navMesh;
 
 	// STATUS
-
+	private ProfilerStopWatch stopWatch = new ProfilerStopWatch("pathfinding.navMesh");
+	private ProfilerStopWatch triangleFindingStopWatch = new ProfilerStopWatch("pathfinding.navMesh.startTargetTriangles");
 
 	// OUTPUT
 	private TransitionalPath path;
-	private String error;
+	private String failure;
 
 
 	// -------
@@ -39,16 +47,21 @@ public class NavMeshPathfinder
 	// -------
 	// GETTERS
 	// -------
-	@APIUsage
 	public TransitionalPath getPath()
 	{
 		return this.path;
 	}
 
 	@APIUsage
-	public String getError()
+	public String getFailure()
 	{
-		return this.error;
+		return this.failure;
+	}
+
+
+	public ProfilerStopWatch getStopWatch()
+	{
+		return this.stopWatch;
 	}
 
 
@@ -58,7 +71,46 @@ public class NavMeshPathfinder
 	@APIUsage
 	public void findPath()
 	{
+		this.stopWatch.start();
+		this.triangleFindingStopWatch.start();
+		NavMeshTriangle startTriangle = this.navMesh.getTriangleAt(this.startLocation);
+		if(startTriangle == null)
+		{
+			this.failure = "Start location is not on NavMesh";
+			return;
+		}
 
+		NavMeshTriangle targetTriangle = this.navMesh.getTriangleAt(this.targetLocation);
+		if(targetTriangle == null)
+		{
+			this.failure = "Target location is not on NavMesh";
+			return;
+		}
+
+		this.triangleFindingStopWatch.stop();
+
+		NavMeshTrianglePathfinder trianglePathfinder = new NavMeshTrianglePathfinder(startTriangle, targetTriangle);
+		trianglePathfinder.findPath();
+		List<NavMeshTriangle> triangleSequence = trianglePathfinder.getTriangleSequence();
+		if(triangleSequence == null)
+		{
+			this.failure = trianglePathfinder.getFailure();
+			return;
+		}
+
+		NavMeshTriangleTraverser triangleTraverser = new NavMeshTriangleTraverser(new Vector3D(this.startLocation),
+				new Vector3D(this.targetLocation), triangleSequence);
+		triangleTraverser.traverseTriangles();
+		this.path = triangleTraverser.getPath();
+
+		this.stopWatch.stop();
+
+
+		DebugUtil.say("");
+		DebugUtil.say(getStopWatch());
+		DebugUtil.say(triangleFindingStopWatch);
+		DebugUtil.say(trianglePathfinder.getStopWatch());
+		DebugUtil.say(triangleTraverser.getStopWatch());
 	}
 
 }

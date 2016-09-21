@@ -1,9 +1,10 @@
 package de.domisum.lib.compitum.transitionalpath.node;
 
+import de.domisum.lib.compitum.universal.WeightedNode;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class TransitionalBlockNode
+public class TransitionalBlockNode implements WeightedNode
 {
 
 	// PROPERTIES
@@ -29,6 +30,7 @@ public class TransitionalBlockNode
 		this.z = z;
 	}
 
+	@Override
 	public boolean equals(Object other)
 	{
 		if(!(other instanceof TransitionalBlockNode))
@@ -39,6 +41,7 @@ public class TransitionalBlockNode
 		return o.x == this.x && o.y == this.y && o.z == this.z;
 	}
 
+	@Override
 	public int hashCode()
 	{
 		int hash = this.x;
@@ -78,7 +81,8 @@ public class TransitionalBlockNode
 		return this.parent.getWeight()+this.weightFromParent;
 	}
 
-	public double getEstimatedCombinedWeight()
+	@Override
+	public double getFValue()
 	{
 		return getWeight()+this.heuristicWeight;
 	}

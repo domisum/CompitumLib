@@ -1,6 +1,5 @@
-package de.domisum.lib.compitum.transitionalpath;
+package de.domisum.lib.compitum.universal;
 
-import de.domisum.lib.compitum.transitionalpath.node.TransitionalBlockNode;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 
 import java.util.ArrayList;
@@ -9,17 +8,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SortedTransitionalNodeList
+public class SortedWeightedNodeList<T extends WeightedNode>
 {
 
-	private List<TransitionalBlockNode> nodes;
-	private Set<TransitionalBlockNode> nodesContainsTester;
+	private List<T> nodes;
+	private Set<T> nodesContainsTester;
 
 
 	// -------
 	// CONSTRUCTOR
 	// -------
-	public SortedTransitionalNodeList(int length)
+	public SortedWeightedNodeList(int length)
 	{
 		this.nodes = new ArrayList<>(length);
 		this.nodesContainsTester = new HashSet<>(length);
@@ -29,18 +28,18 @@ public class SortedTransitionalNodeList
 	// -------
 	// GETTERS
 	// -------
-	public TransitionalBlockNode getAndRemoveFirst()
+	public T getAndRemoveFirst()
 	{
 		if(this.nodes.isEmpty())
 			return null;
 
-		TransitionalBlockNode firstNode = this.nodes.remove(0);
+		T firstNode = this.nodes.remove(0);
 		this.nodesContainsTester.remove(firstNode);
 
 		return firstNode;
 	}
 
-	public boolean contains(TransitionalBlockNode node)
+	public boolean contains(T node)
 	{
 		return this.nodesContainsTester.contains(node);
 	}
@@ -50,14 +49,14 @@ public class SortedTransitionalNodeList
 		return this.nodes.size();
 	}
 
-	private double getValueToCompare(TransitionalBlockNode node)
+	private double getValueToCompare(T node)
 	{
-		return node.getEstimatedCombinedWeight();
+		return node.getFValue();
 	}
 
 
 	@Deprecated
-	public List<TransitionalBlockNode> getNodes()
+	public List<T> getNodes()
 	{
 		return this.nodes;
 	}
@@ -66,14 +65,14 @@ public class SortedTransitionalNodeList
 	// -------
 	// CHANGERS
 	// -------
-	public void addSorted(TransitionalBlockNode node)
+	public void addSorted(T node)
 	{
 		// don't subtract one from the size since the element could be added after the last current entry
 		this.nodesContainsTester.add(node);
 		insertIntoList(node, 0, this.nodes.size());
 	}
 
-	private void insertIntoList(TransitionalBlockNode node, int lowerBound, int upperBound)
+	private void insertIntoList(T node, int lowerBound, int upperBound)
 	{
 		if(lowerBound == upperBound)
 		{
@@ -84,7 +83,7 @@ public class SortedTransitionalNodeList
 		double nodeValue = getValueToCompare(node);
 
 		int dividingIndex = (lowerBound+upperBound)/2;
-		TransitionalBlockNode dividingNode = this.nodes.get(dividingIndex);
+		T dividingNode = this.nodes.get(dividingIndex);
 		double dividingValue = getValueToCompare(dividingNode);
 
 		if(nodeValue > dividingValue)

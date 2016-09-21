@@ -1,11 +1,11 @@
 package de.domisum.lib.compitum.navmesh.json;
 
-import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
-import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.auxilium.util.java.annotations.DeserializationNoArgsConstructor;
 import de.domisum.lib.auxilium.util.java.annotations.SetByDeserialization;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
+import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 
-import java.util.List;
+import java.util.Collection;
 
 class SerializationNavMeshTriangle
 {
@@ -44,13 +44,13 @@ class SerializationNavMeshTriangle
 	// -------
 	// GETTERS
 	// -------
-	NavMeshTriangle getNavMeshTriangle(List<NavMeshPoint> points)
+	NavMeshTriangle getNavMeshTriangle(Collection<NavMeshPoint> points)
 	{
 		return new NavMeshTriangle(this.id, getPoint(points, this.point1), getPoint(points, this.point2),
 				getPoint(points, this.point3));
 	}
 
-	private NavMeshPoint getPoint(List<NavMeshPoint> points, String id)
+	private NavMeshPoint getPoint(Collection<NavMeshPoint> points, String id)
 	{
 		for(NavMeshPoint point : points)
 			if(point.getId().equals(id))

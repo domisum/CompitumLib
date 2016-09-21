@@ -1,11 +1,14 @@
-package de.domisum.lib.compitum.navmesh.path;
+package de.domisum.lib.compitum.navmesh.path.traversal;
 
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
+import de.domisum.lib.compitum.navmesh.transition.NavMeshTrianglePortal;
+import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
+import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +31,16 @@ public class NavMeshTriangleTraverser
 	private int visRightTriangleIndex;
 
 	private int currentTriangleIndex = 0;
+	private NavMeshTriangle triangle;
+	private NavMeshTriangle triangleAfter;
 
 	private Vector3D portalEndpointLeft;
 	private Vector3D portalEndpointRight;
 
-	private ProfilerStopWatch stopWatch = new ProfilerStopWatch("triangleTraverser");
+	private ProfilerStopWatch stopWatch = new ProfilerStopWatch("pathfinding.navMesh.triangleTraversal");
 
 	// OUTPUT
+	private TransitionalPath path;
 
 
 	// -------
@@ -52,9 +58,9 @@ public class NavMeshTriangleTraverser
 	// -------
 	// GETTERS
 	// -------
-	public List<Duo<Vector3D, Integer>> getWaypoints()
+	public TransitionalPath getPath()
 	{
-		return this.waypoints;
+		return this.path;
 	}
 
 	public ProfilerStopWatch getStopWatch()
@@ -70,32 +76,44 @@ public class NavMeshTriangleTraverser
 	{
 		this.stopWatch.start();
 
-		triangleTraversal:
+		this.currentPosition = this.startPosition;
+
+		if(this.triangleSequence.size() == 1)
+			this.waypoints.add(new Duo<>(this.targetPosition, TransitionType.WALK));
+		else
 		{
-			this.currentPosition = this.startPosition;
-
-			if(this.triangleSequence.size() == 1)
-			{
-				this.waypoints.add(new Duo<>(this.targetPosition, TransitionType.WALK));
-				break triangleTraversal;
-			}
-
 			for(this.currentTriangleIndex = 0;
 			    this.currentTriangleIndex < this.triangleSequence.size(); this.currentTriangleIndex++)
-				traverseTriangle();
+				processTriangleTransition();
 		}
 
+		this.path = new TransitionalPath(this.waypoints);
 		this.stopWatch.stop();
 	}
 
-	private void traverseTriangle()
+
+	private void processTriangleTransition()
 	{
-		NavMeshTriangle triangle = this.triangleSequence.get(this.currentTriangleIndex);
-		NavMeshTriangle triangleAfter = this.currentTriangleIndex+1 < this.triangleSequence.size() ?
+		this.triangle = this.triangleSequence.get(this.currentTriangleIndex);
+		this.triangleAfter = this.currentTriangleIndex+1 < this.triangleSequence.size() ?
 				this.triangleSequence.get(this.currentTriangleIndex+1) :
 				null;
 
-		if(triangleAfter == null) // last triangle
+		NavMeshTriangleTransition transition = this.triangle.getTransitionTo(this.triangleAfter);
+
+		if(transition == null)
+			traverseTrianglePortal();
+		else if(transition.getTransitionType() == TransitionType.WALK)
+			traverseTrianglePortal();
+		else if(transition.getTransitionType() == TransitionType.CLIMB)
+			traverseTrianglePortal();
+	}
+
+
+	// WALKING
+	private void traverseTrianglePortal()
+	{
+		if(this.triangleAfter == null) // last triangle
 		{
 			// visLeft can be null if the transition into the last triangle was a turn
 			if(this.visLeft != null)
@@ -120,7 +138,7 @@ public class NavMeshTriangleTraverser
 		// either first triangle processing or after new corner
 		else if(this.visLeft == null) // if visLeft is null, then visRight is also null
 		{
-			findPortalEndpoints(triangle, triangleAfter);
+			findPortalEndpoints(this.triangle, this.triangleAfter);
 			this.visLeft = this.portalEndpointLeft;
 			this.visRight = this.portalEndpointRight;
 			this.visLeftTriangleIndex = this.currentTriangleIndex;
@@ -128,7 +146,7 @@ public class NavMeshTriangleTraverser
 		}
 		else
 		{
-			findPortalEndpoints(triangle, triangleAfter);
+			findPortalEndpoints(this.triangle, this.triangleAfter);
 
 			Vector3D towardsVisLeft = this.visLeft.subtract(this.currentPosition);
 			Vector3D towardsVisRight = this.visRight.subtract(this.currentPosition);
@@ -171,7 +189,8 @@ public class NavMeshTriangleTraverser
 
 	private void findPortalEndpoints(NavMeshTriangle from, NavMeshTriangle to)
 	{
-		LineSegment3D portalLineSegment = from.getPortalTo(to).getFullLineSegment();
+		NavMeshTriangleTransition transition = from.getTransitionTo(to);
+		LineSegment3D portalLineSegment = ((NavMeshTrianglePortal) transition).getFullLineSegment();
 
 		this.portalEndpointLeft = portalLineSegment.a;
 		this.portalEndpointRight = portalLineSegment.b;
@@ -184,6 +203,13 @@ public class NavMeshTriangleTraverser
 			this.portalEndpointRight = temp;
 		}
 	}
+
+	// LADDER CLIMBING
+	private void useLadder()
+	{
+
+	}
+
 
 	private void newWaypoint(Vector3D position, int transitionType)
 	{
@@ -207,7 +233,6 @@ public class NavMeshTriangleTraverser
 
 		return crossY < 0;
 	}
-
 
 	private static boolean isSame(Vector3D a, Vector3D b)
 	{

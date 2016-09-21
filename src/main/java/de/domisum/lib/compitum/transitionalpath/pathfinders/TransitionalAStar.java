@@ -1,14 +1,14 @@
 package de.domisum.lib.compitum.transitionalpath.pathfinders;
 
 
-import de.domisum.lib.compitum.transitionalpath.node.TransitionalBlockNode;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
-import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
-import de.domisum.lib.compitum.evaluator.StairEvaluator;
-import de.domisum.lib.compitum.transitionalpath.SortedTransitionalNodeList;
-import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.math.MathUtil;
+import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
+import de.domisum.lib.compitum.evaluator.StairEvaluator;
+import de.domisum.lib.compitum.universal.SortedWeightedNodeList;
+import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
+import de.domisum.lib.compitum.transitionalpath.node.TransitionalBlockNode;
+import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -43,7 +43,8 @@ public class TransitionalAStar
 	private long pathfindingStartNano;
 	private long pathfindingEndNano;
 
-	private SortedTransitionalNodeList unvisitedNodes = new SortedTransitionalNodeList(this.maxNodeVisits*3);
+	private SortedWeightedNodeList<TransitionalBlockNode> unvisitedNodes = new SortedWeightedNodeList<>(
+			this.maxNodeVisits*3);
 	private Set<TransitionalBlockNode> visitedNodes = new HashSet<>(this.maxNodeVisits);
 
 	// OUTPUT
@@ -79,7 +80,7 @@ public class TransitionalAStar
 
 
 	@APIUsage
-	public String getError()
+	public String getFailure()
 	{
 		return this.error;
 	}
@@ -201,7 +202,7 @@ public class TransitionalAStar
 
 		// path finalization
 		// if the end node has a parent, a path has been found
-		if(this.endNode.getParent() != null || startNode.equals(endNode))
+		if(this.endNode.getParent() != null || startNode.equals(this.endNode))
 			this.path = new TransitionalBlockPath(this.endNode);
 		else
 			// this looks through the provided options and checks if an ability of the pathfinder is deactivated,
@@ -320,10 +321,8 @@ public class TransitionalAStar
 		if(this.visitedNodes.contains(node))
 			return true;
 
-		if(this.unvisitedNodes.contains(node))
-			return true;
+		return this.unvisitedNodes.contains(node);
 
-		return false;
 	}
 
 	private void addNode(TransitionalBlockNode node)
@@ -344,10 +343,8 @@ public class TransitionalAStar
 		if(!isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(dX, 0, 0)))
 			return false;
 
-		if(!isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(0, 0, dZ)))
-			return false;
+		return isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(0, 0, dZ));
 
-		return true;
 	}
 
 	private boolean canStandAt(Location feetLocation)
@@ -355,10 +352,8 @@ public class TransitionalAStar
 		if(!isUnobstructed(feetLocation))
 			return false;
 
-		if(!MaterialEvaluator.canStandOn(feetLocation.clone().add(0, -1, 0).getBlock().getTypeId()))
-			return false;
+		return MaterialEvaluator.canStandOn(feetLocation.clone().add(0, -1, 0).getBlock().getTypeId());
 
-		return true;
 	}
 
 	private boolean isUnobstructed(Location feetLocation)
@@ -366,10 +361,8 @@ public class TransitionalAStar
 		if(!isBlockUnobstructed(feetLocation))
 			return false;
 
-		if(!isBlockUnobstructed(feetLocation.clone().add(0, 1, 0)))
-			return false;
+		return isBlockUnobstructed(feetLocation.clone().add(0, 1, 0));
 
-		return true;
 	}
 
 

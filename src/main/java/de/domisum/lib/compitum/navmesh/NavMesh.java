@@ -6,7 +6,8 @@ import de.domisum.lib.auxilium.util.keys.Base64Key;
 import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
-import de.domisum.lib.compitum.navmesh.geometry.NavMeshTrianglePortal;
+import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
+import de.domisum.lib.compitum.navmesh.transition.NavMeshTrianglePortal;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -50,6 +51,7 @@ public class NavMesh
 			this.triangles.put(t.id, t);
 
 		fillInNeighbors();
+		determineHeuristicTriangleCenters();
 	}
 
 
@@ -92,7 +94,6 @@ public class NavMesh
 		return this.points.values();
 	}
 
-
 	private NavMeshPoint getPoint(String id)
 	{
 		return this.points.get(id);
@@ -117,7 +118,7 @@ public class NavMesh
 	}
 
 
-	private NavMeshTriangle getTriangle(String id)
+	public NavMeshTriangle getTriangle(String id)
 	{
 		return this.triangles.get(id);
 	}
@@ -172,6 +173,24 @@ public class NavMesh
 	}
 
 
+	// LADDER
+	public void createLadder(NavMeshTriangle triangle1, Vector3D position1, NavMeshTriangle triangle2, Vector3D position2)
+	{
+		NavMeshLadder ladder;
+		if(position1.y < position2.y)
+			ladder = new NavMeshLadder(triangle1, position1, triangle2, position2);
+		else
+			ladder = new NavMeshLadder(triangle2, position2, triangle1, position1);
+
+		triangle1.makeNeighbors(triangle2, ladder);
+	}
+
+	public void removeLadder(NavMeshLadder ladder)
+	{
+		ladder.getTriangleBottom().removeNeighbor(ladder.getTriangleTop());
+	}
+
+
 	// -------
 	// PATHFINDING
 	// -------
@@ -203,7 +222,13 @@ public class NavMesh
 	}
 
 
-	public void reduceHeuristicCenterDistances(double factor)
+	private void determineHeuristicTriangleCenters()
+	{
+		for(int i = 0; i < 5; i++)
+			reduceHeuristicCenterDistances(0.1);
+	}
+
+	private void reduceHeuristicCenterDistances(double factor)
 	{
 		for(NavMeshTriangle triangle : this.triangles.values())
 		{
