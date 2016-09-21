@@ -12,6 +12,9 @@ import java.util.Map;
 public class NavMeshTriangle
 {
 
+	// CONSTANTS
+	private static final double CONTAINS_TOLERANCE = 0.00001;
+
 	// PROPERTIES
 	public final String id;
 
@@ -90,18 +93,46 @@ public class NavMeshTriangle
 
 	public boolean doesContain(Vector3D point)
 	{
-		if(Math.abs(getCenter().y-point.y) > 3)
+		if(Math.abs(getCenter().y-point.y) >= 2)
 			return false;
 
 		Vector3D a = this.point1.getPositionVector();
 		Vector3D b = this.point2.getPositionVector();
 		Vector3D c = this.point3.getPositionVector();
 
-		boolean b1 = sign(point, a, b) < 0;
-		boolean b2 = sign(point, b, c) < 0;
-		boolean b3 = sign(point, c, a) < 0;
+		double ab = sign(point, a, b);
+		double bc = sign(point, b, c);
+		double ca = sign(point, c, a);
 
-		return ((b1 == b2) && (b2 == b3));
+		if(Math.abs(ab) < CONTAINS_TOLERANCE)
+		{
+			if(Math.abs(bc) < CONTAINS_TOLERANCE)
+				return true;
+			else if(Math.abs(ca) < CONTAINS_TOLERANCE)
+				return true;
+
+			return bc < 0 == ca < 0;
+		}
+		else if(Math.abs(bc) < CONTAINS_TOLERANCE)
+		{
+			if(Math.abs(ab) < CONTAINS_TOLERANCE)
+				return true;
+			else if(Math.abs(ca) < CONTAINS_TOLERANCE)
+				return true;
+
+			return ab < 0 == ca < 0;
+		}
+		else if(Math.abs(ca) < CONTAINS_TOLERANCE)
+		{
+			if(Math.abs(ab) < CONTAINS_TOLERANCE)
+				return true;
+			else if(Math.abs(bc) < CONTAINS_TOLERANCE)
+				return true;
+
+			return ab < 0 == bc < 0;
+		}
+
+		return (ab < 0 == bc < 0) && (bc < 0 == ca < 0);
 	}
 
 
