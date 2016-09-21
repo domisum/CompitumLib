@@ -5,6 +5,7 @@ import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
+import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTrianglePortal;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
@@ -101,12 +102,12 @@ public class NavMeshTriangleTraverser
 
 		NavMeshTriangleTransition transition = this.triangle.getTransitionTo(this.triangleAfter);
 
-		if(transition == null)
+		if(this.triangleAfter == null)
 			traverseTrianglePortal();
 		else if(transition.getTransitionType() == TransitionType.WALK)
 			traverseTrianglePortal();
 		else if(transition.getTransitionType() == TransitionType.CLIMB)
-			traverseTrianglePortal();
+			useLadder();
 	}
 
 
@@ -114,28 +115,8 @@ public class NavMeshTriangleTraverser
 	private void traverseTrianglePortal()
 	{
 		if(this.triangleAfter == null) // last triangle
-		{
-			// visLeft can be null if the transition into the last triangle was a turn
-			if(this.visLeft != null)
-			{
-				Vector3D towardsVisLeft = this.visLeft.subtract(this.currentPosition);
-				Vector3D towardsVisRight = this.visRight.subtract(this.currentPosition);
-
-				Vector3D towardsTarget = this.targetPosition.subtract(this.currentPosition);
-
-				if(isLeftOf(towardsVisRight, towardsTarget, false)) // right curve
-				{
-					newWaypoint(this.visRight, TransitionType.WALK);
-				}
-				else if(isLeftOf(towardsTarget, towardsVisLeft, false)) // left curve
-				{
-					newWaypoint(this.visLeft, TransitionType.WALK);
-				}
-			}
-
-			this.waypoints.add(new Duo<>(this.targetPosition, TransitionType.WALK));
-		}
-		// either first triangle processing or after new corner
+			processMovementTowardsTargetPoint(this.targetPosition);
+			// either first triangle processing or after new corner
 		else if(this.visLeft == null) // if visLeft is null, then visRight is also null
 		{
 			findPortalEndpoints(this.triangle, this.triangleAfter);
@@ -204,10 +185,50 @@ public class NavMeshTriangleTraverser
 		}
 	}
 
+	private void processMovementTowardsTargetPoint(Vector3D targetPoint)
+	{
+		// the vis points can be null if the transition into the previous triangle was a turn
+		if(this.visLeft != null)
+		{
+			Vector3D towardsVisLeft = this.visLeft.subtract(this.currentPosition);
+			Vector3D towardsVisRight = this.visRight.subtract(this.currentPosition);
+
+			Vector3D towardsTargetPoint = targetPoint.subtract(this.currentPosition);
+
+			if(isLeftOf(towardsVisRight, towardsTargetPoint, false)) // right turn
+				newWaypoint(this.visRight, TransitionType.WALK);
+			else if(isLeftOf(towardsTargetPoint, towardsVisLeft, false)) // left turn
+				newWaypoint(this.visLeft, TransitionType.WALK);
+		}
+
+		this.waypoints.add(new Duo<>(targetPoint, TransitionType.WALK));
+	}
+
+
 	// LADDER CLIMBING
 	private void useLadder()
 	{
+		NavMeshTriangleTransition transition = this.triangle.getTransitionTo(this.triangleAfter);
+		NavMeshLadder ladder = (NavMeshLadder) transition;
 
+		boolean upwards = ladder.getTriangleBottom() == this.triangle;
+		if(upwards)
+		{
+			processMovementTowardsTargetPoint(ladder.getPositionBottom());
+			Vector3D climbingEndPosition = new Vector3D(ladder.getPositionBottom().x, ladder.getPositionTop().y,
+					ladder.getPositionBottom().z);
+
+			newWaypoint(climbingEndPosition, TransitionType.CLIMB);
+			newWaypoint(ladder.getPositionTop(), TransitionType.WALK);
+		}
+		else
+		{
+			Vector3D climbingStartPosition = new Vector3D(ladder.getPositionBottom().x, ladder.getPositionTop().y,
+					ladder.getPositionBottom().z);
+			processMovementTowardsTargetPoint(climbingStartPosition);
+
+			newWaypoint(ladder.getPositionBottom(), TransitionType.CLIMB);
+		}
 	}
 
 
