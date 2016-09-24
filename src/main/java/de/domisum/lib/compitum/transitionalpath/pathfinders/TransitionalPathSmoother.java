@@ -1,8 +1,10 @@
-package de.domisum.lib.compitum.transitionalpath.path;
+package de.domisum.lib.compitum.transitionalpath.pathfinders;
 
 import de.domisum.lib.compitum.transitionalpath.node.TransitionalBlockNode;
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
+import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
 
 import java.util.ArrayList;
 import java.util.List;

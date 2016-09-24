@@ -8,7 +8,7 @@ import de.domisum.lib.compitum.navmesh.NavMeshManager;
 import de.domisum.lib.compitum.navmesh.path.NavMeshPathfinder;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalPathSmoother;
+import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalPathSmoother;
 import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalAStar;
 import org.bukkit.Location;
 
