@@ -1,20 +1,17 @@
 package de.domisum.lib.compitum.transitionalpath.path;
 
-import de.domisum.lib.auxilium.data.container.Duo;
-import de.domisum.lib.auxilium.data.container.math.Vector3D;
-
 import java.util.List;
 
 public class TransitionalPath
 {
 
-	private List<Duo<Vector3D, Integer>> waypoints; // <location, TransitionType>
+	private List<TransitionalWaypoint> waypoints;
 
 
 	// -------
 	// CONSTRUCTOR
 	// -------
-	public TransitionalPath(List<Duo<Vector3D, Integer>> waypoints)
+	public TransitionalPath(List<TransitionalWaypoint> waypoints)
 	{
 		this.waypoints = waypoints;
 	}
@@ -28,7 +25,7 @@ public class TransitionalPath
 		return this.waypoints.size();
 	}
 
-	public Duo<Vector3D, Integer> getWaypoint(int index)
+	public TransitionalWaypoint getWaypoint(int index)
 	{
 		if(index >= this.waypoints.size() || index < 0)
 			return null;

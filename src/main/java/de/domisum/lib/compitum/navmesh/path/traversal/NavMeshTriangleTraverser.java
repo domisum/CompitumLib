@@ -1,6 +1,5 @@
 package de.domisum.lib.compitum.navmesh.path.traversal;
 
-import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
@@ -10,6 +9,7 @@ import de.domisum.lib.compitum.navmesh.transition.NavMeshTrianglePortal;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
+import de.domisum.lib.compitum.transitionalpath.path.TransitionalWaypoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class NavMeshTriangleTraverser
 	private List<NavMeshTriangle> triangleSequence;
 
 	// STATUS
-	private List<Duo<Vector3D, Integer>> waypoints = new ArrayList<>();
+	private List<TransitionalWaypoint> waypoints = new ArrayList<>();
 	// triangle traversal
 	private Vector3D currentPosition;
 	private Vector3D visLeft;
@@ -80,7 +80,7 @@ public class NavMeshTriangleTraverser
 		this.currentPosition = this.startPosition;
 
 		if(this.triangleSequence.size() == 1)
-			this.waypoints.add(new Duo<>(this.targetPosition, TransitionType.WALK));
+			this.waypoints.add(new TransitionalWaypoint(this.targetPosition, TransitionType.WALK));
 		else
 		{
 			for(this.currentTriangleIndex = 0;
@@ -201,7 +201,7 @@ public class NavMeshTriangleTraverser
 				newWaypoint(this.visLeft, TransitionType.WALK);
 		}
 
-		this.waypoints.add(new Duo<>(targetPoint, TransitionType.WALK));
+		this.waypoints.add(new TransitionalWaypoint(targetPoint, TransitionType.WALK));
 	}
 
 
@@ -218,7 +218,7 @@ public class NavMeshTriangleTraverser
 			Vector3D climbingEndPosition = new Vector3D(ladder.getPositionBottom().x, ladder.getPositionTop().y,
 					ladder.getPositionBottom().z);
 
-			newWaypoint(climbingEndPosition, TransitionType.CLIMB);
+			newWaypoint(climbingEndPosition, TransitionType.CLIMB); // FIXME add ladder information
 			newWaypoint(ladder.getPositionTop(), TransitionType.WALK);
 		}
 		else
@@ -232,13 +232,16 @@ public class NavMeshTriangleTraverser
 	}
 
 
-	private void newWaypoint(Vector3D position, int transitionType)
+	private TransitionalWaypoint newWaypoint(Vector3D position, int transitionType)
 	{
-		this.waypoints.add(new Duo<>(position, transitionType));
-		this.currentPosition = position;
+		TransitionalWaypoint waypoint = new TransitionalWaypoint(position, transitionType);
+		this.waypoints.add(waypoint);
 
+		this.currentPosition = position;
 		this.visLeft = null;
 		this.visRight = null;
+
+		return waypoint;
 	}
 
 
