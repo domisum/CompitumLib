@@ -1,5 +1,6 @@
 package de.domisum.lib.compitum.navmesh;
 
+import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
@@ -161,6 +162,7 @@ public class NavMesh
 	{
 		NavMeshTriangle triangle = new NavMeshTriangle(getUnusedId(), point1, point2, point3);
 		this.triangles.put(triangle.id, triangle);
+
 		fillInNeighborsFor(triangle);
 
 		return triangle;
@@ -174,13 +176,14 @@ public class NavMesh
 
 
 	// LADDER
-	public void createLadder(NavMeshTriangle triangle1, Vector3D position1, NavMeshTriangle triangle2, Vector3D position2)
+	public void createLadder(NavMeshTriangle triangle1, Vector3D position1, NavMeshTriangle triangle2, Vector3D position2,
+			Direction2D ladderDirection)
 	{
 		NavMeshLadder ladder;
 		if(position1.y < position2.y)
-			ladder = new NavMeshLadder(triangle1, position1, triangle2, position2);
+			ladder = new NavMeshLadder(triangle1, position1, triangle2, position2, ladderDirection);
 		else
-			ladder = new NavMeshLadder(triangle2, position2, triangle1, position1);
+			ladder = new NavMeshLadder(triangle2, position2, triangle1, position1, ladderDirection);
 
 		triangle1.makeNeighbors(triangle2, ladder);
 	}
@@ -224,7 +227,7 @@ public class NavMesh
 
 	private void determineHeuristicTriangleCenters()
 	{
-		for(int i = 0; i < 5; i++)
+		for(int i = 0; i < 20; i++)
 			reduceHeuristicCenterDistances(0.1);
 	}
 

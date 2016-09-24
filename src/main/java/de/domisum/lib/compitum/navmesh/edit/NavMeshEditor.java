@@ -2,6 +2,7 @@ package de.domisum.lib.compitum.navmesh.edit;
 
 import com.darkblade12.particleeffect.ParticleEffect;
 import de.domisum.lib.auxilium.data.container.InterchangableDuo;
+import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.bukkit.MessagingUtil;
 import de.domisum.lib.compitum.CompitumLib;
@@ -265,6 +266,9 @@ class NavMeshEditor
 
 			effect.display(0, 0, 0, 0, 1, location, this.player);
 		}
+
+		// make sure end is displayed properly even with big distance between points
+		effect.display(0, 0, 0, 0, 1, end.toLocation(this.player.getWorld()).add(0, 0.5, 0), this.player);
 	}
 
 
@@ -530,7 +534,10 @@ class NavMeshEditor
 
 		// second point
 		Vector3D otherLadderPosition = new Vector3D(this.player.getLocation());
-		getNavMesh().createLadder(this.ladderTriangle, this.ladderPosition, triangle, otherLadderPosition);
+		Direction2D ladderDirection = Direction2D.getFromYaw(this.player.getLocation().getYaw());
+		this.player.sendMessage("Ladder orientation: "+ladderDirection);
+
+		getNavMesh().createLadder(this.ladderTriangle, this.ladderPosition, triangle, otherLadderPosition, ladderDirection);
 		this.ladderTriangle = null;
 		this.ladderPosition = null;
 	}

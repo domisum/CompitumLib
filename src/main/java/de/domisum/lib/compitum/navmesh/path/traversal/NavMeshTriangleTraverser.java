@@ -218,16 +218,18 @@ public class NavMeshTriangleTraverser
 			Vector3D climbingEndPosition = new Vector3D(ladder.getPositionBottom().x, ladder.getPositionTop().y,
 					ladder.getPositionBottom().z);
 
-			newWaypoint(climbingEndPosition, TransitionType.CLIMB); // FIXME add ladder information
+			TransitionalWaypoint climbWaypoint = newWaypoint(climbingEndPosition, TransitionType.CLIMB);
+			climbWaypoint.setData("ladderDirection", ladder.getLadderDirection());
 			newWaypoint(ladder.getPositionTop(), TransitionType.WALK);
 		}
 		else
 		{
 			Vector3D climbingStartPosition = new Vector3D(ladder.getPositionBottom().x, ladder.getPositionTop().y,
 					ladder.getPositionBottom().z);
-			processMovementTowardsTargetPoint(climbingStartPosition);
 
-			newWaypoint(ladder.getPositionBottom(), TransitionType.CLIMB);
+			processMovementTowardsTargetPoint(climbingStartPosition);
+			TransitionalWaypoint climbWaypoint = newWaypoint(ladder.getPositionBottom(), TransitionType.CLIMB);
+			climbWaypoint.setData("ladderDirection", ladder.getLadderDirection());
 		}
 	}
 

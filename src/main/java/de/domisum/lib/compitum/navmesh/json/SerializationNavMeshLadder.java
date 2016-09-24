@@ -1,5 +1,6 @@
 package de.domisum.lib.compitum.navmesh.json;
 
+import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.annotations.DeserializationNoArgsConstructor;
 import de.domisum.lib.auxilium.util.java.annotations.SetByDeserialization;
@@ -21,6 +22,9 @@ class SerializationNavMeshLadder
 	@SetByDeserialization
 	private Vector3D positionTop;
 
+	@SetByDeserialization
+	private Direction2D ladderDirection;
+
 
 	// -------
 	// CONSTRUCTOR
@@ -38,6 +42,8 @@ class SerializationNavMeshLadder
 
 		this.triangleTop = navMeshLadder.getTriangleTop().id;
 		this.positionTop = navMeshLadder.getPositionTop();
+
+		this.ladderDirection = navMeshLadder.getLadderDirection();
 	}
 
 
@@ -49,7 +55,7 @@ class SerializationNavMeshLadder
 		NavMeshTriangle triangleBottom_ = navMesh.getTriangle(this.triangleBottom);
 		NavMeshTriangle triangleTop_ = navMesh.getTriangle(this.triangleTop);
 
-		return new NavMeshLadder(triangleBottom_, this.positionBottom, triangleTop_, this.positionTop);
+		return new NavMeshLadder(triangleBottom_, this.positionBottom, triangleTop_, this.positionTop, ladderDirection);
 	}
 
 }
