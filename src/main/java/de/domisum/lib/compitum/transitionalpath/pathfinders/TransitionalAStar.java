@@ -5,10 +5,10 @@ import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
 import de.domisum.lib.compitum.evaluator.StairEvaluator;
-import de.domisum.lib.compitum.universal.SortedWeightedNodeList;
 import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
 import de.domisum.lib.compitum.transitionalpath.node.TransitionalBlockNode;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
+import de.domisum.lib.compitum.universal.SortedWeightedNodeList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -43,13 +43,12 @@ public class TransitionalAStar
 	private long pathfindingStartNano;
 	private long pathfindingEndNano;
 
-	private SortedWeightedNodeList<TransitionalBlockNode> unvisitedNodes = new SortedWeightedNodeList<>(
-			this.maxNodeVisits*3);
+	private SortedWeightedNodeList<TransitionalBlockNode> unvisitedNodes = new SortedWeightedNodeList<>(this.maxNodeVisits*3);
 	private Set<TransitionalBlockNode> visitedNodes = new HashSet<>(this.maxNodeVisits);
 
 	// OUTPUT
 	private TransitionalBlockPath path;
-	private String error;
+	private String failure;
 
 
 	// -------
@@ -82,7 +81,7 @@ public class TransitionalAStar
 	@APIUsage
 	public String getFailure()
 	{
-		return this.error;
+		return this.failure;
 	}
 
 
@@ -154,22 +153,23 @@ public class TransitionalAStar
 	@APIUsage
 	public void findPath()
 	{
-		// don't set the start time if it is already exists, this way retries are counted together
+		// don't set the start time if it already exists, this way duration of retries are counted together
 		if(this.pathfindingStartNano == 0)
 			this.pathfindingStartNano = System.nanoTime();
 
 		// validation
 		if(this.startLocation.getWorld() != this.endLocation.getWorld())
-		{
-			this.error = "The start and the end location are not in the same world!";
-			return;
-		}
+			throw new IllegalArgumentException("The start and the end location are not in the same world!");
 
 		// preparation
 		TransitionalBlockNode startNode = new TransitionalBlockNode(this.startLocation.getBlockX(),
 				this.startLocation.getBlockY(), this.startLocation.getBlockZ());
+		// this is needed in case the start and end nodes are the same, so the transition type is set
+		startNode.setParent(null, TransitionType.WALK, 0);
+
 		this.endNode = new TransitionalBlockNode(this.endLocation.getBlockX(), this.endLocation.getBlockY(),
 				this.endLocation.getBlockZ());
+
 		this.unvisitedNodes.addSorted(startNode);
 
 		// pathfinding
@@ -178,12 +178,14 @@ public class TransitionalAStar
 			if(this.unvisitedNodes.getSize() == 0)
 			{
 				// no unvisited nodes left, nowhere else to go ...
+				this.failure = "No unvisted nodes left";
 				break;
 			}
 
 			if(this.visitedNodes.size() >= this.maxNodeVisits)
 			{
 				// reached limit of nodes to search
+				this.failure = "Number of nodes visited exceeds maximum";
 				break;
 			}
 
@@ -347,6 +349,7 @@ public class TransitionalAStar
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private boolean canStandAt(Location feetLocation)
 	{
 		if(!isUnobstructed(feetLocation))
@@ -367,6 +370,7 @@ public class TransitionalAStar
 
 
 	// LOCATION VALIDATION
+	@SuppressWarnings("deprecation")
 	private boolean isBlockUnobstructed(Location location)
 	{
 		return MaterialEvaluator.canStandIn(location.getBlock().getTypeId());
@@ -433,7 +437,7 @@ public class TransitionalAStar
 		this.visitedNodes.clear();
 
 		this.path = null;
-		this.error = null;
+		this.failure = null;
 	}
 
 }

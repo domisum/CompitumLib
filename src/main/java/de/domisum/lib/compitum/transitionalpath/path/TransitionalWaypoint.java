@@ -22,6 +22,11 @@ public class TransitionalWaypoint
 		this.transitionType = transitionType;
 	}
 
+	public String toString()
+	{
+		return "waypoint[position="+this.position+";transitionType="+this.transitionType+"]";
+	}
+
 
 	// -------
 	// GETTERS

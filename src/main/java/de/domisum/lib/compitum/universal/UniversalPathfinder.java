@@ -8,8 +8,8 @@ import de.domisum.lib.compitum.navmesh.NavMeshManager;
 import de.domisum.lib.compitum.navmesh.path.NavMeshPathfinder;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
 import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
-import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalPathSmoother;
 import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalAStar;
+import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalPathSmoother;
 import org.bukkit.Location;
 
 @APIUsage
@@ -104,7 +104,6 @@ public class UniversalPathfinder
 		TransitionalAStar pathfinder = new TransitionalAStar(this.start, this.target);
 		pathfinder.findPath();
 		this.diagnose = pathfinder.getDiagnose();
-
 		if(!pathfinder.pathFound())
 		{
 			this.failure = pathfinder.getFailure();
