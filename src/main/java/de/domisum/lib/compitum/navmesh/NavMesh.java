@@ -2,9 +2,7 @@ package de.domisum.lib.compitum.navmesh;
 
 import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
-import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
@@ -203,8 +201,6 @@ public class NavMesh
 
 		for(NavMeshTriangle triangle : this.triangles.values())
 			fillInNeighborsFor(triangle);
-
-		DebugUtil.say("neighboringDuration: "+MathUtil.round((System.nanoTime()-start)/1000d, 0)+"mys");
 	}
 
 	private void fillInNeighborsFor(NavMeshTriangle triangle)

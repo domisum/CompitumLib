@@ -1,10 +1,9 @@
 package de.domisum.lib.compitum.navgraph.pathfinding;
 
-import de.domisum.lib.compitum.navgraph.GraphEdge;
-import de.domisum.lib.compitum.navgraph.GraphNode;
-import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.math.MathUtil;
+import de.domisum.lib.compitum.navgraph.GraphEdge;
+import de.domisum.lib.compitum.navgraph.GraphNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,7 +113,6 @@ public class NavGraphAStar
 		{
 			if(this.unvisitedNodes.size() == 0)
 			{
-				DebugUtil.say("no unvisited nodes left");
 				break;
 			}
 
