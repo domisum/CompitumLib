@@ -73,18 +73,25 @@ public class TransitionalBlockNode implements WeightedNode
 	}
 
 
-	public double getWeight()
+	@Override
+	public double getGValue()
 	{
 		if(this.parent == null)
 			return this.weightFromParent;
 
-		return this.parent.getWeight()+this.weightFromParent;
+		return this.parent.getGValue()+this.weightFromParent;
+	}
+
+	@Override
+	public double getHValue()
+	{
+		return this.heuristicWeight;
 	}
 
 	@Override
 	public double getFValue()
 	{
-		return getWeight()+this.heuristicWeight;
+		return getGValue()+getHValue();
 	}
 
 
@@ -108,11 +115,5 @@ public class TransitionalBlockNode implements WeightedNode
 	{
 		this.heuristicWeight = heuristicWeight;
 	}
-
-
-	// -------
-	// WEIGHT
-	// -------
-
 
 }

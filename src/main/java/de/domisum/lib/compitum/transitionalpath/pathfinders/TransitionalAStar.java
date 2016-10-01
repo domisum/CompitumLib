@@ -38,13 +38,13 @@ public class TransitionalAStar
 	private boolean moveDiagonally = true;
 	private boolean useLadders = false;
 
-	private TransitionalBlockNode endNode;
-
-	private long pathfindingStartNano;
-	private long pathfindingEndNano;
+	protected TransitionalBlockNode endNode;
 
 	private SortedWeightedNodeList<TransitionalBlockNode> unvisitedNodes = new SortedWeightedNodeList<>(this.maxNodeVisits*3);
 	private Set<TransitionalBlockNode> visitedNodes = new HashSet<>(this.maxNodeVisits);
+
+	private long pathfindingStartNano;
+	private long pathfindingEndNano;
 
 	// OUTPUT
 	private TransitionalBlockPath path;
@@ -173,6 +173,23 @@ public class TransitionalAStar
 		this.unvisitedNodes.addSorted(startNode);
 
 		// pathfinding
+		visitNodes();
+
+
+		// path finalization
+		// if the end node has a parent, a path has been found
+		if(this.endNode.getParent() != null || startNode.equals(this.endNode))
+			this.path = new TransitionalBlockPath(this.endNode);
+		else
+			// this looks through the provided options and checks if an ability of the pathfinder is deactivated,
+			// if so it activates it and reruns the pathfinding. if there are no other options available, it returns
+			retry();
+
+		this.pathfindingEndNano = System.nanoTime();
+	}
+
+	private void visitNodes()
+	{
 		while(true)
 		{
 			if(this.unvisitedNodes.getSize() == 0)
@@ -193,7 +210,7 @@ public class TransitionalAStar
 			this.visitedNodes.add(nodeToVisit);
 
 			// pathing reached end node
-			if(nodeToVisit.equals(this.endNode))
+			if(isTargetReached(nodeToVisit))
 			{
 				this.endNode = nodeToVisit;
 				break;
@@ -201,17 +218,11 @@ public class TransitionalAStar
 
 			visitNode(nodeToVisit);
 		}
+	}
 
-		// path finalization
-		// if the end node has a parent, a path has been found
-		if(this.endNode.getParent() != null || startNode.equals(this.endNode))
-			this.path = new TransitionalBlockPath(this.endNode);
-		else
-			// this looks through the provided options and checks if an ability of the pathfinder is deactivated,
-			// if so it activates it and reruns the pathfinding. if there are no other options available, it returns
-			retry();
-
-		this.pathfindingEndNano = System.nanoTime();
+	protected boolean isTargetReached(TransitionalBlockNode nodeToVisit)
+	{
+		return nodeToVisit.equals(this.endNode);
 	}
 
 

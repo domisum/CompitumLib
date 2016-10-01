@@ -6,6 +6,10 @@ public interface WeightedNode
 	// -------
 	// GETTERS
 	// -------
+	double getGValue();
+
+	double getHValue();
+
 	double getFValue();
 
 }

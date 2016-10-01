@@ -57,7 +57,8 @@ class NavMeshTriangleNode implements WeightedNode
 	}
 
 
-	private double getGValue()
+	@Override
+	public double getGValue()
 	{
 		if(this.parent == null)
 			return 0;
@@ -73,7 +74,8 @@ class NavMeshTriangleNode implements WeightedNode
 		return this.gValue;
 	}
 
-	private double getHValue()
+	@Override
+	public double getHValue()
 	{
 		return this.heuristicValue;
 	}
