@@ -44,9 +44,9 @@ public class TransitionalBlockNode implements WeightedNode
 	@Override
 	public int hashCode()
 	{
-		int hash = this.x;
+		int hash = 0;
 		hash |= (this.x%4096)<<20; // 12 bits long, in [0;11]
-		hash |= this.y<<12; // 8 bits long, in [12;19]
+		hash |= this.y<<12; // 8 bits (2^8 = 256) long, in [12;19]
 		hash |= (this.z%4096); // 12 bits long, in [20;31]
 
 		return hash;
