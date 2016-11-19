@@ -4,9 +4,7 @@ import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.java.GsonUtil;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.json.SerializationNavMesh;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.HashSet;
@@ -22,14 +20,10 @@ public class NavMeshManager
 	// REFERENCES
 	private Set<NavMesh> meshes = new HashSet<>();
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	public NavMeshManager()
-	{
 
-	}
-
+	/*
+	// INITIALIZATION
+	*/
 	public void initiialize()
 	{
 		loadMeshes();
@@ -37,7 +31,7 @@ public class NavMeshManager
 
 	public void terminate()
 	{
-		saveMeshes();
+		// don't save the meshes by default
 	}
 
 
@@ -91,15 +85,7 @@ public class NavMeshManager
 	// -------
 	// SAVING
 	// -------
-	public void additionalSave()
-	{
-		saveMeshes();
-
-		for(Player p : Bukkit.getOnlinePlayers())
-			p.sendMessage("Saved navMesh data to disk.");
-	}
-
-	private void saveMeshes()
+	public void saveMeshes()
 	{
 		CompitumLib.getLogger().info("Saving NavMeshs...");
 
