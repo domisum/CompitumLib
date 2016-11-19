@@ -1,11 +1,10 @@
 package de.domisum.lib.compitum;
 
-import de.domisum.lib.compitum.navmesh.NavMeshManager;
-import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
-import de.domisum.lib.compitum.evaluator.StairEvaluator;
-import de.domisum.lib.compitum.navgraph.NavGraphManager;
 import de.domisum.lib.auxilium.AuxiliumLib;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
+import de.domisum.lib.compitum.evaluator.StairEvaluator;
+import de.domisum.lib.compitum.navmesh.NavMeshManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,14 +15,12 @@ public class CompitumLib
 {
 
 	// SETTINGS
-	private static boolean navGraphsEnabled = false;
 	private static boolean navMeshesEnabled = false;
 
 	// REFERENCES
 	private static CompitumLib instance;
 	private Plugin plugin;
 
-	private NavGraphManager navGraphManager;
 	private NavMeshManager navMeshManager;
 
 
@@ -64,11 +61,6 @@ public class CompitumLib
 		MaterialEvaluator.prepareEvaluation();
 		StairEvaluator.prepareEvaluation();
 
-		if(navGraphsEnabled)
-		{
-			this.navGraphManager = new NavGraphManager();
-			this.navGraphManager.initiialize();
-		}
 		if(navMeshesEnabled)
 		{
 			this.navMeshManager = new NavMeshManager();
@@ -80,8 +72,6 @@ public class CompitumLib
 
 	private void onDisable()
 	{
-		if(this.navGraphManager != null)
-			this.navGraphManager.terminate();
 		if(this.navMeshManager != null)
 			this.navMeshManager.terminate();
 
@@ -112,27 +102,12 @@ public class CompitumLib
 
 
 	@APIUsage
-	public static NavGraphManager getNavGraphManager()
-	{
-		if(!navGraphsEnabled)
-			throw new IllegalStateException("The usage of NavGraphs has to be enabled first!");
-
-		return getInstance().navGraphManager;
-	}
-
-	@APIUsage
 	public static NavMeshManager getNavMeshManager()
 	{
 		if(!navMeshesEnabled)
 			throw new IllegalStateException("The usage of NavMeshes has to be enabled first!");
 
 		return getInstance().navMeshManager;
-	}
-
-	@APIUsage
-	public static boolean areNavGraphsEnabled()
-	{
-		return navGraphsEnabled;
 	}
 
 	@APIUsage
@@ -145,15 +120,6 @@ public class CompitumLib
 	// -------
 	// SETTERS
 	// -------
-	@APIUsage
-	public static void enableNavGraphs()
-	{
-		if(getInstance() != null)
-			throw new IllegalStateException("NavGraphs have to be enabled before enabling CompitumLib");
-
-		navGraphsEnabled = true;
-	}
-
 	@APIUsage
 	public static void enableNavMeshes()
 	{
