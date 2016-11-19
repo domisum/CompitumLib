@@ -1,10 +1,9 @@
 package de.domisum.lib.compitum.navmesh;
 
-import de.domisum.lib.compitum.CompitumLib;
-import de.domisum.lib.compitum.navmesh.edit.NavMeshEditManager;
-import de.domisum.lib.compitum.navmesh.json.SerializationNavMesh;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.java.GsonUtil;
+import de.domisum.lib.compitum.CompitumLib;
+import de.domisum.lib.compitum.navmesh.json.SerializationNavMesh;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -23,9 +22,6 @@ public class NavMeshManager
 	// REFERENCES
 	private Set<NavMesh> meshes = new HashSet<>();
 
-	private NavMeshEditManager editManager;
-
-
 	// -------
 	// CONSTRUCTOR
 	// -------
@@ -37,15 +33,10 @@ public class NavMeshManager
 	public void initiialize()
 	{
 		loadMeshes();
-
-		this.editManager = new NavMeshEditManager();
-		this.editManager.initialize();
 	}
 
 	public void terminate()
 	{
-		this.editManager.terminate();
-
 		saveMeshes();
 	}
 
@@ -140,11 +131,6 @@ public class NavMeshManager
 	// -------
 	// GETTERS
 	// -------
-	public NavMeshEditManager getEditManager()
-	{
-		return this.editManager;
-	}
-
 	public NavMesh getNavMeshAt(Location location)
 	{
 		for(NavMesh g : this.meshes)

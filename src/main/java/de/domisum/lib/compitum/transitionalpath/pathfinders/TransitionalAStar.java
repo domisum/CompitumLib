@@ -12,7 +12,6 @@ import de.domisum.lib.compitum.universal.SortedWeightedNodeList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -109,19 +108,6 @@ public class TransitionalAStar
 		diagnose += "durationMs="+getMsDuration()+", ";
 
 		return diagnose;
-	}
-
-
-	@Deprecated
-	public Set<TransitionalBlockNode> getVisitedNodes()
-	{
-		return this.visitedNodes;
-	}
-
-	@Deprecated
-	public Collection<TransitionalBlockNode> getUnvisitedNodes()
-	{
-		return this.unvisitedNodes.getNodes();
 	}
 
 
