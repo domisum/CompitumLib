@@ -55,7 +55,7 @@ class SerializationNavMeshLadder
 		NavMeshTriangle triangleBottom_ = navMesh.getTriangle(this.triangleBottom);
 		NavMeshTriangle triangleTop_ = navMesh.getTriangle(this.triangleTop);
 
-		return new NavMeshLadder(triangleBottom_, this.positionBottom, triangleTop_, this.positionTop, ladderDirection);
+		return new NavMeshLadder(triangleBottom_, this.positionBottom, triangleTop_, this.positionTop, this.ladderDirection);
 	}
 
 }
