@@ -87,6 +87,9 @@ public class CompitumLib
 	@APIUsage
 	public static CompitumLib getInstance()
 	{
+		if(instance == null)
+			throw new IllegalArgumentException(CompitumLib.class.getSimpleName()+" has to be initialized before usage");
+
 		return instance;
 	}
 
@@ -123,7 +126,7 @@ public class CompitumLib
 	@APIUsage
 	public static void enableNavMeshes()
 	{
-		if(getInstance() != null)
+		if(instance != null)
 			throw new IllegalStateException("NavMeshes have to be enabled before enabling CompitumLib");
 
 		navMeshesEnabled = true;
