@@ -1,7 +1,9 @@
 package de.domisum.lib.compitum.navmesh.path;
 
 
+import de.domisum.lib.auxilium.util.TextUtil;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.debug.DebugUtil;
 import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
@@ -140,6 +142,8 @@ public class NavMeshTrianglePathfinder
 		}
 
 		this.stopWatch.stop();
+
+		DebugUtil.say(TextUtil.getListAsString(triangleSequence));
 	}
 
 	private void visitNode(NavMeshTriangleNode node)

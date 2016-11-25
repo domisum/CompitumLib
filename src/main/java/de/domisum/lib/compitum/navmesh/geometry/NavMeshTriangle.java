@@ -43,7 +43,7 @@ public class NavMeshTriangle
 	@Override
 	public String toString()
 	{
-		return "triangle["+this.point1.getId()+","+this.point2.getId()+","+this.point3.getId()+"]";
+		return this.id;
 	}
 
 	@Override
