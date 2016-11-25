@@ -10,27 +10,24 @@ import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import org.bukkit.Bukkit;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SerializationNavMesh
 {
 
 	// PROPERTIES
-	@SetByDeserialization
-	private String worldName;
-	@SetByDeserialization
-	private Vector3D rangeCenter;
-	@SetByDeserialization
-	private double range;
+	@SetByDeserialization private String worldName;
+	@SetByDeserialization private Vector3D rangeCenter;
+	@SetByDeserialization private double range;
 
 	// REFERENCES
-	@SetByDeserialization
-	private Set<NavMeshPoint> points = new HashSet<>();
-	@SetByDeserialization
-	private Set<SerializationNavMeshTriangle> triangles = new HashSet<>();
-	@SetByDeserialization
-	private Set<SerializationNavMeshLadder> ladders = new HashSet<>();
+	@SetByDeserialization private List<NavMeshPoint> points = new ArrayList<>();
+	@SetByDeserialization private List<SerializationNavMeshTriangle> triangles = new ArrayList<>();
+	@SetByDeserialization private List<SerializationNavMeshLadder> ladders = new ArrayList<>();
 
 
 	// -------
@@ -63,6 +60,10 @@ public class SerializationNavMesh
 					this.ladders.add(new SerializationNavMeshLadder((NavMeshLadder) transition));
 			}
 		}
+
+		this.points.sort(Comparator.comparing(NavMeshPoint::getId));
+		this.triangles.sort(Comparator.comparing(SerializationNavMeshTriangle::getId));
+		this.ladders.sort(Comparator.comparing(SerializationNavMeshLadder::getTriangleBottom));
 	}
 
 	public NavMesh convertToNavMesh(String id)

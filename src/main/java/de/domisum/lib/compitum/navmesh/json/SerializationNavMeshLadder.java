@@ -7,23 +7,19 @@ import de.domisum.lib.auxilium.util.java.annotations.SetByDeserialization;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
+import lombok.Getter;
 
 class SerializationNavMeshLadder
 {
 
 	// PROPERTIES
-	@SetByDeserialization
-	private String triangleBottom;
-	@SetByDeserialization
-	private Vector3D positionBottom;
+	@SetByDeserialization @Getter private String triangleBottom;
+	@SetByDeserialization private Vector3D positionBottom;
 
-	@SetByDeserialization
-	private String triangleTop;
-	@SetByDeserialization
-	private Vector3D positionTop;
+	@SetByDeserialization private String triangleTop;
+	@SetByDeserialization private Vector3D positionTop;
 
-	@SetByDeserialization
-	private Direction2D ladderDirection;
+	@SetByDeserialization private Direction2D ladderDirection;
 
 
 	// -------
