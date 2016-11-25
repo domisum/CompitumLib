@@ -55,10 +55,14 @@ public class SerializationNavMesh
 			this.triangles.add(new SerializationNavMeshTriangle(triangle));
 
 			for(NavMeshTriangleTransition transition : triangle.neighbors.values())
-			{
 				if(transition instanceof NavMeshLadder)
-					this.ladders.add(new SerializationNavMeshLadder((NavMeshLadder) transition));
-			}
+				{
+					NavMeshLadder navMeshLadder = (NavMeshLadder) transition;
+					// only add the ladder if the triangle currently being processed is the bottom one
+					// in order to avoid duplicating the ladder
+					if(navMeshLadder.getTriangleBottom() == triangle)
+						this.ladders.add(new SerializationNavMeshLadder(navMeshLadder));
+				}
 		}
 
 		this.points.sort(Comparator.comparing(NavMeshPoint::getId));
