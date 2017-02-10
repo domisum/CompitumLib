@@ -63,15 +63,15 @@
 
 	<distributionManagement>
 		<repository>
-			<id>central</id>
+			<id>vps</id>
 			<name>vps.domisum.de-releases</name>
-			<url>http://vps.domisum.de:8081/artifactory/ext-release-local</url>
+			<url>http://vps.domisum.de:8081/nexus/content/repositories/releases-public/</url>
 		</repository>
 
 		<snapshotRepository>
-			<id>snapshots</id>
+			<id>vps</id>
 			<name>vps.domisum.de-snapshots</name>
-			<url>http://vps.domisum.de:8081/artifactory/ext-snapshot-local</url>
+			<url>http://vps.domisum.de:8081/nexus/content/repositories/snapshots-public/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
