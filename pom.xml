@@ -14,6 +14,19 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>de.domisum</groupId>
+			<artifactId>AuxiliumLib</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>de.domisum</groupId>
+			<artifactId>AuxiliumSpigotLib</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.9.2-R0.1-SNAPSHOT</version>
@@ -27,11 +40,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>de.domisum</groupId>
-			<artifactId>AuxiliumLib</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.darkblade12.particleeffect</groupId>

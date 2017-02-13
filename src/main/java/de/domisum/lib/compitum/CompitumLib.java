@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum;
 
-import de.domisum.lib.auxilium.AuxiliumLib;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxiliumspigot.AuxiliumSpigotLib;
 import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
 import de.domisum.lib.compitum.evaluator.StairEvaluator;
 import de.domisum.lib.compitum.navmesh.NavMeshManager;
@@ -56,7 +56,7 @@ public class CompitumLib
 
 	private void onEnable()
 	{
-		AuxiliumLib.enable(this.plugin);
+		AuxiliumSpigotLib.enable(this.plugin);
 
 		MaterialEvaluator.prepareEvaluation();
 		StairEvaluator.prepareEvaluation();
@@ -75,7 +75,7 @@ public class CompitumLib
 		if(this.navMeshManager != null)
 			this.navMeshManager.terminate();
 
-		AuxiliumLib.disable();
+		AuxiliumSpigotLib.disable();
 
 		getLogger().info(this.getClass().getSimpleName()+" has been disabled");
 	}

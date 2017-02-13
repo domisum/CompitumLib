@@ -1,8 +1,7 @@
 package de.domisum.lib.compitum.navmesh.path;
 
-
+import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
-import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import de.domisum.lib.compitum.universal.SortedWeightedNodeList;

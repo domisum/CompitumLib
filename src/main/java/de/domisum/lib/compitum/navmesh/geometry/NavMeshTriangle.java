@@ -1,6 +1,7 @@
 package de.domisum.lib.compitum.navmesh.geometry;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import org.bukkit.Location;
@@ -88,7 +89,7 @@ public class NavMeshTriangle
 	// WORLD
 	public boolean doesContain(Location location)
 	{
-		return doesContain(new Vector3D(location));
+		return doesContain(LocationUtil.toVector3D(location));
 	}
 
 	public boolean doesContain(Vector3D point)

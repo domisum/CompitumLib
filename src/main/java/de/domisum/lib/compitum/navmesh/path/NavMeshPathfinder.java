@@ -1,9 +1,8 @@
 package de.domisum.lib.compitum.navmesh.path;
 
-
-import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
-import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
+import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.path.traversal.NavMeshTriangleTraverser;
@@ -97,8 +96,8 @@ public class NavMeshPathfinder
 			return;
 		}
 
-		NavMeshTriangleTraverser triangleTraverser = new NavMeshTriangleTraverser(new Vector3D(this.startLocation),
-				new Vector3D(this.targetLocation), triangleSequence);
+		NavMeshTriangleTraverser triangleTraverser = new NavMeshTriangleTraverser(LocationUtil.toVector3D(this.startLocation),
+				LocationUtil.toVector3D(this.targetLocation), triangleSequence);
 		triangleTraverser.traverseTriangles();
 		this.path = triangleTraverser.getPath();
 

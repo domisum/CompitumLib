@@ -2,7 +2,7 @@ package de.domisum.lib.compitum.navmesh.path.traversal;
 
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.auxilium.util.java.debug.ProfilerStopWatch;
+import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTrianglePortal;

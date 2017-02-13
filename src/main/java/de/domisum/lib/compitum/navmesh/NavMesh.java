@@ -3,6 +3,7 @@ package de.domisum.lib.compitum.navmesh;
 import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
+import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
@@ -78,7 +79,7 @@ public class NavMesh
 		if(location.getWorld() != this.world)
 			return false;
 
-		return new Vector3D(location).distanceToSquared(this.rangeCenter) < this.range*this.range;
+		return LocationUtil.toVector3D(location).distanceToSquared(this.rangeCenter) < this.range*this.range;
 	}
 
 	public World getWorld()
