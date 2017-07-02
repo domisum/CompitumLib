@@ -100,7 +100,7 @@ public class StairEvaluator
 	public static boolean isStair(TransitionalBlockNode from, TransitionalBlockNode to, World world)
 	{
 		if(!ready)
-			throw new IllegalStateException("CompitumLib has to be anabled before usage!");
+			throw new IllegalStateException("CompitumLib has to be enabled before usage!");
 
 		Location stairLocation = to.getLocation(world).add(0, -1, 0);
 		Block stairBlock = stairLocation.getBlock();
