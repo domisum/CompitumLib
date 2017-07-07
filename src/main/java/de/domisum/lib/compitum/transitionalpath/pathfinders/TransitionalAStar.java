@@ -208,73 +208,72 @@ public class TransitionalAStar
 		for(int dX = -1; dX <= 1; dX++)
 			for(int dZ = -1; dZ <= 1; dZ++)
 				for(int dY = -1; dY <= 1; dY++)
-				{
-					// prevent movement to the same position
-					if(dX == 0 && dY == 0 && dZ == 0)
-						continue;
+					validateNodeOffset(node, dX, dY, dZ);
+	}
 
-					// prevent diagonal movement if specified
-					if(!this.moveDiagonally && dX*dZ != 0)
-						continue;
+	private void validateNodeOffset(TransitionalBlockNode node, int dX, int dY, int dZ)
+	{
+		// prevent movement to the same position
+		if(dX == 0 && dY == 0 && dZ == 0)
+			return;
 
-					// prevent diagonal movement at the same time as moving up and down
-					if(dX*dZ != 0 && dY != 0)
-						continue;
+		// prevent diagonal movement if specified
+		if(!this.moveDiagonally && dX*dZ != 0)
+			return;
 
-
-					TransitionalBlockNode newNode = new TransitionalBlockNode(node.x+dX, node.y+dY, node.z+dZ);
-
-
-					if(doesNodeAlreadyExist(newNode))
-						continue;
-
-					// check if player can stand at new node
-					if(!isValid(newNode))
-						continue;
-
-					// check if the diagonal movement is not prevented by blocks to the side
-					if(dX*dZ != 0)
-						if(!isDiagonalMovementPossible(node, dX, dZ))
-							continue;
-
-					// check if the player hits his head when going up/down
-					if(dY == 1)
-						if(!isBlockUnobstructed(node.getLocation(this.startLocation.getWorld()).add(0, 2, 0)))
-							continue;
-
-					if(dY == -1)
-						if(!isBlockUnobstructed(newNode.getLocation(this.startLocation.getWorld()).add(0, 2, 0)))
-							continue;
+		// prevent diagonal movement at the same time as moving up and down
+		if(dX*dZ != 0 && dY != 0)
+			return;
 
 
-					// get transition type (walk up stairs, jump up blocks)
-					int transitionType = TransitionType.WALK;
-					if(dY == 1)
-					{
-						boolean isStair = StairEvaluator.isStair(node, newNode, this.startLocation.getWorld());
-						if(!isStair)
-							transitionType = TransitionType.JUMP;
-					}
+		TransitionalBlockNode newNode = new TransitionalBlockNode(node.x+dX, node.y+dY, node.z+dZ);
+
+		if(doesNodeAlreadyExist(newNode))
+			return;
+
+		// check if player can stand at new node
+		if(!isValid(newNode))
+			return;
+
+		// check if the diagonal movement is not prevented by blocks to the side
+		if(dX*dZ != 0 && !isDiagonalMovementPossible(node, dX, dZ))
+			return;
+
+		// check if the player hits his head when going up/down
+		if(dY == 1 && !isBlockUnobstructed(node.getLocation(this.startLocation.getWorld()).add(0, 2, 0)))
+			return;
+
+		if(dY == -1 && !isBlockUnobstructed(newNode.getLocation(this.startLocation.getWorld()).add(0, 2, 0)))
+			return;
 
 
-					// calculate weight
-					// TODO punish 90° turns
-					int sumAbs = Math.abs(dX)+Math.abs(dY)+Math.abs(dZ);
-					double weight = 1;
-					if(sumAbs == 2)
-						weight = 1.41;
-					else if(sumAbs == 3)
-						weight = 1.73;
-
-					// punish jumps to favor stair climbing
-					if(transitionType == TransitionType.JUMP)
-						weight += 0.5;
+		// get transition type (walk up stairs, jump up blocks)
+		int transitionType = TransitionType.WALK;
+		if(dY == 1)
+		{
+			boolean isStair = StairEvaluator.isStair(node, newNode, this.startLocation.getWorld());
+			if(!isStair)
+				transitionType = TransitionType.JUMP;
+		}
 
 
-					// actually add the node to the pool
-					newNode.setParent(node, transitionType, weight);
-					addNode(newNode);
-				}
+		// calculate weight
+		// TODO punish 90° turns
+		int sumAbs = Math.abs(dX)+Math.abs(dY)+Math.abs(dZ);
+		double weight = 1;
+		if(sumAbs == 2)
+			weight = 1.41;
+		else if(sumAbs == 3)
+			weight = 1.73;
+
+		// punish jumps to favor stair climbing
+		if(transitionType == TransitionType.JUMP)
+			weight += 0.5;
+
+
+		// actually add the node to the pool
+		newNode.setParent(node, transitionType, weight);
+		addNode(newNode);
 	}
 
 	private void lookForLadderNodes(TransitionalBlockNode node)
