@@ -129,7 +129,7 @@ public class UniversalPathfinder
 
 		String materialName = location.getBlock().getType().name();
 		if(materialName.contains("SLAB") || materialName.contains("STEP"))
-			location = location.add(0, 1, 0);
+			location.add(0, 1, 0);
 
 		return location;
 	}
