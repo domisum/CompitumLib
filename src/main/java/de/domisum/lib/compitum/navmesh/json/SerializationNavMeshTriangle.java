@@ -36,7 +36,7 @@ class SerializationNavMeshTriangle
 
 
 	// GETTERS
-	NavMeshTriangle getNavMeshTriangle(Collection<NavMeshPoint> points)
+	protected NavMeshTriangle getNavMeshTriangle(Collection<NavMeshPoint> points)
 	{
 		return new NavMeshTriangle(this.id, getPoint(points, this.point1), getPoint(points, this.point2),
 				getPoint(points, this.point3));
