@@ -41,7 +41,7 @@ class SerializationNavMeshLadder
 
 
 	// GETTERS
-	NavMeshLadder getNavMeshLadder(NavMesh navMesh)
+	protected NavMeshLadder getNavMeshLadder(NavMesh navMesh)
 	{
 		NavMeshTriangle triangleBottom_ = navMesh.getTriangle(this.triangleBottom);
 		NavMeshTriangle triangleTop_ = navMesh.getTriangle(this.triangleTop);
