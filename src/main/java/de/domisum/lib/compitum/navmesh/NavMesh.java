@@ -57,7 +57,7 @@ public class NavMesh
 
 	// GETTERS
 	// general
-	public String getId()
+	@APIUsage public String getId()
 	{
 		return this.id;
 	}
@@ -104,7 +104,7 @@ public class NavMesh
 		return this.triangles.values();
 	}
 
-	public Set<NavMeshTriangle> getTrianglesUsingPoint(NavMeshPoint point)
+	@APIUsage public Set<NavMeshTriangle> getTrianglesUsingPoint(NavMeshPoint point)
 	{
 		Set<NavMeshTriangle> trianglesUsingPoint = new HashSet<>();
 
@@ -134,7 +134,7 @@ public class NavMesh
 
 
 	// POINT
-	public NavMeshPoint createPoint(double x, double y, double z)
+	@APIUsage public NavMeshPoint createPoint(double x, double y, double z)
 	{
 		NavMeshPoint point = new NavMeshPoint(getUnusedId(), x, y, z);
 
@@ -142,7 +142,7 @@ public class NavMesh
 		return point;
 	}
 
-	public void removePoint(NavMeshPoint point)
+	@APIUsage public void removePoint(NavMeshPoint point)
 	{
 		for(NavMeshTriangle t : getTrianglesUsingPoint(point))
 			deleteTriangle(t);
@@ -152,7 +152,7 @@ public class NavMesh
 
 
 	// TRIANGLE
-	public NavMeshTriangle createTriangle(NavMeshPoint point1, NavMeshPoint point2, NavMeshPoint point3)
+	@APIUsage public NavMeshTriangle createTriangle(NavMeshPoint point1, NavMeshPoint point2, NavMeshPoint point3)
 	{
 		NavMeshTriangle triangle = new NavMeshTriangle(getUnusedId(), point1, point2, point3);
 		this.triangles.put(triangle.id, triangle);
@@ -162,7 +162,7 @@ public class NavMesh
 		return triangle;
 	}
 
-	public void deleteTriangle(NavMeshTriangle triangle)
+	@APIUsage public void deleteTriangle(NavMeshTriangle triangle)
 	{
 		this.triangles.remove(triangle.id);
 		triangle.clearNeighbors();
@@ -286,27 +286,14 @@ public class NavMesh
 
 	private Set<NavMeshPoint> getCommonPoints(NavMeshTriangle triangle1, NavMeshTriangle triangle2)
 	{
+		NavMeshPoint[] triangle1Points = new NavMeshPoint[] {triangle1.point1, triangle1.point2, triangle1.point3};
+		NavMeshPoint[] triangle2Points = new NavMeshPoint[] {triangle2.point1, triangle2.point2, triangle2.point3};
+
 		Set<NavMeshPoint> commonPoints = new HashSet<>();
-		if(triangle1.point1 == triangle2.point1)
-			commonPoints.add(triangle1.point1);
-		if(triangle1.point1 == triangle2.point2)
-			commonPoints.add(triangle1.point1);
-		if(triangle1.point1 == triangle2.point3)
-			commonPoints.add(triangle1.point1);
-
-		if(triangle1.point2 == triangle2.point1)
-			commonPoints.add(triangle1.point2);
-		if(triangle1.point2 == triangle2.point2)
-			commonPoints.add(triangle1.point2);
-		if(triangle1.point2 == triangle2.point3)
-			commonPoints.add(triangle1.point2);
-
-		if(triangle1.point3 == triangle2.point1)
-			commonPoints.add(triangle1.point3);
-		if(triangle1.point3 == triangle2.point2)
-			commonPoints.add(triangle1.point3);
-		if(triangle1.point3 == triangle2.point3)
-			commonPoints.add(triangle1.point3);
+		for(NavMeshPoint t1p : triangle1Points)
+			for(NavMeshPoint t2p : triangle2Points)
+				if(Objects.equals(t1p, t2p))
+					commonPoints.add(t1p);
 
 		return commonPoints;
 	}
