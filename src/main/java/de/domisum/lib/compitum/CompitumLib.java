@@ -27,7 +27,6 @@ public class CompitumLib
 	// INIT
 	private CompitumLib(JavaPlugin plugin)
 	{
-		instance = this;
 		this.plugin = plugin;
 
 		onEnable();
@@ -38,7 +37,7 @@ public class CompitumLib
 		if(instance != null)
 			return;
 
-		new CompitumLib(plugin);
+		instance = new CompitumLib(plugin);
 	}
 
 	@APIUsage public static void disable()
