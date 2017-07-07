@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 
 public class NavMeshTriangle
 {
@@ -152,7 +153,7 @@ public class NavMeshTriangle
 		if(this.neighbors.containsKey(other))
 		{
 			NavMeshTriangleTransition currentTransition = this.neighbors.get(other);
-			if(currentTransition == transition)
+			if(Objects.equals(currentTransition, transition))
 				CompitumLib.getLogger()
 						.warning("Overridden NavMesh neighbor: "+currentTransition+"' overridden by '"+transition+"'");
 		}
