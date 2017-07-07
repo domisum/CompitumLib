@@ -2,6 +2,7 @@ package de.domisum.lib.compitum.navmesh;
 
 import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
 import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class NavMesh
@@ -54,7 +56,7 @@ public class NavMesh
 
 
 	// GETTERS
-	// GENERAL
+	// general
 	public String getId()
 	{
 		return this.id;
@@ -84,7 +86,7 @@ public class NavMesh
 	}
 
 
-	// POINT
+	// poin
 	public Collection<NavMeshPoint> getPoints()
 	{
 		return this.points.values();
@@ -96,7 +98,7 @@ public class NavMesh
 	}
 
 
-	// TRIANGLE
+	// triangle
 	public Collection<NavMeshTriangle> getTriangles()
 	{
 		return this.triangles.values();
@@ -131,7 +133,6 @@ public class NavMesh
 	}
 
 
-	// CHANGERS
 	// POINT
 	public NavMeshPoint createPoint(double x, double y, double z)
 	{
@@ -169,8 +170,8 @@ public class NavMesh
 
 
 	// LADDER
-	public void createLadder(NavMeshTriangle triangle1, Vector3D position1, NavMeshTriangle triangle2, Vector3D position2,
-			Direction2D ladderDirection)
+	@APIUsage public void createLadder(NavMeshTriangle triangle1, Vector3D position1, NavMeshTriangle triangle2,
+			Vector3D position2, Direction2D ladderDirection)
 	{
 		NavMeshLadder ladder;
 		if(position1.y < position2.y)
@@ -181,7 +182,7 @@ public class NavMesh
 		triangle1.makeNeighbors(triangle2, ladder);
 	}
 
-	public void removeLadder(NavMeshLadder ladder)
+	@APIUsage public void removeLadder(NavMeshLadder ladder)
 	{
 		ladder.getTriangleBottom().removeNeighbor(ladder.getTriangleTop());
 	}
@@ -200,7 +201,7 @@ public class NavMesh
 	{
 		for(NavMeshTriangle t : this.triangles.values())
 		{
-			if(triangle == t)
+			if(Objects.equals(t, triangle))
 				continue;
 
 			Set<NavMeshPoint> commonPoints = getCommonPoints(triangle, t);

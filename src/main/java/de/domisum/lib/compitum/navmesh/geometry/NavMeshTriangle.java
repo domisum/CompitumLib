@@ -4,6 +4,7 @@ import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
+import lombok.Setter;
 import org.bukkit.Location;
 
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class NavMeshTriangle
 	public final Map<NavMeshTriangle, NavMeshTriangleTransition> neighbors = new HashMap<>();
 
 	// STATUS
-	private Vector3D heuristicCenter;
+	@Setter private Vector3D heuristicCenter;
 
 
 	// INIT
@@ -49,10 +50,24 @@ public class NavMeshTriangle
 		return this.id.hashCode();
 	}
 
+	@Override public boolean equals(Object o)
+	{
+		if(this == o)
+			return true;
+		if(o == null || getClass() != o.getClass())
+			return false;
+
+		NavMeshTriangle that = (NavMeshTriangle) o;
+
+		if(!this.id.equals(that.id))
+			return false;
+
+		return true;
+	}
+
 
 	// GETTERS
-
-	// INTRINSIC
+	// intrinsic
 	public Vector3D getCenter()
 	{
 		Vector3D sum = this.point1.getPositionVector().add(this.point2.getPositionVector().add(this.point3.getPositionVector()));
@@ -68,7 +83,7 @@ public class NavMeshTriangle
 	}
 
 
-	// RELATIONAL
+	// relational
 	public boolean isUsingPoint(NavMeshPoint point)
 	{
 		return this.point1 == point || this.point2 == point || this.point3 == point;
@@ -80,7 +95,7 @@ public class NavMeshTriangle
 	}
 
 
-	// WORLD
+	// world
 	public boolean doesContain(Location location)
 	{
 		return doesContain(LocationUtil.toVector3D(location));
@@ -131,14 +146,7 @@ public class NavMeshTriangle
 	}
 
 
-	// SETTERS
-	public void setHeuristicCenter(Vector3D heuristicCenter)
-	{
-		this.heuristicCenter = heuristicCenter;
-	}
-
-
-	// CHANGERS
+	// NEIGHBORS
 	public void makeNeighbors(NavMeshTriangle other, NavMeshTriangleTransition transition)
 	{
 		if(this.neighbors.containsKey(other))
