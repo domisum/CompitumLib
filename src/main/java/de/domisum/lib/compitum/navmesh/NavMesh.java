@@ -72,7 +72,7 @@ public class NavMesh
 		return this.range;
 	}
 
-	boolean isInRange(Location location)
+	protected boolean isInRange(Location location)
 	{
 		if(location.getWorld() != this.world)
 			return false;
