@@ -254,34 +254,6 @@ public class NavMesh
 		return id;
 	}
 
-	@SuppressWarnings("unused") private boolean areTrianglesAdjacent(NavMeshTriangle triangle1, NavMeshTriangle triangle2)
-	{
-		int same = 0;
-
-		if(triangle1.point1 == triangle2.point1)
-			same++;
-		if(triangle1.point1 == triangle2.point2)
-			same++;
-		if(triangle1.point1 == triangle2.point3)
-			same++;
-
-		if(triangle1.point2 == triangle2.point1)
-			same++;
-		if(triangle1.point2 == triangle2.point2)
-			same++;
-		if(triangle1.point2 == triangle2.point3)
-			same++;
-
-		if(triangle1.point3 == triangle2.point1)
-			same++;
-		if(triangle1.point3 == triangle2.point2)
-			same++;
-		if(triangle1.point3 == triangle2.point3)
-			same++;
-
-		return same == 2;
-	}
-
 	private Set<NavMeshPoint> getCommonPoints(NavMeshTriangle triangle1, NavMeshTriangle triangle2)
 	{
 		NavMeshPoint[] triangle1Points = new NavMeshPoint[] {triangle1.point1, triangle1.point2, triangle1.point3};
