@@ -16,7 +16,7 @@ class NavMeshTriangleNode implements WeightedNode
 
 
 	// INIT
-	NavMeshTriangleNode(NavMeshTriangle triangle, NavMeshTriangleNode parent, double heuristicValue)
+	protected NavMeshTriangleNode(NavMeshTriangle triangle, NavMeshTriangleNode parent, double heuristicValue)
 	{
 		this.triangle = triangle;
 		this.parent = parent;
@@ -40,12 +40,12 @@ class NavMeshTriangleNode implements WeightedNode
 
 
 	// GETTERS
-	NavMeshTriangle getTriangle()
+	protected NavMeshTriangle getTriangle()
 	{
 		return this.triangle;
 	}
 
-	NavMeshTriangleNode getParent()
+	protected NavMeshTriangleNode getParent()
 	{
 		return this.parent;
 	}
