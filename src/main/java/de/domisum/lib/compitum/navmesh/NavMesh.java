@@ -191,8 +191,6 @@ public class NavMesh
 	// PATHFINDING
 	private void fillInNeighbors()
 	{
-		long start = System.nanoTime();
-
 		for(NavMeshTriangle triangle : this.triangles.values())
 			fillInNeighborsFor(triangle);
 	}
