@@ -30,51 +30,39 @@ public class UniversalPathfinder
 	private String failure;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@APIUsage
-	public UniversalPathfinder(Location start, Location target)
+	// INIT
+	@APIUsage public UniversalPathfinder(Location start, Location target)
 	{
 		this.start = fixPathfindingLocation(start);
 		this.target = fixPathfindingLocation(target);
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
-	@APIUsage
-	public TransitionalPath getPath()
+	@APIUsage public TransitionalPath getPath()
 	{
 		return this.path;
 	}
 
-	@APIUsage
-	public boolean isPathFound()
+	@APIUsage public boolean isPathFound()
 	{
 		return this.path != null;
 	}
 
 
-	@APIUsage
-	public String getDiagnose()
+	@APIUsage public String getDiagnose()
 	{
 		return this.diagnose;
 	}
 
-	@APIUsage
-	public String getFailure()
+	@APIUsage public String getFailure()
 	{
 		return this.failure;
 	}
 
 
-	// -------
 	// PATHFINDING
-	// -------
-	@APIUsage
-	public void findPath()
+	@APIUsage public void findPath()
 	{
 		navMeshCheck:
 		if(CompitumLib.areNavMeshesEnabled())
@@ -133,8 +121,7 @@ public class UniversalPathfinder
 	}
 
 
-	@APIUsage
-	public static Location fixPathfindingLocation(Location location)
+	@APIUsage public static Location fixPathfindingLocation(Location location)
 	{
 		location.setY(Math.floor(location.getY()));
 

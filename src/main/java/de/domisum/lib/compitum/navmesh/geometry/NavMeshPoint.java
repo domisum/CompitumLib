@@ -15,11 +15,8 @@ public class NavMeshPoint
 	private double z;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@DeserializationNoArgsConstructor
-	public NavMeshPoint()
+	// INIT
+	@DeserializationNoArgsConstructor public NavMeshPoint()
 	{
 		this.id = "";
 	}
@@ -33,8 +30,7 @@ public class NavMeshPoint
 		this.z = MathUtil.round(z, 2);
 	}
 
-	@Override
-	public boolean equals(Object o)
+	@Override public boolean equals(Object o)
 	{
 		if(!(o instanceof NavMeshPoint))
 			return false;
@@ -43,16 +39,13 @@ public class NavMeshPoint
 		return this.id.equals(other.id);
 	}
 
-	@Override
-	public int hashCode()
+	@Override public int hashCode()
 	{
 		return this.id.hashCode();
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public String getId()
 	{
 		return this.id;
@@ -80,9 +73,7 @@ public class NavMeshPoint
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
 	public void setX(double x)
 	{
 		this.x = x;

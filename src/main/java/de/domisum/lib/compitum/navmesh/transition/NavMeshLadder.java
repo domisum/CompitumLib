@@ -21,9 +21,7 @@ public class NavMeshLadder implements NavMeshTriangleTransition
 	private Direction2D ladderDirection;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public NavMeshLadder(NavMeshTriangle triangleBottom, Vector3D positionBottom, NavMeshTriangle triangleTop,
 			Vector3D positionTop, Direction2D ladderDirection)
 	{
@@ -37,9 +35,7 @@ public class NavMeshLadder implements NavMeshTriangleTransition
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public NavMeshTriangle getTriangleBottom()
 	{
 		return this.triangleBottom;
@@ -69,14 +65,12 @@ public class NavMeshLadder implements NavMeshTriangleTransition
 
 
 	// TRANSITION
-	@Override
-	public int getTransitionType()
+	@Override public int getTransitionType()
 	{
 		return TransitionType.CLIMB;
 	}
 
-	@Override
-	public double getWeight()
+	@Override public double getWeight()
 	{
 		double dY = Math.abs(this.positionTop.y-this.positionBottom.y);
 		return dY*CLIMBING_EXPENSE;

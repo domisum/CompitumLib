@@ -44,9 +44,7 @@ public class NavMeshTriangleTraverser
 	private TransitionalPath path;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public NavMeshTriangleTraverser(Vector3D startPosition, Vector3D targetPosition, List<NavMeshTriangle> triangleSequence)
 	{
 		this.startPosition = startPosition;
@@ -56,9 +54,7 @@ public class NavMeshTriangleTraverser
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public TransitionalPath getPath()
 	{
 		return this.path;
@@ -91,9 +87,7 @@ public class NavMeshTriangleTraverser
 	}
 
 
-	// -------
 	// TRAVERSAL
-	// -------
 	public void traverseTriangles()
 	{
 		this.stopWatch.start();
@@ -271,9 +265,7 @@ public class NavMeshTriangleTraverser
 	}
 
 
-	// -------
 	// UTIL
-	// -------
 	private static boolean isLeftOf(Vector3D v1, Vector3D v2, boolean onZero)
 	{
 		double crossY = v1.crossProduct(v2).y;

@@ -24,9 +24,7 @@ public class CompitumLib
 	private NavMeshManager navMeshManager;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	private CompitumLib(JavaPlugin plugin)
 	{
 		instance = this;
@@ -35,8 +33,7 @@ public class CompitumLib
 		onEnable();
 	}
 
-	@APIUsage
-	public static void enable(JavaPlugin plugin)
+	@APIUsage public static void enable(JavaPlugin plugin)
 	{
 		if(instance != null)
 			return;
@@ -44,8 +41,7 @@ public class CompitumLib
 		new CompitumLib(plugin);
 	}
 
-	@APIUsage
-	public static void disable()
+	@APIUsage public static void disable()
 	{
 		if(instance == null)
 			return;
@@ -81,11 +77,8 @@ public class CompitumLib
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
-	@APIUsage
-	public static CompitumLib getInstance()
+	@APIUsage public static CompitumLib getInstance()
 	{
 		if(instance == null)
 			throw new IllegalArgumentException(CompitumLib.class.getSimpleName()+" has to be initialized before usage");
@@ -104,8 +97,7 @@ public class CompitumLib
 	}
 
 
-	@APIUsage
-	public static NavMeshManager getNavMeshManager()
+	@APIUsage public static NavMeshManager getNavMeshManager()
 	{
 		if(!navMeshesEnabled)
 			throw new IllegalStateException("The usage of NavMeshes has to be enabled first!");
@@ -113,18 +105,14 @@ public class CompitumLib
 		return getInstance().navMeshManager;
 	}
 
-	@APIUsage
-	public static boolean areNavMeshesEnabled()
+	@APIUsage public static boolean areNavMeshesEnabled()
 	{
 		return navMeshesEnabled;
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
-	@APIUsage
-	public static void enableNavMeshes()
+	@APIUsage public static void enableNavMeshes()
 	{
 		if(instance != null)
 			throw new IllegalStateException("NavMeshes have to be enabled before enabling CompitumLib");

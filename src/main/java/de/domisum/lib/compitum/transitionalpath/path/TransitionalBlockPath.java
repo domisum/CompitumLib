@@ -14,9 +14,7 @@ public class TransitionalBlockPath
 	private List<TransitionalBlockNode> nodes = new ArrayList<>();
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public TransitionalBlockPath(TransitionalBlockNode endNode)
 	{
 		generatePath(endNode);
@@ -35,11 +33,8 @@ public class TransitionalBlockPath
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
-	@APIUsage
-	public List<TransitionalBlockNode> getNodes()
+	@APIUsage public List<TransitionalBlockNode> getNodes()
 	{
 		return this.nodes;
 	}

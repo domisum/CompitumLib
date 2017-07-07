@@ -1,27 +1,21 @@
 package de.domisum.lib.compitum.path.node;
 
-import de.domisum.lib.compitum.path.pathfinders.AStar;
 import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
+import de.domisum.lib.compitum.path.pathfinders.AStar;
 import org.bukkit.World;
 
 public class NodeUnderSurface extends Node
 {
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public NodeUnderSurface(World world, int x, int y, int z, AStar aStar, Node target)
 	{
 		super(world, x, y, z, aStar, target);
 	}
 
 
-	// -------
 	// VALIDITATION
-	// -------
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean isUnblocked()
+	@Override @SuppressWarnings("deprecation") public boolean isUnblocked()
 	{
 		if(this.isUnblockedChecked)
 			return this.isUnblocked;
@@ -34,9 +28,7 @@ public class NodeUnderSurface extends Node
 		return this.isUnblocked;
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean canStandAt()
+	@SuppressWarnings("deprecation") @Override public boolean canStandAt()
 	{
 		if(this.canStandAtChecked)
 			return this.canStandAt;

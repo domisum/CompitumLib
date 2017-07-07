@@ -30,19 +30,14 @@ public class SerializationNavMesh
 	@SetByDeserialization private List<SerializationNavMeshLadder> ladders = new ArrayList<>();
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@DeserializationNoArgsConstructor
-	public SerializationNavMesh()
+	// INIT
+	@DeserializationNoArgsConstructor public SerializationNavMesh()
 	{
 
 	}
 
 
-	// -------
 	// CONVERSION
-	// -------
 	public SerializationNavMesh(NavMesh mesh)
 	{
 		this.worldName = mesh.getWorld().getName();

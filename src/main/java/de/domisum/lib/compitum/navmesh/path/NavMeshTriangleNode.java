@@ -15,9 +15,7 @@ class NavMeshTriangleNode implements WeightedNode
 	private double heuristicValue = -1;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	NavMeshTriangleNode(NavMeshTriangle triangle, NavMeshTriangleNode parent, double heuristicValue)
 	{
 		this.triangle = triangle;
@@ -26,14 +24,12 @@ class NavMeshTriangleNode implements WeightedNode
 		this.heuristicValue = heuristicValue;
 	}
 
-	@Override
-	public int hashCode()
+	@Override public int hashCode()
 	{
 		return this.triangle.hashCode();
 	}
 
-	@Override
-	public boolean equals(Object o)
+	@Override public boolean equals(Object o)
 	{
 		if(!(o instanceof NavMeshTriangleNode))
 			return false;
@@ -43,9 +39,7 @@ class NavMeshTriangleNode implements WeightedNode
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	NavMeshTriangle getTriangle()
 	{
 		return this.triangle;
@@ -57,8 +51,7 @@ class NavMeshTriangleNode implements WeightedNode
 	}
 
 
-	@Override
-	public double getGValue()
+	@Override public double getGValue()
 	{
 		if(this.parent == null)
 			return 0;
@@ -74,14 +67,12 @@ class NavMeshTriangleNode implements WeightedNode
 		return this.gValue;
 	}
 
-	@Override
-	public double getHValue()
+	@Override public double getHValue()
 	{
 		return this.heuristicValue;
 	}
 
-	@Override
-	public double getFValue()
+	@Override public double getFValue()
 	{
 		return getGValue()+getHValue();
 	}

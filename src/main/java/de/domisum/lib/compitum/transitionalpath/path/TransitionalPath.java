@@ -8,18 +8,14 @@ public class TransitionalPath
 	private List<TransitionalWaypoint> waypoints;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public TransitionalPath(List<TransitionalWaypoint> waypoints)
 	{
 		this.waypoints = waypoints;
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public int getNumberOfWaypoints()
 	{
 		return this.waypoints.size();

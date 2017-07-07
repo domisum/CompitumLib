@@ -43,9 +43,7 @@ public class AStar
 	protected long endNano;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public AStar(Location startLocation, Location endLocation)
 	{
 		this.startLocation = startLocation;
@@ -61,9 +59,7 @@ public class AStar
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public World getWorld()
 	{
 		return this.world;
@@ -146,9 +142,7 @@ public class AStar
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
 	public void setMaximumNodeVisits(int maximumNodeVisits)
 	{
 		if(this.pathfindingStatus != PathfindingStatus.NOT_STARTED)
@@ -168,9 +162,7 @@ public class AStar
 	}
 
 
-	// -------
 	// PATHING
-	// -------
 	public void findPath() throws IllegalArgumentException
 	{
 		this.pathfindingStatus = PathfindingStatus.SEARCHING;
@@ -382,9 +374,7 @@ public class AStar
 	}
 
 
-	// -------
 	// UTIL
-	// -------
 	protected Node newNode(World world, int x, int y, int z, Node target)
 	{
 		return new Node(world, x, y, z, this, target);

@@ -29,9 +29,7 @@ public class NavMeshTriangle
 	private Vector3D heuristicCenter;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public NavMeshTriangle(String id, NavMeshPoint point1, NavMeshPoint point2, NavMeshPoint point3)
 	{
 		this.id = id;
@@ -41,22 +39,18 @@ public class NavMeshTriangle
 		this.point3 = point3;
 	}
 
-	@Override
-	public String toString()
+	@Override public String toString()
 	{
 		return "triangle["+this.point1.getId()+","+this.point2.getId()+","+this.point3.getId()+"]";
 	}
 
-	@Override
-	public int hashCode()
+	@Override public int hashCode()
 	{
 		return this.id.hashCode();
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 
 	// INTRINSIC
 	public Vector3D getCenter()
@@ -137,18 +131,14 @@ public class NavMeshTriangle
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
 	public void setHeuristicCenter(Vector3D heuristicCenter)
 	{
 		this.heuristicCenter = heuristicCenter;
 	}
 
 
-	// -------
 	// CHANGERS
-	// -------
 	public void makeNeighbors(NavMeshTriangle other, NavMeshTriangleTransition transition)
 	{
 		if(this.neighbors.containsKey(other))
@@ -176,9 +166,7 @@ public class NavMeshTriangle
 	}
 
 
-	// -------
 	// UTIL
-	// -------
 	private double sign(Vector3D p1, Vector3D p2, Vector3D p3)
 	{
 		return (p1.x-p3.x)*(p2.z-p3.z)-(p2.x-p3.x)*(p1.z-p3.z);

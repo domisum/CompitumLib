@@ -22,11 +22,8 @@ class SerializationNavMeshLadder
 	@SetByDeserialization private Direction2D ladderDirection;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@DeserializationNoArgsConstructor
-	public SerializationNavMeshLadder()
+	// INIT
+	@DeserializationNoArgsConstructor public SerializationNavMeshLadder()
 	{
 
 	}
@@ -43,9 +40,7 @@ class SerializationNavMeshLadder
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	NavMeshLadder getNavMeshLadder(NavMesh navMesh)
 	{
 		NavMeshTriangle triangleBottom_ = navMesh.getTriangle(this.triangleBottom);

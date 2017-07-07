@@ -15,9 +15,7 @@ public class SortedWeightedNodeList<T extends WeightedNode>
 	private Set<T> nodesContainsTester;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public SortedWeightedNodeList(int length)
 	{
 		this.nodes = new ArrayList<>(length);
@@ -25,9 +23,7 @@ public class SortedWeightedNodeList<T extends WeightedNode>
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public T getAndRemoveFirst()
 	{
 		if(this.nodes.isEmpty())
@@ -55,16 +51,13 @@ public class SortedWeightedNodeList<T extends WeightedNode>
 	}
 
 
-	@Deprecated
-	public List<T> getNodes()
+	@Deprecated public List<T> getNodes()
 	{
 		return this.nodes;
 	}
 
 
-	// -------
 	// CHANGERS
-	// -------
 	public void addSorted(T node)
 	{
 		// don't subtract one from the size since the element could be added after the last current entry
@@ -99,8 +92,7 @@ public class SortedWeightedNodeList<T extends WeightedNode>
 	}
 
 
-	@APIUsage
-	public void sort()
+	@APIUsage public void sort()
 	{
 		Collections.sort(this.nodes, (n1, n2)->getValueToCompare(n1) > getValueToCompare(n2) ? 1 : -1);
 	}

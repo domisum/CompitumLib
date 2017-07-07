@@ -26,9 +26,7 @@ public class StairEvaluator
 	private static boolean ready = false;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public static void prepareEvaluation()
 	{
 		int maxId = -1;
@@ -94,9 +92,7 @@ public class StairEvaluator
 	}
 
 
-	// -------
 	// EVALUATION
-	// -------
 	public static boolean isStair(TransitionalBlockNode from, TransitionalBlockNode to, World world)
 	{
 		if(!ready)

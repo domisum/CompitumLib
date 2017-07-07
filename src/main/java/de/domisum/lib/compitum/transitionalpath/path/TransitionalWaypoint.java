@@ -13,9 +13,7 @@ public class TransitionalWaypoint
 	private DataRegister dataRegister = new DataRegister();
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public TransitionalWaypoint(Vector3D position, int transitionType)
 	{
 		this.position = position;
@@ -28,9 +26,7 @@ public class TransitionalWaypoint
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public Vector3D getPosition()
 	{
 		return this.position;
@@ -47,9 +43,7 @@ public class TransitionalWaypoint
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
 	public void setData(String key, Object value)
 	{
 		this.dataRegister.set(key, value);

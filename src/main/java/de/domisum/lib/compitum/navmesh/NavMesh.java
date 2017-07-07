@@ -34,9 +34,7 @@ public class NavMesh
 	private Map<String, NavMeshTriangle> triangles = new HashMap<>(); // <id, triangle>
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public NavMesh(String id, Vector3D ranceCenter, double range, World world, Collection<NavMeshPoint> points,
 			Collection<NavMeshTriangle> triangles)
 	{
@@ -55,9 +53,7 @@ public class NavMesh
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	// GENERAL
 	public String getId()
 	{
@@ -135,9 +131,7 @@ public class NavMesh
 	}
 
 
-	// -------
 	// CHANGERS
-	// -------
 	// POINT
 	public NavMeshPoint createPoint(double x, double y, double z)
 	{
@@ -193,9 +187,7 @@ public class NavMesh
 	}
 
 
-	// -------
 	// PATHFINDING
-	// -------
 	private void fillInNeighbors()
 	{
 		long start = System.nanoTime();
@@ -252,9 +244,7 @@ public class NavMesh
 	}
 
 
-	// -------
 	// UTIL
-	// -------
 	private String getUnusedId()
 	{
 		String id;
@@ -265,8 +255,7 @@ public class NavMesh
 		return id;
 	}
 
-	@SuppressWarnings("unused")
-	private boolean areTrianglesAdjacent(NavMeshTriangle triangle1, NavMeshTriangle triangle2)
+	@SuppressWarnings("unused") private boolean areTrianglesAdjacent(NavMeshTriangle triangle1, NavMeshTriangle triangle2)
 	{
 		int same = 0;
 

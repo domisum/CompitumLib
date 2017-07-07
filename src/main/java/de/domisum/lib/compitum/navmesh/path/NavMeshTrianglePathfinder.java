@@ -37,20 +37,15 @@ public class NavMeshTrianglePathfinder
 	private String failure;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@APIUsage
-	public NavMeshTrianglePathfinder(NavMeshTriangle startTriangle, NavMeshTriangle targetTriangle)
+	// INIT
+	@APIUsage public NavMeshTrianglePathfinder(NavMeshTriangle startTriangle, NavMeshTriangle targetTriangle)
 	{
 		this.startTriangle = startTriangle;
 		this.targetTriangle = targetTriangle;
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public List<NavMeshTriangle> getTriangleSequence()
 	{
 		return this.triangleSequence;
@@ -61,35 +56,27 @@ public class NavMeshTrianglePathfinder
 		return this.failure;
 	}
 
-	@APIUsage
-	public ProfilerStopWatch getStopWatch()
+	@APIUsage public ProfilerStopWatch getStopWatch()
 	{
 		return this.stopWatch;
 	}
 
 
-	@APIUsage
-	public boolean canUseLadders()
+	@APIUsage public boolean canUseLadders()
 	{
 		return this.canUseLadders;
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
-	@APIUsage
-	public void setCanUseLadders(boolean canUseLadders)
+	@APIUsage public void setCanUseLadders(boolean canUseLadders)
 	{
 		this.canUseLadders = canUseLadders;
 	}
 
 
-	// -------
 	// PATHFINDING
-	// -------
-	@APIUsage
-	public void findPath()
+	@APIUsage public void findPath()
 	{
 		this.stopWatch.start();
 

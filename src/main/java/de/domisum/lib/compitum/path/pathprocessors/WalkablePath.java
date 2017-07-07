@@ -23,9 +23,7 @@ public class WalkablePath
 	private Location currentLocation;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public WalkablePath(RawPath rawPath)
 	{
 		this.rawPath = rawPath;
@@ -70,9 +68,7 @@ public class WalkablePath
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public boolean hasNext()
 	{
 		if((this.iterator == null) && (this.locations != null))

@@ -15,11 +15,8 @@ public class TransitionalStrollAStar extends TransitionalAStar
 	private double maxDistance;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@APIUsage
-	public TransitionalStrollAStar(Location startLocation, Location strollBaseLocation, double maxDistance)
+	// INIT
+	@APIUsage public TransitionalStrollAStar(Location startLocation, Location strollBaseLocation, double maxDistance)
 	{
 		super(startLocation, getEndLocation(strollBaseLocation, maxDistance));
 
@@ -36,11 +33,8 @@ public class TransitionalStrollAStar extends TransitionalAStar
 	}
 
 
-	// -------
 	// PATHFINDING
-	// -------
-	@Override
-	protected boolean isTargetReached(TransitionalBlockNode nodeToVisit)
+	@Override protected boolean isTargetReached(TransitionalBlockNode nodeToVisit)
 	{
 		if(nodeToVisit.equals(this.endNode))
 			return true;

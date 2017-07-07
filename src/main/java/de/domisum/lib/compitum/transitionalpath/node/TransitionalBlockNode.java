@@ -20,9 +20,7 @@ public class TransitionalBlockNode implements WeightedNode
 	private double heuristicWeight;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public TransitionalBlockNode(int x, int y, int z)
 	{
 		this.x = x;
@@ -30,8 +28,7 @@ public class TransitionalBlockNode implements WeightedNode
 		this.z = z;
 	}
 
-	@Override
-	public boolean equals(Object other)
+	@Override public boolean equals(Object other)
 	{
 		if(!(other instanceof TransitionalBlockNode))
 			return false;
@@ -41,8 +38,7 @@ public class TransitionalBlockNode implements WeightedNode
 		return o.x == this.x && o.y == this.y && o.z == this.z;
 	}
 
-	@Override
-	public int hashCode()
+	@Override public int hashCode()
 	{
 		int hash = 0;
 		hash |= (this.x%4096)<<20; // 12 bits long, in [0;11]
@@ -52,16 +48,13 @@ public class TransitionalBlockNode implements WeightedNode
 		return hash;
 	}
 
-	@Override
-	public String toString()
+	@Override public String toString()
 	{
 		return "transitionalNode[x="+this.x+",y="+this.y+",z="+this.z+"]";
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public TransitionalBlockNode getParent()
 	{
 		return this.parent;
@@ -73,8 +66,7 @@ public class TransitionalBlockNode implements WeightedNode
 	}
 
 
-	@Override
-	public double getGValue()
+	@Override public double getGValue()
 	{
 		if(this.parent == null)
 			return this.weightFromParent;
@@ -82,14 +74,12 @@ public class TransitionalBlockNode implements WeightedNode
 		return this.parent.getGValue()+this.weightFromParent;
 	}
 
-	@Override
-	public double getHValue()
+	@Override public double getHValue()
 	{
 		return this.heuristicWeight;
 	}
 
-	@Override
-	public double getFValue()
+	@Override public double getFValue()
 	{
 		return getGValue()+getHValue();
 	}
@@ -101,9 +91,7 @@ public class TransitionalBlockNode implements WeightedNode
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
 	public void setParent(TransitionalBlockNode parent, int transitionType, double additionalWeight)
 	{
 		this.parent = parent;

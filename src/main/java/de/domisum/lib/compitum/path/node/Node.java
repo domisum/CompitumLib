@@ -37,9 +37,7 @@ public class Node implements Comparable<Node>
 	protected boolean canStandAt;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public Node(World world, int x, int y, int z, AStar aStar, Node target)
 	{
 		this.world = world;
@@ -51,8 +49,7 @@ public class Node implements Comparable<Node>
 		this.target = target;
 	}
 
-	@Override
-	public boolean equals(Object o)
+	@Override public boolean equals(Object o)
 	{
 		if(!(o instanceof Node))
 			return false;
@@ -62,22 +59,18 @@ public class Node implements Comparable<Node>
 		return (other.x == this.x) && (other.y == this.y) && (other.z == this.z);
 	}
 
-	@Override
-	public int hashCode()
+	@Override public int hashCode()
 	{
 		return this.x+(513*this.y)+(517*this.z);
 	}
 
-	@Override
-	public String toString()
+	@Override public String toString()
 	{
 		return "node[x="+this.x+",y="+this.y+",z="+this.z+"]";
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
 	public void setTarget(Node target)
 	{
 		this.target = target;
@@ -90,9 +83,7 @@ public class Node implements Comparable<Node>
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public Node getParent()
 	{
 		return this.parent;
@@ -140,9 +131,7 @@ public class Node implements Comparable<Node>
 	}
 
 
-	// -------
 	// EXPENSE & HEURISTIC
-	// -------
 	public double getExpense()
 	{
 		if(this.expenseCalculated)
@@ -226,18 +215,14 @@ public class Node implements Comparable<Node>
 		return getExpense()+(this.aStar.getHeuristicWeight()*getRemainingExpense());
 	}
 
-	@Override
-	public int compareTo(Node otherNode)
+	@Override public int compareTo(Node otherNode)
 	{
 		return Double.compare(getCombinedExpense(), otherNode.getCombinedExpense());
 	}
 
 
-	// -------
 	// VALIDITATION
-	// -------
-	@SuppressWarnings("deprecation")
-	public boolean isUnblocked()
+	@SuppressWarnings("deprecation") public boolean isUnblocked()
 	{
 		if(this.isUnblockedChecked)
 			return this.isUnblocked;
@@ -256,8 +241,7 @@ public class Node implements Comparable<Node>
 		return this.isUnblocked;
 	}
 
-	@SuppressWarnings("deprecation")
-	public boolean canStandAt()
+	@SuppressWarnings("deprecation") public boolean canStandAt()
 	{
 		if(this.canStandAtChecked)
 			return this.canStandAt;

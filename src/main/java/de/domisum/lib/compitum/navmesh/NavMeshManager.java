@@ -35,9 +35,7 @@ public class NavMeshManager
 	}
 
 
-	// -------
 	// LOADING
-	// -------
 	private void loadMeshes()
 	{
 		CompitumLib.getLogger().info("Loading NavMeshs...");
@@ -82,9 +80,7 @@ public class NavMeshManager
 	}
 
 
-	// -------
 	// SAVING
-	// -------
 	public void saveMeshes()
 	{
 		CompitumLib.getLogger().info("Saving NavMeshs...");
@@ -114,9 +110,7 @@ public class NavMeshManager
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public NavMesh getNavMeshAt(Location location)
 	{
 		for(NavMesh g : this.meshes)

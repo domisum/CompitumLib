@@ -14,17 +14,14 @@ public class RawPath
 	private List<Node> nodes;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public RawPath(World world, List<Node> nodes)
 	{
 		this.world = world;
 		this.nodes = nodes;
 	}
 
-	@Override
-	public String toString()
+	@Override public String toString()
 	{
 		String string = "[";
 
@@ -35,9 +32,7 @@ public class RawPath
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public World getWorld()
 	{
 		return this.world;

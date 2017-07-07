@@ -50,35 +50,27 @@ public class TransitionalAStar
 	private String failure;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@APIUsage
-	public TransitionalAStar(Location startLocation, Location endLocation)
+	// INIT
+	@APIUsage public TransitionalAStar(Location startLocation, Location endLocation)
 	{
 		this.startLocation = startLocation;
 		this.endLocation = endLocation;
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
-	@APIUsage
-	public boolean pathFound()
+	@APIUsage public boolean pathFound()
 	{
 		return this.path != null;
 	}
 
-	@APIUsage
-	public TransitionalBlockPath getPath()
+	@APIUsage public TransitionalBlockPath getPath()
 	{
 		return this.path;
 	}
 
 
-	@APIUsage
-	public String getFailure()
+	@APIUsage public String getFailure()
 	{
 		return this.failure;
 	}
@@ -94,8 +86,7 @@ public class TransitionalAStar
 		return MathUtil.round(getNanoDuration()/1000d/1000, 2);
 	}
 
-	@APIUsage
-	public String getDiagnose()
+	@APIUsage public String getDiagnose()
 	{
 		String diagnose = "";
 
@@ -111,33 +102,25 @@ public class TransitionalAStar
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
-	@APIUsage
-	public void setHeuristicImportance(double heuristicImportance)
+	@APIUsage public void setHeuristicImportance(double heuristicImportance)
 	{
 		this.heuristicImportance = heuristicImportance;
 	}
 
-	@APIUsage
-	public void setCanUseDiagonalMovement(boolean canUseDiagonalMovement)
+	@APIUsage public void setCanUseDiagonalMovement(boolean canUseDiagonalMovement)
 	{
 		this.canUseDiagonalMovement = canUseDiagonalMovement;
 	}
 
-	@APIUsage
-	public void setCanUseLadders(boolean canUseLadders)
+	@APIUsage public void setCanUseLadders(boolean canUseLadders)
 	{
 		this.canUseLadders = canUseLadders;
 	}
 
 
-	// -------
 	// PATHFINDING
-	// -------
-	@APIUsage
-	public void findPath()
+	@APIUsage public void findPath()
 	{
 		// don't set the start time if it already exists, this way duration of retries are counted together
 		if(this.pathfindingStartNano == 0)
@@ -346,8 +329,7 @@ public class TransitionalAStar
 
 	}
 
-	@SuppressWarnings("deprecation")
-	private boolean canStandAt(Location feetLocation)
+	@SuppressWarnings("deprecation") private boolean canStandAt(Location feetLocation)
 	{
 		if(!isUnobstructed(feetLocation))
 			return false;
@@ -367,23 +349,19 @@ public class TransitionalAStar
 
 
 	// LOCATION VALIDATION
-	@SuppressWarnings("deprecation")
-	private boolean isBlockUnobstructed(Location location)
+	@SuppressWarnings("deprecation") private boolean isBlockUnobstructed(Location location)
 	{
 		return MaterialEvaluator.canStandIn(location.getBlock().getTypeId());
 	}
 
 
-	// -------
 	// HEURISTIC
-	// -------
 	private double getHeuristicWeight(TransitionalBlockNode node)
 	{
 		return getEuclideanDistance(node);
 	}
 
-	@SuppressWarnings("unused")
-	private double getManhattanDistance(TransitionalBlockNode node)
+	@SuppressWarnings("unused") private double getManhattanDistance(TransitionalBlockNode node)
 	{
 		return Math.abs(node.x-this.endNode.x)+Math.abs(node.y-this.endNode.y)+Math.abs(node.z-this.endNode.z);
 	}
@@ -398,9 +376,7 @@ public class TransitionalAStar
 	}
 
 
-	// -------
 	// RETRY
-	// -------
 	private void retry()
 	{
 		lookForReason:

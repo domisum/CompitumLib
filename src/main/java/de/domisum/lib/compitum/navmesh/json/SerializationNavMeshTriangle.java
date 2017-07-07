@@ -19,11 +19,8 @@ class SerializationNavMeshTriangle
 	@SetByDeserialization private String point3;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@DeserializationNoArgsConstructor
-	public SerializationNavMeshTriangle()
+	// INIT
+	@DeserializationNoArgsConstructor public SerializationNavMeshTriangle()
 	{
 
 	}
@@ -38,9 +35,7 @@ class SerializationNavMeshTriangle
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	NavMeshTriangle getNavMeshTriangle(Collection<NavMeshPoint> points)
 	{
 		return new NavMeshTriangle(this.id, getPoint(points, this.point1), getPoint(points, this.point2),

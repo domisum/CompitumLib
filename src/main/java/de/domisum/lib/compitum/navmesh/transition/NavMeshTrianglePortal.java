@@ -23,9 +23,7 @@ public class NavMeshTrianglePortal implements NavMeshTriangleTransition
 	private double triangleHeuristicCenterDistance = -1;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public NavMeshTrianglePortal(NavMeshTriangle triangle1, NavMeshTriangle triangle2, Collection<NavMeshPoint> commonPoints)
 	{
 		this.triangle1 = triangle1;
@@ -40,9 +38,7 @@ public class NavMeshTrianglePortal implements NavMeshTriangleTransition
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public LineSegment3D getFullLineSegment()
 	{
 		if(this.fullLineSegment == null)
@@ -51,14 +47,12 @@ public class NavMeshTrianglePortal implements NavMeshTriangleTransition
 		return this.fullLineSegment;
 	}
 
-	@Override
-	public int getTransitionType()
+	@Override public int getTransitionType()
 	{
 		return TransitionType.WALK;
 	}
 
-	@Override
-	public double getWeight()
+	@Override public double getWeight()
 	{
 		if(this.triangleHeuristicCenterDistance == -1)
 			this.triangleHeuristicCenterDistance = this.triangle2.getHeuristicCenter()

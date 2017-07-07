@@ -19,27 +19,21 @@ public class TransitionalPathSmoother
 	private TransitionalPath smoothPath;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public TransitionalPathSmoother(TransitionalBlockPath blockPath)
 	{
 		this.blockPath = blockPath;
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public TransitionalPath getSmoothPath()
 	{
 		return this.smoothPath;
 	}
 
 
-	// -------
 	// CONVERSION
-	// -------
 	public void convert()
 	{
 		List<TransitionalWaypoint> waypoints = new ArrayList<>();

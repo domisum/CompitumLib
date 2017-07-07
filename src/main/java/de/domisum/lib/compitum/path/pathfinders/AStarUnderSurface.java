@@ -8,20 +8,15 @@ import org.bukkit.World;
 public class AStarUnderSurface extends AStar
 {
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public AStarUnderSurface(Location startLocation, Location endLocation)
 	{
 		super(startLocation, endLocation);
 	}
 
 
-	// -------
 	// PATHFINDING
-	// -------
-	@Override
-	protected void visitNode(Node node, int dX, int dY, int dZ)
+	@Override protected void visitNode(Node node, int dX, int dY, int dZ)
 	{
 		Node newNode = null;
 
@@ -88,11 +83,8 @@ public class AStarUnderSurface extends AStar
 	}
 
 
-	// -------
 	// UTIL
-	// -------
-	@Override
-	protected Node newNode(World world, int x, int y, int z, Node target)
+	@Override protected Node newNode(World world, int x, int y, int z, Node target)
 	{
 		return new NodeUnderSurface(world, x, y, z, this, target);
 	}

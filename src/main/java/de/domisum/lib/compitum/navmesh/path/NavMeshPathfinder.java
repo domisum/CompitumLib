@@ -29,11 +29,8 @@ public class NavMeshPathfinder
 	private String failure;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
-	@APIUsage
-	public NavMeshPathfinder(Location startLocation, Location targetLocation, NavMesh navMesh)
+	// INIT
+	@APIUsage public NavMeshPathfinder(Location startLocation, Location targetLocation, NavMesh navMesh)
 	{
 		this.startLocation = startLocation;
 		this.targetLocation = targetLocation;
@@ -42,16 +39,13 @@ public class NavMeshPathfinder
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public TransitionalPath getPath()
 	{
 		return this.path;
 	}
 
-	@APIUsage
-	public String getFailure()
+	@APIUsage public String getFailure()
 	{
 		return this.failure;
 	}
@@ -63,11 +57,8 @@ public class NavMeshPathfinder
 	}
 
 
-	// -------
 	// PATHFINDING
-	// -------
-	@APIUsage
-	public void findPath()
+	@APIUsage public void findPath()
 	{
 		this.stopWatch.start();
 		this.triangleFindingStopWatch.start();

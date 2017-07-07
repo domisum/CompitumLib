@@ -14,9 +14,7 @@ public class MaterialEvaluator
 	private static boolean ready = false;
 
 
-	// -------
-	// CONSTRUCTOR
-	// -------
+	// INIT
 	public static void prepareEvaluation()
 	{
 		int maxId = -1;
@@ -51,9 +49,7 @@ public class MaterialEvaluator
 	}
 
 
-	// -------
 	// EVALUATION
-	// -------
 	public static boolean canStandOn(int materialID)
 	{
 		if(!ready)
