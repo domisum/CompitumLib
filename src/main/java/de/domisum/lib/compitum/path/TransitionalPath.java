@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.transitionalpath.path;
+package de.domisum.lib.compitum.path;
 
 import java.util.List;
 

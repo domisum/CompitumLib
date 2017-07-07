@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.evaluator;
+package de.domisum.lib.compitum.worldpathfinders.evaluator;
 
 import org.bukkit.Material;
 

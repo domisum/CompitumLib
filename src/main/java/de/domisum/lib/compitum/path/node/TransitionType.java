@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.transitionalpath.node;
+package de.domisum.lib.compitum.path.node;
 
 public class TransitionType
 {

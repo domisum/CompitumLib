@@ -1,15 +1,14 @@
-package de.domisum.lib.compitum.universal;
+package de.domisum.lib.compitum;
 
 
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
-import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.NavMeshManager;
 import de.domisum.lib.compitum.navmesh.path.NavMeshPathfinder;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
-import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalAStar;
-import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalPathSmoother;
+import de.domisum.lib.compitum.path.TransitionalBlockPath;
+import de.domisum.lib.compitum.path.TransitionalPath;
+import de.domisum.lib.compitum.worldpathfinders.TransitionalAStar;
+import de.domisum.lib.compitum.worldpathfinders.TransitionalPathSmoother;
 import org.bukkit.Location;
 
 import java.util.Objects;

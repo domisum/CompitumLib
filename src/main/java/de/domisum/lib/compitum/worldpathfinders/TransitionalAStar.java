@@ -1,14 +1,14 @@
-package de.domisum.lib.compitum.transitionalpath.pathfinders;
+package de.domisum.lib.compitum.worldpathfinders;
 
 
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxilium.util.math.MathUtil;
-import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
-import de.domisum.lib.compitum.evaluator.StairEvaluator;
-import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
-import de.domisum.lib.compitum.transitionalpath.node.TransitionalBlockNode;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalBlockPath;
-import de.domisum.lib.compitum.universal.SortedWeightedNodeList;
+import de.domisum.lib.compitum.worldpathfinders.evaluator.MaterialEvaluator;
+import de.domisum.lib.compitum.worldpathfinders.evaluator.StairEvaluator;
+import de.domisum.lib.compitum.path.node.TransitionType;
+import de.domisum.lib.compitum.path.node.TransitionalBlockNode;
+import de.domisum.lib.compitum.path.TransitionalBlockPath;
+import de.domisum.lib.compitum.path.node.weighted.SortedWeightedNodeList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 

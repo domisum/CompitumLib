@@ -3,7 +3,7 @@ package de.domisum.lib.compitum.navmesh.transition;
 import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
-import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
+import de.domisum.lib.compitum.path.node.TransitionType;
 
 public class NavMeshLadder implements NavMeshTriangleTransition
 {

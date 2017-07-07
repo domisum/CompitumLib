@@ -1,6 +1,6 @@
-package de.domisum.lib.compitum.transitionalpath.node;
+package de.domisum.lib.compitum.path.node;
 
-import de.domisum.lib.compitum.universal.WeightedNode;
+import de.domisum.lib.compitum.path.node.weighted.WeightedNode;
 import org.bukkit.Location;
 import org.bukkit.World;
 

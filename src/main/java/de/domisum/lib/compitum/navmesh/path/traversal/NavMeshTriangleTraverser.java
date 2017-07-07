@@ -7,9 +7,9 @@ import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTrianglePortal;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
-import de.domisum.lib.compitum.transitionalpath.node.TransitionType;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalWaypoint;
+import de.domisum.lib.compitum.path.node.TransitionType;
+import de.domisum.lib.compitum.path.TransitionalPath;
+import de.domisum.lib.compitum.path.TransitionalWaypoint;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,7 @@ import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
-import de.domisum.lib.compitum.universal.SortedWeightedNodeList;
+import de.domisum.lib.compitum.path.node.weighted.SortedWeightedNodeList;
 
 import java.util.ArrayList;
 import java.util.Collections;

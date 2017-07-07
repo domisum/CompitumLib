@@ -2,8 +2,8 @@ package de.domisum.lib.compitum;
 
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxiliumspigot.AuxiliumSpigotLib;
-import de.domisum.lib.compitum.evaluator.MaterialEvaluator;
-import de.domisum.lib.compitum.evaluator.StairEvaluator;
+import de.domisum.lib.compitum.worldpathfinders.evaluator.MaterialEvaluator;
+import de.domisum.lib.compitum.worldpathfinders.evaluator.StairEvaluator;
 import de.domisum.lib.compitum.navmesh.NavMeshManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;

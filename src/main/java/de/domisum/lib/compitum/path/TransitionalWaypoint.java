@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.transitionalpath.path;
+package de.domisum.lib.compitum.path;
 
 import de.domisum.lib.auxilium.data.container.DataRegister;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;

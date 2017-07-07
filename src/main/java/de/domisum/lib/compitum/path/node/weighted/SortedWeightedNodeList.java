@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.universal;
+package de.domisum.lib.compitum.path.node.weighted;
 
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 

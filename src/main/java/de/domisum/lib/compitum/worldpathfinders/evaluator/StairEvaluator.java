@@ -1,6 +1,6 @@
-package de.domisum.lib.compitum.evaluator;
+package de.domisum.lib.compitum.worldpathfinders.evaluator;
 
-import de.domisum.lib.compitum.transitionalpath.node.TransitionalBlockNode;
+import de.domisum.lib.compitum.path.node.TransitionalBlockNode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;

@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.universal;
+package de.domisum.lib.compitum.path.node.weighted;
 
 public interface WeightedNode
 {

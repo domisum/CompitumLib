@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum.navmesh.path;
 
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
-import de.domisum.lib.compitum.universal.WeightedNode;
+import de.domisum.lib.compitum.path.node.weighted.WeightedNode;
 
 class NavMeshTriangleNode implements WeightedNode
 {

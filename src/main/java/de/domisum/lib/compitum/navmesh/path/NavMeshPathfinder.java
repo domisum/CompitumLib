@@ -6,7 +6,7 @@ import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.path.traversal.NavMeshTriangleTraverser;
-import de.domisum.lib.compitum.transitionalpath.path.TransitionalPath;
+import de.domisum.lib.compitum.path.TransitionalPath;
 import org.bukkit.Location;
 
 import java.util.List;
