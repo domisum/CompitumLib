@@ -28,7 +28,7 @@ class SerializationNavMeshLadder
 
 	}
 
-	SerializationNavMeshLadder(NavMeshLadder navMeshLadder)
+	protected SerializationNavMeshLadder(NavMeshLadder navMeshLadder)
 	{
 		this.triangleBottom = navMeshLadder.getTriangleBottom().id;
 		this.positionBottom = navMeshLadder.getPositionBottom();
