@@ -12,6 +12,8 @@ import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalAStar;
 import de.domisum.lib.compitum.transitionalpath.pathfinders.TransitionalPathSmoother;
 import org.bukkit.Location;
 
+import java.util.Objects;
+
 @APIUsage
 public class UniversalPathfinder
 {
@@ -76,7 +78,7 @@ public class UniversalPathfinder
 			if(meshAtTarget == null)
 				break navMeshCheck;
 
-			if(meshAtStart != meshAtTarget)
+			if(!Objects.equals(meshAtStart, meshAtTarget))
 				break navMeshCheck;
 
 			useNavMesh(meshAtStart);
