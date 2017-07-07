@@ -4,7 +4,7 @@ import de.domisum.lib.compitum.path.node.weighted.WeightedNode;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class TransitionalBlockNode implements WeightedNode
+public class BlockPathNode implements WeightedNode
 {
 
 	// PROPERTIES
@@ -13,7 +13,7 @@ public class TransitionalBlockNode implements WeightedNode
 	public final int z;
 
 	// SUCCESSOR
-	private TransitionalBlockNode parent;
+	private BlockPathNode parent;
 	private int transitionType = 0;
 
 	private double weightFromParent;
@@ -21,7 +21,7 @@ public class TransitionalBlockNode implements WeightedNode
 
 
 	// INIT
-	public TransitionalBlockNode(int x, int y, int z)
+	public BlockPathNode(int x, int y, int z)
 	{
 		this.x = x;
 		this.y = y;
@@ -30,10 +30,10 @@ public class TransitionalBlockNode implements WeightedNode
 
 	@Override public boolean equals(Object other)
 	{
-		if(!(other instanceof TransitionalBlockNode))
+		if(!(other instanceof BlockPathNode))
 			return false;
 
-		TransitionalBlockNode o = (TransitionalBlockNode) other;
+		BlockPathNode o = (BlockPathNode) other;
 
 		return o.x == this.x && o.y == this.y && o.z == this.z;
 	}
@@ -55,7 +55,7 @@ public class TransitionalBlockNode implements WeightedNode
 
 
 	// GETTERS
-	public TransitionalBlockNode getParent()
+	public BlockPathNode getParent()
 	{
 		return this.parent;
 	}
@@ -92,7 +92,7 @@ public class TransitionalBlockNode implements WeightedNode
 
 
 	// SETTERS
-	public void setParent(TransitionalBlockNode parent, int transitionType, double additionalWeight)
+	public void setParent(BlockPathNode parent, int transitionType, double additionalWeight)
 	{
 		this.parent = parent;
 		this.transitionType = transitionType;

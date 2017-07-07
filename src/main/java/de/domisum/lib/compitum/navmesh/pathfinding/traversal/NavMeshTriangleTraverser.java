@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.navmesh.path.traversal;
+package de.domisum.lib.compitum.navmesh.pathfinding.traversal;
 
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
@@ -8,8 +8,8 @@ import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTrianglePortal;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import de.domisum.lib.compitum.path.node.TransitionType;
-import de.domisum.lib.compitum.path.TransitionalPath;
-import de.domisum.lib.compitum.path.TransitionalWaypoint;
+import de.domisum.lib.compitum.path.Path;
+import de.domisum.lib.compitum.path.PathWaypoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class NavMeshTriangleTraverser
 	private List<NavMeshTriangle> triangleSequence;
 
 	// STATUS
-	private List<TransitionalWaypoint> waypoints = new ArrayList<>();
+	private List<PathWaypoint> pathWaypoints = new ArrayList<>();
 	// triangle traversal
 	private Vector3D currentPosition;
 	private Vector3D visLeft;
@@ -41,7 +41,7 @@ public class NavMeshTriangleTraverser
 	private ProfilerStopWatch stopWatch = new ProfilerStopWatch("pathfinding.navMesh.triangleTraversal");
 
 	// OUTPUT
-	private TransitionalPath path;
+	private Path path;
 
 
 	// INIT
@@ -55,7 +55,7 @@ public class NavMeshTriangleTraverser
 
 
 	// GETTERS
-	public TransitionalPath getPath()
+	public Path getPath()
 	{
 		return this.path;
 	}
@@ -95,7 +95,7 @@ public class NavMeshTriangleTraverser
 		this.currentPosition = this.startPosition;
 
 		if(this.triangleSequence.size() == 1)
-			this.waypoints.add(new TransitionalWaypoint(this.targetPosition, TransitionType.WALK));
+			this.pathWaypoints.add(new PathWaypoint(this.targetPosition, TransitionType.WALK));
 		else
 		{
 			for(this.currentTriangleIndex = 0;
@@ -103,7 +103,7 @@ public class NavMeshTriangleTraverser
 				processTriangleTransition();
 		}
 
-		this.path = new TransitionalPath(this.waypoints);
+		this.path = new Path(this.pathWaypoints);
 		this.stopWatch.stop();
 	}
 
@@ -201,7 +201,7 @@ public class NavMeshTriangleTraverser
 			}
 		}
 
-		this.waypoints.add(new TransitionalWaypoint(targetPoint, TransitionType.WALK));
+		this.pathWaypoints.add(new PathWaypoint(targetPoint, TransitionType.WALK));
 	}
 
 
@@ -218,8 +218,8 @@ public class NavMeshTriangleTraverser
 			Vector3D climbingEndPosition = new Vector3D(ladder.getPositionBottom().x, ladder.getPositionTop().y,
 					ladder.getPositionBottom().z);
 
-			TransitionalWaypoint climbWaypoint = newWaypoint(climbingEndPosition, TransitionType.CLIMB);
-			climbWaypoint.setData("ladderDirection", ladder.getLadderDirection());
+			PathWaypoint climbPathWaypoint = newWaypoint(climbingEndPosition, TransitionType.CLIMB);
+			climbPathWaypoint.setData("ladderDirection", ladder.getLadderDirection());
 			newWaypoint(ladder.getPositionTop(), TransitionType.WALK);
 		}
 		else
@@ -228,8 +228,8 @@ public class NavMeshTriangleTraverser
 					ladder.getPositionBottom().z);
 
 			processMovementTowardsTargetPoint(climbingStartPosition);
-			TransitionalWaypoint climbWaypoint = newWaypoint(ladder.getPositionBottom(), TransitionType.CLIMB);
-			climbWaypoint.setData("ladderDirection", ladder.getLadderDirection());
+			PathWaypoint climbPathWaypoint = newWaypoint(ladder.getPositionBottom(), TransitionType.CLIMB);
+			climbPathWaypoint.setData("ladderDirection", ladder.getLadderDirection());
 		}
 	}
 
@@ -252,16 +252,16 @@ public class NavMeshTriangleTraverser
 		}
 	}
 
-	private TransitionalWaypoint newWaypoint(Vector3D position, int transitionType)
+	private PathWaypoint newWaypoint(Vector3D position, int transitionType)
 	{
-		TransitionalWaypoint waypoint = new TransitionalWaypoint(position, transitionType);
-		this.waypoints.add(waypoint);
+		PathWaypoint pathWaypoint = new PathWaypoint(position, transitionType);
+		this.pathWaypoints.add(pathWaypoint);
 
 		this.currentPosition = position;
 		this.visLeft = null;
 		this.visRight = null;
 
-		return waypoint;
+		return pathWaypoint;
 	}
 
 

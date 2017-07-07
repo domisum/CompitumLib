@@ -1,28 +1,28 @@
 package de.domisum.lib.compitum.path;
 
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
-import de.domisum.lib.compitum.path.node.TransitionalBlockNode;
+import de.domisum.lib.compitum.path.node.BlockPathNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TransitionalBlockPath
+public class BlockPath
 {
 
 	// PROPERTIES
-	private List<TransitionalBlockNode> nodes = new ArrayList<>();
+	private List<BlockPathNode> nodes = new ArrayList<>();
 
 
 	// INIT
-	public TransitionalBlockPath(TransitionalBlockNode endNode)
+	public BlockPath(BlockPathNode endNode)
 	{
 		generatePath(endNode);
 	}
 
-	private void generatePath(TransitionalBlockNode endNode)
+	private void generatePath(BlockPathNode endNode)
 	{
-		TransitionalBlockNode currentNode = endNode;
+		BlockPathNode currentNode = endNode;
 		while(currentNode != null)
 		{
 			this.nodes.add(currentNode);
@@ -34,7 +34,7 @@ public class TransitionalBlockPath
 
 
 	// GETTERS
-	@APIUsage public List<TransitionalBlockNode> getNodes()
+	@APIUsage public List<BlockPathNode> getNodes()
 	{
 		return this.nodes;
 	}

@@ -1,9 +1,9 @@
-package de.domisum.lib.compitum.navmesh.path;
+package de.domisum.lib.compitum.navmesh.pathfinding;
 
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.path.node.weighted.WeightedNode;
 
-class NavMeshTriangleNode implements WeightedNode
+public class NavMeshTriangleNode implements WeightedNode
 {
 
 	// REFERENCES

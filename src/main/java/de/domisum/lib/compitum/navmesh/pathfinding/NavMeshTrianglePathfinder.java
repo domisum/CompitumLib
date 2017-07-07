@@ -1,4 +1,4 @@
-package de.domisum.lib.compitum.navmesh.path;
+package de.domisum.lib.compitum.navmesh.pathfinding;
 
 import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;

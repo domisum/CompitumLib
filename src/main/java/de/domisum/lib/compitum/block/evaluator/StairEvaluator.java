@@ -1,6 +1,6 @@
-package de.domisum.lib.compitum.worldpathfinders.evaluator;
+package de.domisum.lib.compitum.block.evaluator;
 
-import de.domisum.lib.compitum.path.node.TransitionalBlockNode;
+import de.domisum.lib.compitum.path.node.BlockPathNode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -93,7 +93,7 @@ public class StairEvaluator
 
 
 	// EVALUATION
-	public static boolean isStair(TransitionalBlockNode from, TransitionalBlockNode to, World world)
+	public static boolean isStair(BlockPathNode from, BlockPathNode to, World world)
 	{
 		if(!ready)
 			throw new IllegalStateException("CompitumLib has to be enabled before usage!");

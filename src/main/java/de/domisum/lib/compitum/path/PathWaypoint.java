@@ -3,7 +3,7 @@ package de.domisum.lib.compitum.path;
 import de.domisum.lib.auxilium.data.container.DataRegister;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 
-public class TransitionalWaypoint
+public class PathWaypoint
 {
 
 	// PROPERTIES
@@ -14,7 +14,7 @@ public class TransitionalWaypoint
 
 
 	// INIT
-	public TransitionalWaypoint(Vector3D position, int transitionType)
+	public PathWaypoint(Vector3D position, int transitionType)
 	{
 		this.position = position;
 		this.transitionType = transitionType;

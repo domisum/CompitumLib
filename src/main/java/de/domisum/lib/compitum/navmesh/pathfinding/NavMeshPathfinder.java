@@ -1,12 +1,12 @@
-package de.domisum.lib.compitum.navmesh.path;
+package de.domisum.lib.compitum.navmesh.pathfinding;
 
 import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
-import de.domisum.lib.compitum.navmesh.path.traversal.NavMeshTriangleTraverser;
-import de.domisum.lib.compitum.path.TransitionalPath;
+import de.domisum.lib.compitum.navmesh.pathfinding.traversal.NavMeshTriangleTraverser;
+import de.domisum.lib.compitum.path.Path;
 import org.bukkit.Location;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class NavMeshPathfinder
 	private ProfilerStopWatch triangleFindingStopWatch = new ProfilerStopWatch("pathfinding.navMesh.startTargetTriangles");
 
 	// OUTPUT
-	private TransitionalPath path;
+	private Path path;
 	private String failure;
 
 
@@ -40,7 +40,7 @@ public class NavMeshPathfinder
 
 
 	// GETTERS
-	public TransitionalPath getPath()
+	public Path getPath()
 	{
 		return this.path;
 	}

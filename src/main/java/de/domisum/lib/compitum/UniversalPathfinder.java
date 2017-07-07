@@ -4,11 +4,11 @@ package de.domisum.lib.compitum;
 import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.NavMeshManager;
-import de.domisum.lib.compitum.navmesh.path.NavMeshPathfinder;
-import de.domisum.lib.compitum.path.TransitionalBlockPath;
-import de.domisum.lib.compitum.path.TransitionalPath;
-import de.domisum.lib.compitum.worldpathfinders.TransitionalAStar;
-import de.domisum.lib.compitum.worldpathfinders.TransitionalPathSmoother;
+import de.domisum.lib.compitum.navmesh.pathfinding.NavMeshPathfinder;
+import de.domisum.lib.compitum.path.BlockPath;
+import de.domisum.lib.compitum.path.Path;
+import de.domisum.lib.compitum.block.BlockAStar;
+import de.domisum.lib.compitum.block.BlockPathSmoother;
 import org.bukkit.Location;
 
 import java.util.Objects;
@@ -25,7 +25,7 @@ public class UniversalPathfinder
 
 
 	// OUTPUT
-	private TransitionalPath path;
+	private Path path;
 
 	private String diagnose;
 	private String failure;
@@ -40,7 +40,7 @@ public class UniversalPathfinder
 
 
 	// GETTERS
-	@APIUsage public TransitionalPath getPath()
+	@APIUsage public Path getPath()
 	{
 		return this.path;
 	}
@@ -90,7 +90,7 @@ public class UniversalPathfinder
 
 	private void useWorldAStar()
 	{
-		TransitionalAStar pathfinder = new TransitionalAStar(this.start, this.target);
+		BlockAStar pathfinder = new BlockAStar(this.start, this.target);
 		pathfinder.findPath();
 		this.diagnose = pathfinder.getDiagnose();
 		if(!pathfinder.pathFound())
@@ -98,9 +98,9 @@ public class UniversalPathfinder
 			this.failure = pathfinder.getFailure();
 			return;
 		}
-		TransitionalBlockPath blockPath = pathfinder.getPath();
+		BlockPath blockPath = pathfinder.getPath();
 
-		TransitionalPathSmoother smoother = new TransitionalPathSmoother(blockPath);
+		BlockPathSmoother smoother = new BlockPathSmoother(blockPath);
 		smoother.convert();
 		this.path = smoother.getSmoothPath();
 	}
