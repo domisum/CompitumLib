@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum.navmesh;
 
 import de.domisum.lib.auxilium.util.FileUtil;
-import de.domisum.lib.auxilium.util.java.json.GsonUtil;
+import de.domisum.lib.auxilium.util.json.GsonUtil;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.json.SerializationNavMesh;
 import org.bukkit.Location;
