@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum;
 
 
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.annotations.API;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.NavMeshManager;
 import de.domisum.lib.compitum.navmesh.pathfinding.NavMeshPathfinder;
@@ -13,7 +13,7 @@ import org.bukkit.Location;
 
 import java.util.Objects;
 
-@APIUsage
+@API
 public class UniversalPathfinder
 {
 
@@ -32,7 +32,7 @@ public class UniversalPathfinder
 
 
 	// INIT
-	@APIUsage public UniversalPathfinder(Location start, Location target)
+	@API public UniversalPathfinder(Location start, Location target)
 	{
 		this.start = fixPathfindingLocation(start);
 		this.target = fixPathfindingLocation(target);
@@ -40,30 +40,30 @@ public class UniversalPathfinder
 
 
 	// GETTERS
-	@APIUsage public Path getPath()
+	@API public Path getPath()
 	{
 		return this.path;
 	}
 
-	@APIUsage public boolean isPathFound()
+	@API public boolean isPathFound()
 	{
 		return this.path != null;
 	}
 
 
-	@APIUsage public String getDiagnose()
+	@API public String getDiagnose()
 	{
 		return this.diagnose;
 	}
 
-	@APIUsage public String getFailure()
+	@API public String getFailure()
 	{
 		return this.failure;
 	}
 
 
 	// PATHFINDING
-	@APIUsage public void findPath()
+	@API public void findPath()
 	{
 		navMeshCheck:
 		if(CompitumLib.areNavMeshesEnabled())
@@ -122,7 +122,7 @@ public class UniversalPathfinder
 	}
 
 
-	@APIUsage public static Location fixPathfindingLocation(Location location)
+	@API public static Location fixPathfindingLocation(Location location)
 	{
 		location.setY(Math.floor(location.getY()));
 

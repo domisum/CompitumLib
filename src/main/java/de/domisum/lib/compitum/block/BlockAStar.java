@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum.block;
 
 
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.annotations.API;
 import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.compitum.block.evaluator.MaterialEvaluator;
 import de.domisum.lib.compitum.block.evaluator.StairEvaluator;
@@ -15,7 +15,7 @@ import org.bukkit.Material;
 import java.util.HashSet;
 import java.util.Set;
 
-@APIUsage
+@API
 public class BlockAStar
 {
 
@@ -51,7 +51,7 @@ public class BlockAStar
 
 
 	// INIT
-	@APIUsage public BlockAStar(Location startLocation, Location endLocation)
+	@API public BlockAStar(Location startLocation, Location endLocation)
 	{
 		this.startLocation = startLocation;
 		this.endLocation = endLocation;
@@ -59,18 +59,18 @@ public class BlockAStar
 
 
 	// GETTERS
-	@APIUsage public boolean pathFound()
+	@API public boolean pathFound()
 	{
 		return this.path != null;
 	}
 
-	@APIUsage public BlockPath getPath()
+	@API public BlockPath getPath()
 	{
 		return this.path;
 	}
 
 
-	@APIUsage public String getFailure()
+	@API public String getFailure()
 	{
 		return this.failure;
 	}
@@ -86,7 +86,7 @@ public class BlockAStar
 		return MathUtil.round(getNanoDuration()/1000d/1000, 2);
 	}
 
-	@APIUsage public String getDiagnose()
+	@API public String getDiagnose()
 	{
 		String diagnose = "";
 
@@ -103,24 +103,24 @@ public class BlockAStar
 
 
 	// SETTERS
-	@APIUsage public void setHeuristicImportance(double heuristicImportance)
+	@API public void setHeuristicImportance(double heuristicImportance)
 	{
 		this.heuristicImportance = heuristicImportance;
 	}
 
-	@APIUsage public void setCanUseDiagonalMovement(boolean canUseDiagonalMovement)
+	@API public void setCanUseDiagonalMovement(boolean canUseDiagonalMovement)
 	{
 		this.canUseDiagonalMovement = canUseDiagonalMovement;
 	}
 
-	@APIUsage public void setCanUseLadders(boolean canUseLadders)
+	@API public void setCanUseLadders(boolean canUseLadders)
 	{
 		this.canUseLadders = canUseLadders;
 	}
 
 
 	// PATHFINDING
-	@APIUsage public void findPath()
+	@API public void findPath()
 	{
 		// don't set the start time if it already exists, this way duration of retries are counted together
 		if(this.pathfindingStartNano == 0)

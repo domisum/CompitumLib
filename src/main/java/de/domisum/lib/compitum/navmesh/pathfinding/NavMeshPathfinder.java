@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum.navmesh.pathfinding;
 
 import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.annotations.API;
 import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
@@ -11,7 +11,7 @@ import org.bukkit.Location;
 
 import java.util.List;
 
-@APIUsage
+@API
 public class NavMeshPathfinder
 {
 
@@ -30,7 +30,7 @@ public class NavMeshPathfinder
 
 
 	// INIT
-	@APIUsage public NavMeshPathfinder(Location startLocation, Location targetLocation, NavMesh navMesh)
+	@API public NavMeshPathfinder(Location startLocation, Location targetLocation, NavMesh navMesh)
 	{
 		this.startLocation = startLocation;
 		this.targetLocation = targetLocation;
@@ -45,7 +45,7 @@ public class NavMeshPathfinder
 		return this.path;
 	}
 
-	@APIUsage public String getFailure()
+	@API public String getFailure()
 	{
 		return this.failure;
 	}
@@ -58,7 +58,7 @@ public class NavMeshPathfinder
 
 
 	// PATHFINDING
-	@APIUsage public void findPath()
+	@API public void findPath()
 	{
 		this.stopWatch.start();
 		this.triangleFindingStopWatch.start();

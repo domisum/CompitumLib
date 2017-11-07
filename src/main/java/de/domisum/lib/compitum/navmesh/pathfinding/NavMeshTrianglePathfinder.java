@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum.navmesh.pathfinding;
 
 import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.annotations.API;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
 import de.domisum.lib.compitum.path.node.weighted.SortedWeightedNodeList;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@APIUsage
+@API
 public class NavMeshTrianglePathfinder
 {
 
@@ -38,7 +38,7 @@ public class NavMeshTrianglePathfinder
 
 
 	// INIT
-	@APIUsage public NavMeshTrianglePathfinder(NavMeshTriangle startTriangle, NavMeshTriangle targetTriangle)
+	@API public NavMeshTrianglePathfinder(NavMeshTriangle startTriangle, NavMeshTriangle targetTriangle)
 	{
 		this.startTriangle = startTriangle;
 		this.targetTriangle = targetTriangle;
@@ -56,27 +56,27 @@ public class NavMeshTrianglePathfinder
 		return this.failure;
 	}
 
-	@APIUsage public ProfilerStopWatch getStopWatch()
+	@API public ProfilerStopWatch getStopWatch()
 	{
 		return this.stopWatch;
 	}
 
 
-	@APIUsage public boolean canUseLadders()
+	@API public boolean canUseLadders()
 	{
 		return this.canUseLadders;
 	}
 
 
 	// SETTERS
-	@APIUsage public void setCanUseLadders(boolean canUseLadders)
+	@API public void setCanUseLadders(boolean canUseLadders)
 	{
 		this.canUseLadders = canUseLadders;
 	}
 
 
 	// PATHFINDING
-	@APIUsage public void findPath()
+	@API public void findPath()
 	{
 		this.stopWatch.start();
 

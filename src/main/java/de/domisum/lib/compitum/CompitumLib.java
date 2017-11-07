@@ -1,6 +1,6 @@
 package de.domisum.lib.compitum;
 
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.annotations.API;
 import de.domisum.lib.auxiliumspigot.AuxiliumSpigotLib;
 import de.domisum.lib.compitum.block.evaluator.MaterialEvaluator;
 import de.domisum.lib.compitum.block.evaluator.StairEvaluator;
@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
-@APIUsage
+@API
 public class CompitumLib
 {
 
@@ -32,7 +32,7 @@ public class CompitumLib
 		onEnable();
 	}
 
-	@APIUsage public static void enable(JavaPlugin plugin)
+	@API public static void enable(JavaPlugin plugin)
 	{
 		if(instance != null)
 			return;
@@ -40,7 +40,7 @@ public class CompitumLib
 		instance = new CompitumLib(plugin);
 	}
 
-	@APIUsage public static void disable()
+	@API public static void disable()
 	{
 		if(instance == null)
 			return;
@@ -77,7 +77,7 @@ public class CompitumLib
 
 
 	// GETTERS
-	@APIUsage public static CompitumLib getInstance()
+	@API public static CompitumLib getInstance()
 	{
 		if(instance == null)
 			throw new IllegalArgumentException(CompitumLib.class.getSimpleName()+" has to be initialized before usage");
@@ -96,7 +96,7 @@ public class CompitumLib
 	}
 
 
-	@APIUsage public static NavMeshManager getNavMeshManager()
+	@API public static NavMeshManager getNavMeshManager()
 	{
 		if(!navMeshesEnabled)
 			throw new IllegalStateException("The usage of NavMeshes has to be enabled first!");
@@ -104,14 +104,14 @@ public class CompitumLib
 		return getInstance().navMeshManager;
 	}
 
-	@APIUsage public static boolean areNavMeshesEnabled()
+	@API public static boolean areNavMeshesEnabled()
 	{
 		return navMeshesEnabled;
 	}
 
 
 	// SETTERS
-	@APIUsage public static void enableNavMeshes()
+	@API public static void enableNavMeshes()
 	{
 		if(instance != null)
 			throw new IllegalStateException("NavMeshes have to be enabled before enabling CompitumLib");

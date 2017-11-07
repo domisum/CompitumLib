@@ -1,6 +1,6 @@
 package de.domisum.lib.compitum.path.node.weighted;
 
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.annotations.API;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -92,7 +92,7 @@ public class SortedWeightedNodeList<T extends WeightedNode>
 	}
 
 
-	@APIUsage public void sort()
+	@API public void sort()
 	{
 		Collections.sort(this.nodes, (n1, n2)->getValueToCompare(n1) > getValueToCompare(n2) ? 1 : -1);
 	}

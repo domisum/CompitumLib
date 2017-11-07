@@ -1,6 +1,6 @@
 package de.domisum.lib.compitum.path;
 
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.annotations.API;
 import de.domisum.lib.compitum.path.node.BlockPathNode;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class BlockPath
 
 
 	// GETTERS
-	@APIUsage public List<BlockPathNode> getNodes()
+	@API public List<BlockPathNode> getNodes()
 	{
 		return this.nodes;
 	}

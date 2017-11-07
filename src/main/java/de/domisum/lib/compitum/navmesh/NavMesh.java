@@ -2,7 +2,7 @@ package de.domisum.lib.compitum.navmesh;
 
 import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.auxilium.util.java.annotations.APIUsage;
+import de.domisum.lib.auxilium.util.java.annotations.API;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
 import de.domisum.lib.auxiliumspigot.util.LocationUtil;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
@@ -57,7 +57,7 @@ public class NavMesh
 
 	// GETTERS
 	// general
-	@APIUsage public String getId()
+	@API public String getId()
 	{
 		return this.id;
 	}
@@ -104,7 +104,7 @@ public class NavMesh
 		return this.triangles.values();
 	}
 
-	@APIUsage public Set<NavMeshTriangle> getTrianglesUsingPoint(NavMeshPoint point)
+	@API public Set<NavMeshTriangle> getTrianglesUsingPoint(NavMeshPoint point)
 	{
 		Set<NavMeshTriangle> trianglesUsingPoint = new HashSet<>();
 
@@ -134,7 +134,7 @@ public class NavMesh
 
 
 	// POINT
-	@APIUsage public NavMeshPoint createPoint(double x, double y, double z)
+	@API public NavMeshPoint createPoint(double x, double y, double z)
 	{
 		NavMeshPoint point = new NavMeshPoint(getUnusedId(), x, y, z);
 
@@ -142,7 +142,7 @@ public class NavMesh
 		return point;
 	}
 
-	@APIUsage public void removePoint(NavMeshPoint point)
+	@API public void removePoint(NavMeshPoint point)
 	{
 		for(NavMeshTriangle t : getTrianglesUsingPoint(point))
 			deleteTriangle(t);
@@ -152,7 +152,7 @@ public class NavMesh
 
 
 	// TRIANGLE
-	@APIUsage public NavMeshTriangle createTriangle(NavMeshPoint point1, NavMeshPoint point2, NavMeshPoint point3)
+	@API public NavMeshTriangle createTriangle(NavMeshPoint point1, NavMeshPoint point2, NavMeshPoint point3)
 	{
 		NavMeshTriangle triangle = new NavMeshTriangle(getUnusedId(), point1, point2, point3);
 		this.triangles.put(triangle.id, triangle);
@@ -162,7 +162,7 @@ public class NavMesh
 		return triangle;
 	}
 
-	@APIUsage public void deleteTriangle(NavMeshTriangle triangle)
+	@API public void deleteTriangle(NavMeshTriangle triangle)
 	{
 		this.triangles.remove(triangle.id);
 		triangle.clearNeighbors();
@@ -170,7 +170,7 @@ public class NavMesh
 
 
 	// LADDER
-	@APIUsage public void createLadder(NavMeshTriangle triangle1, Vector3D position1, NavMeshTriangle triangle2,
+	@API public void createLadder(NavMeshTriangle triangle1, Vector3D position1, NavMeshTriangle triangle2,
 			Vector3D position2, Direction2D ladderDirection)
 	{
 		NavMeshLadder ladder;
@@ -182,7 +182,7 @@ public class NavMesh
 		triangle1.makeNeighbors(triangle2, ladder);
 	}
 
-	@APIUsage public void removeLadder(NavMeshLadder ladder)
+	@API public void removeLadder(NavMeshLadder ladder)
 	{
 		ladder.getTriangleBottom().removeNeighbor(ladder.getTriangleTop());
 	}
