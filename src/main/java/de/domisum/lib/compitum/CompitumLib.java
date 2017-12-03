@@ -28,8 +28,6 @@ public class CompitumLib
 	private CompitumLib(JavaPlugin plugin)
 	{
 		this.plugin = plugin;
-
-		onEnable();
 	}
 
 	@API public static void enable(JavaPlugin plugin)
@@ -38,6 +36,7 @@ public class CompitumLib
 			return;
 
 		instance = new CompitumLib(plugin);
+		instance.onEnable();
 	}
 
 	@API public static void disable()
@@ -83,11 +82,6 @@ public class CompitumLib
 			throw new IllegalArgumentException(CompitumLib.class.getSimpleName()+" has to be initialized before usage");
 
 		return instance;
-	}
-
-	public static Plugin getPlugin()
-	{
-		return getInstance().plugin;
 	}
 
 	public static Logger getLogger()
