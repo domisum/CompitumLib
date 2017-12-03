@@ -2,13 +2,13 @@ package de.domisum.lib.compitum;
 
 
 import de.domisum.lib.auxilium.util.java.annotations.API;
+import de.domisum.lib.compitum.block.BlockAStar;
+import de.domisum.lib.compitum.block.BlockPathSmoother;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.NavMeshManager;
 import de.domisum.lib.compitum.navmesh.pathfinding.NavMeshPathfinder;
 import de.domisum.lib.compitum.path.BlockPath;
 import de.domisum.lib.compitum.path.Path;
-import de.domisum.lib.compitum.block.BlockAStar;
-import de.domisum.lib.compitum.block.BlockPathSmoother;
 import org.bukkit.Location;
 
 import java.util.Objects;
