@@ -12,6 +12,17 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>domisum-releases-public</id>
+			<url>http://vps.domisum.de:8081/nexus/content/repositories/releases-public/</url>
+		</repository>
+		<repository>
+			<id>domisum-snapshots-public</id>
+			<url>http://vps.domisum.de:8081/nexus/content/repositories/snapshots-public/</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>de.domisum</groupId>
