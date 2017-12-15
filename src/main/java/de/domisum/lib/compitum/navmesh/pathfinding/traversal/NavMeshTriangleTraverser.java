@@ -2,14 +2,14 @@ package de.domisum.lib.compitum.navmesh.pathfinding.traversal;
 
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.auxilium.util.java.ProfilerStopWatch;
+import de.domisum.lib.auxilium.util.time.ProfilerStopWatch;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshLadder;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTrianglePortal;
 import de.domisum.lib.compitum.navmesh.transition.NavMeshTriangleTransition;
-import de.domisum.lib.compitum.path.node.TransitionType;
 import de.domisum.lib.compitum.path.Path;
 import de.domisum.lib.compitum.path.PathWaypoint;
+import de.domisum.lib.compitum.path.node.TransitionType;
 
 import java.util.ArrayList;
 import java.util.List;
