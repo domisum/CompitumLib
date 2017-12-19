@@ -1,6 +1,6 @@
 package de.domisum.lib.compitum.navmesh;
 
-import de.domisum.lib.auxilium.util.FileUtil;
+import de.domisum.lib.auxilium.util.OldFileUtil;
 import de.domisum.lib.auxilium.util.json.GsonUtil;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.json.SerializationNavMesh;
@@ -44,22 +44,24 @@ public class NavMeshManager
 		// noinspection ResultOfMethodCallIgnored
 		baseDir.mkdirs();
 
-		for(File file : FileUtil.listFilesRecursively(baseDir))
+		for(File file : OldFileUtil.listFilesRecursively(baseDir))
 		{
 			if(file.isDirectory())
 				continue;
 
 			if(!file.getName().endsWith(NAV_MESH_FILE_EXTENSION))
 			{
-				CompitumLib.getLogger().warning(
-						"The file '"+file.getAbsolutePath()+" in the NavMesh directory was skipped since it doesn't end with '"
-								+NAV_MESH_FILE_EXTENSION+"'.");
+				CompitumLib
+						.getLogger()
+						.warning("The file '"+file.getAbsolutePath()
+								+" in the NavMesh directory was skipped since it doesn't end with '"+NAV_MESH_FILE_EXTENSION
+								+"'.");
 				continue;
 			}
 
-			String navMeshId = FileUtil.getIdentifier(baseDir, file, NAV_MESH_FILE_EXTENSION);
+			String navMeshId = OldFileUtil.getIdentifier(baseDir, file, NAV_MESH_FILE_EXTENSION);
 
-			String content = FileUtil.readFileToString(file);
+			String content = OldFileUtil.readFileToString(file);
 			NavMesh navMesh;
 			try
 			{
@@ -67,7 +69,8 @@ public class NavMeshManager
 				navMesh = serializationNavMesh.convertToNavMesh(navMeshId);
 				this.meshes.add(navMesh);
 
-				CompitumLib.getLogger()
+				CompitumLib
+						.getLogger()
 						.info("Loaded NavMesh '"+navMesh.getId()+"' with "+navMesh.getTriangles().size()+" triangles");
 			}
 			catch(Exception e)
@@ -98,7 +101,7 @@ public class NavMeshManager
 				SerializationNavMesh sNavMesh = new SerializationNavMesh(navMesh);
 				String json = GsonUtil.getPretty().toJson(sNavMesh);
 
-				FileUtil.writeStringToFile(file, json);
+				OldFileUtil.writeStringToFile(file, json);
 			}
 			catch(Exception e)
 			{
