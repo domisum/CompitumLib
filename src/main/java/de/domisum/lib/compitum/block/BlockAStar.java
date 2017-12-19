@@ -157,7 +157,7 @@ public class BlockAStar
 		this.pathfindingEndNano = System.nanoTime();
 	}
 
-	private void visitNodes()
+	protected void visitNodes()
 	{
 		while(true)
 		{
@@ -195,7 +195,7 @@ public class BlockAStar
 	}
 
 
-	private void visitNode(BlockPathNode node)
+	protected void visitNode(BlockPathNode node)
 	{
 		lookForWalkableNodes(node);
 
@@ -203,7 +203,7 @@ public class BlockAStar
 			lookForLadderNodes(node);
 	}
 
-	private void lookForWalkableNodes(BlockPathNode node)
+	protected void lookForWalkableNodes(BlockPathNode node)
 	{
 		for(int dX = -1; dX <= 1; dX++)
 			for(int dZ = -1; dZ <= 1; dZ++)
@@ -211,7 +211,7 @@ public class BlockAStar
 					validateNodeOffset(node, dX, dY, dZ);
 	}
 
-	private void validateNodeOffset(BlockPathNode node, int dX, int dY, int dZ)
+	protected void validateNodeOffset(BlockPathNode node, int dX, int dY, int dZ)
 	{
 		// prevent movement to the same position
 		if(dX == 0 && dY == 0 && dZ == 0)
@@ -276,7 +276,7 @@ public class BlockAStar
 		addNode(newNode);
 	}
 
-	private void lookForLadderNodes(BlockPathNode node)
+	protected void lookForLadderNodes(BlockPathNode node)
 	{
 		Location feetLocation = node.getLocation(this.startLocation.getWorld());
 
@@ -297,7 +297,7 @@ public class BlockAStar
 	}
 
 
-	private boolean doesNodeAlreadyExist(BlockPathNode node)
+	protected boolean doesNodeAlreadyExist(BlockPathNode node)
 	{
 		if(this.visitedNodes.contains(node))
 			return true;
@@ -306,7 +306,7 @@ public class BlockAStar
 
 	}
 
-	private void addNode(BlockPathNode node)
+	protected void addNode(BlockPathNode node)
 	{
 		node.setHeuristicWeight(getHeuristicWeight(node)*this.heuristicImportance);
 		this.unvisitedNodes.addSorted(node);
@@ -314,12 +314,12 @@ public class BlockAStar
 
 
 	// NODE VALIDATION
-	private boolean isValid(BlockPathNode node)
+	protected boolean isValid(BlockPathNode node)
 	{
 		return canStandAt(node.getLocation(this.startLocation.getWorld()));
 	}
 
-	private boolean isDiagonalMovementPossible(BlockPathNode node, int dX, int dZ)
+	protected boolean isDiagonalMovementPossible(BlockPathNode node, int dX, int dZ)
 	{
 		if(!isUnobstructed(node.getLocation(this.startLocation.getWorld()).clone().add(dX, 0, 0)))
 			return false;
@@ -328,7 +328,7 @@ public class BlockAStar
 
 	}
 
-	@SuppressWarnings("deprecation") private boolean canStandAt(Location feetLocation)
+	@SuppressWarnings("deprecation") protected boolean canStandAt(Location feetLocation)
 	{
 		if(!isUnobstructed(feetLocation))
 			return false;
@@ -337,7 +337,7 @@ public class BlockAStar
 
 	}
 
-	private boolean isUnobstructed(Location feetLocation)
+	protected boolean isUnobstructed(Location feetLocation)
 	{
 		if(!isBlockUnobstructed(feetLocation))
 			return false;
@@ -348,24 +348,24 @@ public class BlockAStar
 
 
 	// LOCATION VALIDATION
-	@SuppressWarnings("deprecation") private boolean isBlockUnobstructed(Location location)
+	@SuppressWarnings("deprecation") protected boolean isBlockUnobstructed(Location location)
 	{
 		return MaterialEvaluator.canStandIn(location.getBlock().getTypeId());
 	}
 
 
 	// HEURISTIC
-	private double getHeuristicWeight(BlockPathNode node)
+	protected double getHeuristicWeight(BlockPathNode node)
 	{
 		return getEuclideanDistance(node);
 	}
 
-	@SuppressWarnings("unused") private double getManhattanDistance(BlockPathNode node)
+	@SuppressWarnings("unused") protected double getManhattanDistance(BlockPathNode node)
 	{
 		return Math.abs(node.x-this.endNode.x)+Math.abs(node.y-this.endNode.y)+Math.abs(node.z-this.endNode.z);
 	}
 
-	private double getEuclideanDistance(BlockPathNode node)
+	protected double getEuclideanDistance(BlockPathNode node)
 	{
 		int dX = this.endNode.x-node.x;
 		int dY = this.endNode.y-node.y;
@@ -376,7 +376,7 @@ public class BlockAStar
 
 
 	// RETRY
-	private void retry()
+	protected void retry()
 	{
 		lookForReason:
 		{
@@ -401,7 +401,7 @@ public class BlockAStar
 		findPath();
 	}
 
-	private void reset()
+	protected void reset()
 	{
 		this.endNode = null;
 
