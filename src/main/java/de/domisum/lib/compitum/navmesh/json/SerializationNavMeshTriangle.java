@@ -1,7 +1,7 @@
 package de.domisum.lib.compitum.navmesh.json;
 
 import de.domisum.lib.auxilium.util.java.annotations.DeserializationNoArgsConstructor;
-import de.domisum.lib.auxilium.util.java.annotations.SetByDeserialization;
+import de.domisum.lib.auxilium.util.java.annotations.InitByDeserialization;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import lombok.Getter;
@@ -12,11 +12,11 @@ class SerializationNavMeshTriangle
 {
 
 	// PROPERTIES
-	@SetByDeserialization @Getter private String id;
+	@InitByDeserialization @Getter private String id;
 
-	@SetByDeserialization private String point1;
-	@SetByDeserialization private String point2;
-	@SetByDeserialization private String point3;
+	@InitByDeserialization private String point1;
+	@InitByDeserialization private String point2;
+	@InitByDeserialization private String point3;
 
 
 	// INIT

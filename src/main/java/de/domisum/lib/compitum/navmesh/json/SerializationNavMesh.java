@@ -2,7 +2,7 @@ package de.domisum.lib.compitum.navmesh.json;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.annotations.DeserializationNoArgsConstructor;
-import de.domisum.lib.auxilium.util.java.annotations.SetByDeserialization;
+import de.domisum.lib.auxilium.util.java.annotations.InitByDeserialization;
 import de.domisum.lib.compitum.navmesh.NavMesh;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshPoint;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
@@ -20,14 +20,14 @@ public class SerializationNavMesh
 {
 
 	// PROPERTIES
-	@SetByDeserialization private String worldName;
-	@SetByDeserialization private Vector3D rangeCenter;
-	@SetByDeserialization private double range;
+	@InitByDeserialization private String worldName;
+	@InitByDeserialization private Vector3D rangeCenter;
+	@InitByDeserialization private double range;
 
 	// REFERENCES
-	@SetByDeserialization private List<NavMeshPoint> points = new ArrayList<>();
-	@SetByDeserialization private List<SerializationNavMeshTriangle> triangles = new ArrayList<>();
-	@SetByDeserialization private List<SerializationNavMeshLadder> ladders = new ArrayList<>();
+	@InitByDeserialization private List<NavMeshPoint> points = new ArrayList<>();
+	@InitByDeserialization private List<SerializationNavMeshTriangle> triangles = new ArrayList<>();
+	@InitByDeserialization private List<SerializationNavMeshLadder> ladders = new ArrayList<>();
 
 
 	// INIT

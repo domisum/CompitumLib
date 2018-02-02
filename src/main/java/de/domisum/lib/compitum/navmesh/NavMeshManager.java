@@ -1,6 +1,6 @@
 package de.domisum.lib.compitum.navmesh;
 
-import de.domisum.lib.auxilium.util.OldFileUtil;
+import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.json.GsonUtil;
 import de.domisum.lib.compitum.CompitumLib;
 import de.domisum.lib.compitum.navmesh.json.SerializationNavMesh;
@@ -44,11 +44,8 @@ public class NavMeshManager
 		// noinspection ResultOfMethodCallIgnored
 		baseDir.mkdirs();
 
-		for(File file : OldFileUtil.listFilesRecursively(baseDir))
+		for(File file : FileUtil.listFilesRecursively(baseDir, FileUtil.FileType.FILE))
 		{
-			if(file.isDirectory())
-				continue;
-
 			if(!file.getName().endsWith(NAV_MESH_FILE_EXTENSION))
 			{
 				CompitumLib
@@ -59,9 +56,9 @@ public class NavMeshManager
 				continue;
 			}
 
-			String navMeshId = OldFileUtil.getIdentifier(baseDir, file, NAV_MESH_FILE_EXTENSION);
+			String navMeshId = FileUtil.getNameWithoutCompositeExtension(file);
 
-			String content = OldFileUtil.readFileToString(file);
+			String content = FileUtil.readString(file);
 			NavMesh navMesh;
 			try
 			{
@@ -101,7 +98,7 @@ public class NavMeshManager
 				SerializationNavMesh sNavMesh = new SerializationNavMesh(navMesh);
 				String json = GsonUtil.getPretty().toJson(sNavMesh);
 
-				OldFileUtil.writeStringToFile(file, json);
+				FileUtil.writeString(file, json);
 			}
 			catch(Exception e)
 			{

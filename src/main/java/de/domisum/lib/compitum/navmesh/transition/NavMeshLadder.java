@@ -1,6 +1,6 @@
 package de.domisum.lib.compitum.navmesh.transition;
 
-import de.domisum.lib.auxilium.data.container.dir.Direction2D;
+import de.domisum.lib.auxilium.data.container.direction.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.compitum.navmesh.geometry.NavMeshTriangle;
 import de.domisum.lib.compitum.path.node.TransitionType;
@@ -22,8 +22,12 @@ public class NavMeshLadder implements NavMeshTriangleTransition
 
 
 	// INIT
-	public NavMeshLadder(NavMeshTriangle triangleBottom, Vector3D positionBottom, NavMeshTriangle triangleTop,
-			Vector3D positionTop, Direction2D ladderDirection)
+	public NavMeshLadder(
+			NavMeshTriangle triangleBottom,
+			Vector3D positionBottom,
+			NavMeshTriangle triangleTop,
+			Vector3D positionTop,
+			Direction2D ladderDirection)
 	{
 		this.triangleBottom = triangleBottom;
 		this.positionBottom = positionBottom;

@@ -1,6 +1,6 @@
 package de.domisum.lib.compitum.navmesh;
 
-import de.domisum.lib.auxilium.data.container.dir.Direction2D;
+import de.domisum.lib.auxilium.data.container.direction.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.util.java.annotations.API;
 import de.domisum.lib.auxilium.util.keys.Base64Key;
